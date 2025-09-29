@@ -1,0 +1,75 @@
+---
+permalink: protect-sce/concept_prepare_for_data_protection.html 
+sidebar: sidebar 
+keywords: SnapCenter Plug-in for Exchange Server 
+summary: 'Prima di eseguire qualsiasi operazione di protezione dei dati, come backup, clonazione o ripristino, è necessario definire la strategia e configurare l"ambiente.  È anche possibile configurare SnapCenter Server per utilizzare le tecnologie SnapMirror e SnapVault .' 
+---
+= Prepararsi alla protezione dei dati
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Prima di eseguire qualsiasi operazione di protezione dei dati, come backup, clonazione o ripristino, è necessario definire la strategia e configurare l'ambiente.  È anche possibile configurare SnapCenter Server per utilizzare le tecnologie SnapMirror e SnapVault .
+
+Per sfruttare i vantaggi della tecnologia SnapVault e SnapMirror , è necessario configurare e inizializzare una relazione di protezione dei dati tra i volumi di origine e di destinazione sul dispositivo di archiviazione.  Per eseguire queste attività è possibile utilizzare NetAppSystem Manager oppure la riga di comando della console di archiviazione.
+
+*Trova maggiori informazioni*
+
+link:https://docs.netapp.com/us-en/ontap-automation/getting_started_with_the_rest_api.html["Introduzione all'API REST"]
+
+
+
+== Prerequisiti per l'utilizzo del plug-in SnapCenter per Microsoft Exchange Server
+
+Prima di utilizzare il plug-in per Exchange, l'amministratore SnapCenter deve installare e configurare SnapCenter Server ed eseguire le attività preliminari.
+
+* Installa e configura SnapCenter Server.
+* Accedi a SnapCenter.
+* Configurare l'ambiente SnapCenter aggiungendo o assegnando connessioni al sistema di archiviazione e creando una credenziale.
++
+
+NOTE: SnapCenter non supporta più SVM con lo stesso nome su cluster diversi.  Ogni SVM supportato da SnapCenter deve avere un nome univoco.
+
+* Aggiungere host, installare il plug-in SnapCenter per Microsoft Windows e il plug-in SnapCenter per Microsoft Exchange Server e scoprire (aggiornare) le risorse.
+* Eseguire il provisioning dello storage lato host utilizzando il plug-in SnapCenter per Microsoft Windows.
+* Se si utilizza SnapCenter Server per proteggere i database di Exchange che risiedono su VMware RDM LUN, è necessario distribuire il SnapCenter Plug-in for VMware vSphere e registrare il plug-in con SnapCenter.  Per ulteriori informazioni, consultare la documentazione SnapCenter Plug-in for VMware vSphere .
++
+
+NOTE: I VMDK non sono supportati.
+
+* Spostare un database Microsoft Exchange Server esistente da un disco locale a un archivio supportato utilizzando gli strumenti di Microsoft Exchange.
+* Se si desidera la replica del backup, impostare le relazioni SnapMirror e SnapVault .
+
+
+Per gli utenti SnapCenter 4.1.1, la documentazione SnapCenter Plug-in for VMware vSphere 4.1.1 contiene informazioni sulla protezione dei database e dei file system virtualizzati.  Per gli utenti SnapCenter 4.2.x, NetApp Data Broker 1.0 e 1.0.1, la documentazione contiene informazioni sulla protezione di database e file system virtualizzati mediante il SnapCenter Plug-in for VMware vSphere fornito dall'appliance virtuale NetApp Data Broker basata su Linux (formato Open Virtual Appliance).  Per gli utenti SnapCenter 4.3.x, la documentazione SnapCenter Plug-in for VMware vSphere 4.3 contiene informazioni sulla protezione di database e file system virtualizzati mediante l'appliance virtuale SnapCenter Plug-in for VMware vSphere basata su Linux (formato Open Virtual Appliance).
+
+https://docs.netapp.com/us-en/sc-plugin-vmware-vsphere/["Documentazione SnapCenter Plug-in for VMware vSphere"^]
+
+
+
+== Come vengono utilizzate risorse, gruppi di risorse e criteri per proteggere Exchange Server
+
+Prima di utilizzare SnapCenter, è utile comprendere i concetti di base relativi alle operazioni di backup, ripristino e reseeding che si desidera eseguire.  Interagisci con risorse, gruppi di risorse e policy per diverse operazioni.
+
+* Le risorse sono in genere database di cassette postali o gruppi di disponibilità del database (DAG) di Microsoft Exchange di cui si esegue il backup con SnapCenter.
+* Un gruppo di risorse SnapCenter è una raccolta di risorse su un host o Exchange DAG e può includere un intero DAG o singoli database.
++
+Quando si esegue un'operazione su un gruppo di risorse, tale operazione viene eseguita sulle risorse definite nel gruppo di risorse in base alla pianificazione specificata per il gruppo di risorse.
+
++
+È possibile eseguire il backup su richiesta di una singola risorsa o di un gruppo di risorse.  È anche possibile eseguire backup pianificati per singole risorse e gruppi di risorse.
+
++
+In precedenza i gruppi di risorse erano noti come set di dati.
+
+* Le policy specificano la frequenza di backup, la conservazione delle copie, gli script e altre caratteristiche delle operazioni di protezione dei dati.
++
+Quando si crea un gruppo di risorse, si selezionano una o più policy per quel gruppo.  È anche possibile selezionare una o più policy quando si esegue un backup su richiesta per una singola risorsa.
+
+
+
+Pensa a un gruppo di risorse come a qualcosa che definisce _cosa_ vuoi proteggere e quando vuoi proteggerlo in termini di giorno e ora.  Pensa a una politica come a qualcosa che definisce _come_ vuoi proteggerla.  Ad esempio, se si esegue il backup di tutti i database di un host, è possibile creare un gruppo di risorse che includa tutti i database nell'host.  È quindi possibile associare due policy al gruppo di risorse: una policy giornaliera e una policy oraria.  Quando si crea il gruppo di risorse e si associano i criteri, è possibile configurare il gruppo di risorse in modo che esegua un backup completo ogni giorno e un'altra pianificazione che esegua backup del registro ogni ora.  L'immagine seguente illustra la relazione tra risorse, gruppi di risorse e criteri per i database:
+
+image::../media/sce_resourcegroup_policy.gif[Screenshot del criterio del gruppo di risorse]

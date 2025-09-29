@@ -1,0 +1,20 @@
+---
+permalink: protect-nsp/back_up_netapp_supported_plugins_resources.html 
+sidebar: sidebar 
+keywords: backup 
+summary: 'Il flusso di lavoro del backup include la pianificazione, l"identificazione delle risorse per il backup, la gestione dei criteri di backup, la creazione di gruppi di risorse e l"associazione di criteri, la creazione di backup e il monitoraggio delle operazioni.' 
+---
+= Eseguire il backup delle risorse dei plug-in supportati NetApp
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Il flusso di lavoro del backup include la pianificazione, l'identificazione delle risorse per il backup, la gestione dei criteri di backup, la creazione di gruppi di risorse e l'associazione di criteri, la creazione di backup e il monitoraggio delle operazioni.
+
+Il seguente flusso di lavoro mostra la sequenza in cui è necessario eseguire l'operazione di backup:
+
+image::../media/scc_backup_workflow.gif[Flusso di lavoro di backup]
+
+È anche possibile utilizzare i cmdlet di PowerShell manualmente o negli script per eseguire operazioni di backup, ripristino e clonazione.  Per informazioni dettagliate sui cmdlet di PowerShell, utilizzare la guida del cmdlet SnapCenter o vedere https://docs.netapp.com/us-en/snapcenter-cmdlets/index.html["Guida di riferimento ai cmdlet del software SnapCenter"]

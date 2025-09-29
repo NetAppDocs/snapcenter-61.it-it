@@ -1,0 +1,90 @@
+---
+permalink: admin/concept_manage_policies.html 
+sidebar: sidebar 
+keywords: Manage policies 
+summary: È possibile staccare i criteri da una risorsa o da un gruppo di risorse, modificarli, eliminarli, visualizzarli e copiarli. 
+---
+= Gestire le politiche
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile staccare i criteri da una risorsa o da un gruppo di risorse, modificarli, eliminarli, visualizzarli e copiarli.
+
+
+
+== Modificare le politiche
+
+È possibile modificare le opzioni di replica, le impostazioni di conservazione degli snapshot, il conteggio dei tentativi di errore o le informazioni sugli script mentre un criterio è associato a una risorsa o a un gruppo di risorse.  È possibile modificare il tipo di pianificazione (frequenza) solo dopo aver scollegato un criterio.
+
+*Informazioni su questo compito*
+
+La modifica del tipo di pianificazione in un criterio richiede passaggi aggiuntivi perché SnapCenter Server registra il tipo di pianificazione solo nel momento in cui il criterio viene associato a una risorsa o a un gruppo di risorse.
+
+|===
+| Se lo desidera... | Poi... 
+
+
+ a| 
+Aggiungi un tipo di pianificazione aggiuntivo
+ a| 
+Crea una nuova policy e associala alle risorse o ai gruppi di risorse necessari.
+
+Ad esempio, se un criterio di gruppo di risorse specifica solo backup orari e si desidera aggiungere anche backup giornalieri, è possibile creare un criterio con un tipo di pianificazione giornaliera e aggiungerlo al gruppo di risorse.  Il gruppo di risorse avrebbe quindi due criteri: orario e giornaliero.
+
+
+
+ a| 
+Rimuovere o modificare un tipo di pianificazione
+ a| 
+Eseguire le seguenti operazioni:
+
+. Scollegare il criterio da ogni risorsa e gruppo di risorse che utilizza tale criterio.
+. Modificare il tipo di pianificazione.
+. Associare nuovamente la policy a tutte le risorse e ai gruppi di risorse.
+
+
+Ad esempio, se una policy specifica backup orari e si desidera modificarli in backup giornalieri, è necessario prima scollegare la policy.
+
+|===
+*Passi*
+
+. Nel riquadro di navigazione a sinistra, fare clic su *Impostazioni*.
+. Nella pagina Impostazioni, fare clic su *Criteri*.
+. Selezionare la policy, quindi fare clic su *Modifica*.
+. Modificare le informazioni, quindi fare clic su *Fine*.
+
+
+
+
+== Distacca le politiche
+
+È possibile scollegare i criteri da una risorsa o da un gruppo di risorse in qualsiasi momento, se non si desidera più che tali criteri governino la protezione dei dati per le risorse.  È necessario scollegare un criterio prima di poterlo eliminare o prima di modificarne il tipo di pianificazione.
+
+*Passi*
+
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in appropriato dall'elenco.
+. Nella pagina Risorse, seleziona *Gruppo di risorse* dall'elenco *Visualizza*.
+. Selezionare il gruppo di risorse, quindi fare clic su *Modifica gruppo di risorse*.
+. Nella pagina Criteri della procedura guidata Modifica gruppo di risorse, dall'elenco a discesa, deselezionare il segno di spunta accanto ai criteri che si desidera scollegare.
+. Apportare eventuali modifiche aggiuntive al gruppo di risorse nel resto della procedura guidata, quindi fare clic su *Fine*.
+
+
+
+
+== Elimina le policy
+
+Se non hai più bisogno di alcune policy, potresti volerle eliminare.
+
+.Prima di iniziare
+Se il criterio è associato a una risorsa o a un gruppo di risorse, è necessario scollegarlo.
+
+*Passi*
+
+. Nel riquadro di navigazione a sinistra, fare clic su *Impostazioni*.
+. Nella pagina Impostazioni, fare clic su *Criteri*.
+. Selezionare il criterio, quindi fare clic su *Elimina*.
+. Fare clic su *Sì*.
+

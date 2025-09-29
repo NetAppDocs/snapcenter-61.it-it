@@ -1,0 +1,30 @@
+---
+permalink: protect-nsp/backup_schedules_of_netapp_supported_plugins_resources.html 
+sidebar: sidebar 
+keywords: NetApp supported plug-in 
+summary: Il fattore più critico nella determinazione di una pianificazione di backup è la velocità di modifica della risorsa.  Quanto più spesso si esegue il backup delle risorse, tanto minore sarà il numero di registri di archivio che SnapCenter dovrà utilizzare per il ripristino, il che può comportare operazioni di ripristino più rapide. 
+---
+= Pianificazioni di backup delle risorse plug-in supportate NetApp
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Il fattore più critico nella determinazione di una pianificazione di backup è la velocità di modifica della risorsa.  Quanto più spesso si esegue il backup delle risorse, tanto minore sarà il numero di registri di archivio che SnapCenter dovrà utilizzare per il ripristino, il che può comportare operazioni di ripristino più rapide.
+
+Potresti eseguire il backup di una risorsa molto utilizzata ogni ora, mentre potresti eseguire il backup di una risorsa raramente utilizzata una volta al giorno.  Altri fattori includono l'importanza della risorsa per la tua organizzazione, il tuo contratto di servizio (SLA) e il tuo obiettivo del punto di ripristino (RPO).
+
+L'SLA definisce il livello di servizio previsto e affronta molti aspetti correlati al servizio, tra cui la disponibilità e le prestazioni del servizio.  RPO definisce la strategia per l'età dei file che devono essere recuperati dall'archivio di backup affinché le normali operazioni possano riprendere dopo un errore.  SLA e RPO contribuiscono alla strategia di protezione dei dati.
+
+Le pianificazioni dei backup sono composte da due parti, come segue:
+
+* Frequenza di backup
++
+La frequenza di backup (la frequenza con cui devono essere eseguiti i backup), chiamata anche tipo di pianificazione per alcuni plug-in, fa parte della configurazione di una policy.  Ad esempio, è possibile configurare la frequenza del backup come oraria, giornaliera, settimanale o mensile.  È possibile accedere ai criteri nell'interfaccia utente grafica SnapCenter facendo clic su *Impostazioni* > *Criteri*.
+
+* Pianificazioni di backup
++
+Le pianificazioni dei backup (ovvero il momento esatto in cui devono essere eseguiti i backup) fanno parte della configurazione di una risorsa o di un gruppo di risorse.  Ad esempio, se si dispone di un gruppo di risorse con un criterio configurato per backup settimanali, è possibile configurare la pianificazione in modo che il backup venga eseguito ogni giovedì alle 22:00. È possibile accedere alle pianificazioni del gruppo di risorse nell'interfaccia utente grafica SnapCenter facendo clic su *Risorse*, quindi selezionando il plug-in appropriato e facendo clic su *Visualizza* > *Gruppo di risorse*.
+
+

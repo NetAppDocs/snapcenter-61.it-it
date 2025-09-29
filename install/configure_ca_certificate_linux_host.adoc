@@ -1,0 +1,73 @@
+---
+permalink: install/configure_ca_certificate_linux_host.html 
+sidebar: sidebar 
+keywords: SnapCenter, configure, CA certificate, linux, linux host 
+summary: 'È necessario configurare il certificato CA con SnapCenter Server sull"host Linux.' 
+---
+= Configurare il certificato CA per l'host Linux
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Dopo aver installato SnapCenter Server su Linux, il programma di installazione crea il certificato autofirmato.  Se si desidera utilizzare il certificato CA, è necessario configurare i certificati per il proxy inverso nginx, la registrazione degli audit e i servizi SnapCenter .
+
+
+
+== Configurare il certificato nginx
+
+.Passi
+. Vai a _/etc/nginx/conf.d_: `cd /etc/nginx/conf.d`
+. Aprire *snapcenter.conf* utilizzando vi o un qualsiasi editor di testo.
+. Passare alla sezione server nel file di configurazione.
+. Modificare i percorsi di _ssl_certificate_ e _ssl_certificate_key_ in modo che puntino al certificato CA.
+. Salvare e chiudere il file.
+. Ricarica nginx: `$nginx -s reload`
+
+
+
+
+== Configurare il certificato del registro di controllo
+
+.Passi
+. Aprire _INSTALL_DIR/ NetApp/snapcenter/SnapManagerWeb/ SnapManager.Web.UI.dll.config_ utilizzando vi o un qualsiasi editor di testo.
++
+Il valore predefinito di _INSTALL_DIR_ è _/opt_.
+
+. Modificare le chiavi *AUDILOG_CERTIFICATE_PATH* e *AUDILOG_CERTIFICATE_PASSWORD* per includere rispettivamente il percorso del certificato CA e la password.
++
+Per il certificato del registro di controllo è supportato solo il formato _.pfx_.
+
+. Salvare e chiudere il file.
+. Riavviare il servizio *snapmanagerweb*: `$ systemctl restart snapmanagerweb`
+
+
+
+
+== Configurare il certificato dei servizi SnapCenter
+
+.Passi
+. Aprire i seguenti file di configurazione utilizzando vi o un qualsiasi editor di testo.
++
+** _DIR_INSTALL/ NetApp/snapcenter/SnapManagerWeb/ SnapManager.Web.UI.dll.config_
+** _INSTALL_DIR/ NetApp/snapcenter/SMCore/SMCoreServiceHost.dll.config_
+** _INSTALL_DIR/ NetApp/snapcenter/Scheduler/Scheduler.Api.dll.config_
++
+Il valore predefinito di _INSTALL_DIR_ è _/opt_.
+
+
+
+. Modificare le chiavi *SERVICE_CERTIFICATE_PATH* e *SERVICE_CERTIFICATE_PASSWORD* per includere rispettivamente il percorso del certificato CA e la password.
++
+Per il certificato dei servizi SnapCenter è supportato solo il formato _.pfx_.
+
+. Salvare e chiudere i file.
+. Riavviare tutti i servizi.
++
+** `$ systemctl restart snapmanagerweb`
+** `$ systemctl restart smcore`
+** `$ systemctl restart scheduler`
+
+
+

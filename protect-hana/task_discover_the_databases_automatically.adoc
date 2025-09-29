@@ -1,0 +1,58 @@
+---
+permalink: protect-hana/task_discover_the_databases_automatically.html 
+sidebar: sidebar 
+keywords: credentials 
+summary: 'Le risorse sono i database SAP HANA e il volume non dati sull"host Linux gestiti da SnapCenter.  È possibile aggiungere queste risorse ai gruppi di risorse per eseguire operazioni di protezione dei dati dopo aver individuato i database SAP HANA disponibili.' 
+---
+= Scopri automaticamente i database
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Le risorse sono i database SAP HANA e il volume non dati sull'host Linux gestiti da SnapCenter.  È possibile aggiungere queste risorse ai gruppi di risorse per eseguire operazioni di protezione dei dati dopo aver individuato i database SAP HANA disponibili.
+
+.Prima di iniziare
+* È necessario aver già completato attività quali l'installazione di SnapCenter Server, l'aggiunta della chiave di archiviazione utente HDB, l'aggiunta di host e la configurazione delle connessioni del sistema di archiviazione.
+* È necessario aver configurato la chiave HDB Secure User Store e l'utente HDB SQL OS sull'host Linux.
++
+** È necessario configurare la chiave dell'archivio utenti HDB con SID adm user.  Ad esempio, per il sistema HANA con A22 come SID, la chiave di archiviazione utente HDB deve essere configurata con a22adm.
+
+
+* Il plug-in SnapCenter per il database SAP HANA non supporta il rilevamento automatico delle risorse residenti negli ambienti virtuali RDM/VMDK.  È necessario fornire le informazioni di archiviazione per gli ambienti virtuali durante l'aggiunta manuale dei database.
+
+
+.Informazioni su questo compito
+Dopo aver installato il plug-in, tutte le risorse presenti sull'host Linux vengono automaticamente rilevate e visualizzate nella pagina Risorse.
+
+Le risorse rilevate automaticamente non possono essere modificate o eliminate.
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in per il database SAP HANA dall'elenco.
+. Nella pagina Risorse seleziona il tipo di risorsa dall'elenco Visualizza.
+. (Facoltativo) Fai clic su *image:../media/filter_icon.gif["icona del filtro"] *, quindi selezionare il nome host.
++
+Puoi quindi cliccare su *image:../media/filter_icon.gif["icona del filtro"] * per chiudere il riquadro del filtro.
+
+. Fare clic su *Aggiorna risorse* per scoprire le risorse disponibili sull'host.
++
+Le risorse vengono visualizzate insieme a informazioni quali tipo di risorsa, nome host, gruppi di risorse associati, tipo di backup, criteri e stato generale.
+
++
+** Se il database si trova su un archivio NetApp e non è protetto, nella colonna Stato generale viene visualizzato Non protetto.
+** Se il database si trova su un sistema di archiviazione NetApp ed è protetto e non viene eseguita alcuna operazione di backup, nella colonna Stato generale viene visualizzato Backup non eseguito.  In caso contrario, lo stato cambierà in Backup non riuscito o Backup riuscito in base allo stato dell'ultimo backup.
+
+
+
+
+
+NOTE: Se nel database SAP HANA non è configurata una chiave HDB Secure User Store, accanto alla risorsa viene visualizzata un'icona a forma di lucchetto rosso.  Se durante una successiva operazione di individuazione, la chiave HDB Secure User Store configurata risulta errata o non consente l'accesso al database stesso, l'icona del lucchetto rosso riapparirà.
+
+
+IMPORTANT: È necessario aggiornare le risorse se i database vengono rinominati all'esterno di SnapCenter.
+
+.Dopo aver finito
+È necessario configurare la chiave HDB Secure User Store e l'utente HDBSQL OS per poter proteggere il database o aggiungerlo al gruppo di risorse per eseguire operazioni di protezione dei dati.
+
+link:task_configure_hdb_user_store_key_and_hdbsql_os_user_for_the_sap_hana_database.html["Configurare la chiave di archivio utente HDB e l'utente del sistema operativo HDBSQL per il database SAP HANA"]

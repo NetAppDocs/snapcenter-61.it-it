@@ -1,0 +1,30 @@
+---
+permalink: protect-azure/protect-applications-azure-netapp-files.html 
+sidebar: sidebar 
+keywords: azure netapp files, ANF, back up, restore, clone, ANF backup, Azure Blob storage 
+summary: È possibile eseguire il backup, il ripristino e la clonazione delle applicazioni in esecuzione su Azure NetApp Files. 
+---
+= Proteggere le applicazioni in esecuzione su Azure NetApp Files
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+SnapCenter supporta la protezione delle applicazioni quali Oracle, SQL e SAP HANA residenti su Azure NetApp Files.  A partire dalla versione 6.0.1, SnapCenter supporta la funzionalità di backup Azure NetApp Files che amplia le capacità di protezione dei dati di Azure NetApp Files fornendo una soluzione di backup completamente gestita per il ripristino, l'archiviazione e la conformità a lungo termine.
+
+Azure NetApp Files è una soluzione di archiviazione premium che può risultare costosa per la conservazione dei backup a lungo termine.  Per ottimizzare i costi, è possibile spostare i backup dall'archiviazione di Azure NetApp Files a un archivio oggetti di Azure.  A partire da SnapCenter 6.0.1, è possibile eseguire il backup e la clonazione delle applicazioni residenti in Azure NetApp Files in Azure Blob Storage (archivio oggetti).  È possibile conservare due copie dei dati, copie snapshot del volume nell'archiviazione Azure NetApp Files per il ripristino a breve termine e un'altra copia nell'archiviazione BLOB di Azure per il ripristino a lungo termine.
+
+Quando un criterio con backup Azure NetApp Files è abilitato e associato a una risorsa, SnapCenter gestisce la creazione di snapshot del volume e il relativo backup in Azure Blob Storage.  SnapCenter crea il Backup Vault e abilita il backup per il volume.  Se hai abilitato il backup per il volume, SnapCenter utilizza il vault esistente.
+
+
+
+== Limitazioni
+
+* Le funzionalità di archiviazione degli oggetti per i sistemi di archiviazione FAS, ASA o AFF ONTAP e Amazon FSx for NetApp ONTAP non sono supportate.
+* I flussi di lavoro di montaggio e catalogazione di Oracle e SAP HANA non sono supportati per i backup di archiviazione di oggetti, ma sono supportati per gli snapshot.
+* I cloni Oracle PDB non sono supportati per i backup di archiviazione di oggetti, ma sono supportati per gli snapshot.
+* La verifica del backup dall'archiviazione di oggetti, il supporto dell'API REST, la gestione del ciclo di vita dei cloni dall'archiviazione di oggetti e le funzionalità di reporting per i backup dell'archiviazione di oggetti non sono supportati.
+* Il ripristino dai backup su Azure Blob Storage ad Azure NetApp Files non è supportato.  In alternativa, è possibile utilizzare l'opzione clone.
+* La divisione dei cloni non è supportata.
+

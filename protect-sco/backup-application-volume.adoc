@@ -1,0 +1,96 @@
+---
+permalink: protect-sco/backup-application-volume.html 
+sidebar: sidebar 
+keywords: application volume, back up 
+summary: 'È possibile eseguire il backup del volume dell"applicazione dalla pagina Risorse se il volume dell"applicazione non fa parte di alcun gruppo di risorse.' 
+---
+= Eseguire il backup del volume dell'applicazione
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Se il volume dell'applicazione non fa parte di alcun gruppo di risorse, è possibile eseguirne il backup dalla pagina Risorse.
+
+*Informazioni su questo compito*
+
+Per impostazione predefinita, vengono creati backup di gruppi di coerenza (CG).  Se si desidera creare backup basati su volumi, è necessario impostare il valore di *EnableOracleNdvVolumeBasedBackup* su true nel file _web.config_.
+
+*Passi*
+
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in Oracle Database dall'elenco.
+. Nella pagina Risorse, seleziona *Volume applicazione* dall'elenco *Visualizza*.
+. Clicca *image:../media/filter_icon.gif["icona del filtro"] *, quindi selezionare il nome host e il tipo di database per filtrare le risorse.
++
+Puoi quindi cliccare su *image:../media/filter_icon.gif["icona del filtro"] * per chiudere il riquadro del filtro.
+
+. Selezionare il volume dell'applicazione di cui si desidera eseguire il backup.
++
+Viene visualizzata la pagina Protezione volume applicazione.
+
+. Nella pagina Risorsa, eseguire le seguenti azioni:
++
+|===
+| Per questo campo... | Fai questo... 
+
+
+ a| 
+Utilizza il formato nome personalizzato per la copia Snapshot
+ a| 
+Selezionare questa casella di controllo, quindi immettere un formato di nome personalizzato che si desidera utilizzare per il nome dello snapshot.
+
+Ad esempio, customtext__policy_hostname o resource_hostname.  Per impostazione predefinita, al nome dello snapshot viene aggiunto un timestamp.
+
+
+
+ a| 
+Escludi le destinazioni dei registri di archivio dal backup
+ a| 
+Specificare le destinazioni dei file di registro dell'archivio di cui non si desidera eseguire il backup.
+
+|===
+. Nella pagina Criteri, procedere come segue:
++
+.. Selezionare una o più policy dall'elenco a discesa.
++
+
+NOTE: Puoi anche creare una policy cliccando *image:../media/add_policy_from_resourcegroup.gif["aggiungi gruppo di risorse del modulo di policy"] *.
+
+
+
++
+Nella sezione Configura pianificazioni per policy selezionate vengono elencate le policy selezionate.
+
++
+.. Clicimage:../media/add_policy_from_resourcegroup.gif["aggiungi gruppo di risorse del modulo di policy"] nella colonna Configura pianificazioni per il criterio per il quale si desidera configurare una pianificazione.
+.. Nella finestra Aggiungi pianificazioni per il criterio _nome_criterio_, configura la pianificazione, quindi fai clic su *OK*.
++
+_policy_name_ è il nome della policy selezionata.
+
++
+Le pianificazioni configurate sono elencate nella colonna Pianificazioni applicate.
+
+
+
+. Nella pagina Notifica, dall'elenco a discesa *Preferenza e-mail*, seleziona gli scenari in cui desideri inviare le e-mail.
++
+È necessario specificare anche gli indirizzi email del mittente e del destinatario, nonché l'oggetto dell'email.  Se si desidera allegare il report dell'operazione di backup eseguita sulla risorsa, selezionare *Allega report attività*.
+
++
+
+NOTE: Per la notifica tramite e-mail, è necessario aver specificato i dettagli del server SMTP tramite l'interfaccia grafica utente (GUI) o il comando PowerShell Set-SmSmtpServer.
+
+. Rivedi il riepilogo e poi clicca su *Fine*.
++
+Viene visualizzata la pagina della topologia del volume dell'applicazione.
+
+. Fare clic su *Esegui backup ora*.
+. Nella pagina Backup, procedere come segue:
++
+.. Se hai applicato più criteri alla risorsa, dall'elenco a discesa *Criterio* seleziona il criterio che desideri utilizzare per il backup.
+.. Fare clic su *Backup*.
+
+
+. Monitorare l'avanzamento dell'operazione cliccando su *Monitoraggio* > *Lavori*.
+

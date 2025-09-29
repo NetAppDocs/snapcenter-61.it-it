@@ -1,0 +1,55 @@
+---
+permalink: protect-scsql/task_cancel_the_snapcenter_plug_in_for_sql_server_operations.html 
+sidebar: sidebar 
+keywords: cancel, backup 
+summary: 'È possibile annullare le operazioni di backup in esecuzione, in coda o che non rispondono.  Quando si annulla un"operazione di backup, SnapCenter Server interrompe l"operazione e rimuove tutti gli snapshot dall"archivio se il backup creato non è registrato con SnapCenter Server.  Se il backup è già registrato con SnapCenter Server, non verrà eseguito il rollback dello Snapshot già creato, anche dopo l"attivazione dell"annullamento.' 
+---
+= Annullare il plug-in SnapCenter per le operazioni di backup di Microsoft SQL Server
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile annullare le operazioni di backup in esecuzione, in coda o che non rispondono.  Quando si annulla un'operazione di backup, SnapCenter Server interrompe l'operazione e rimuove tutti gli snapshot dall'archivio se il backup creato non è registrato con SnapCenter Server.  Se il backup è già registrato con SnapCenter Server, non verrà eseguito il rollback dello Snapshot già creato, anche dopo l'attivazione dell'annullamento.
+
+.Prima di iniziare
+* Per annullare le operazioni di ripristino, è necessario aver effettuato l'accesso come amministratore SnapCenter o come proprietario del processo.
+* È possibile annullare solo le operazioni di backup completo o di registro in coda o in esecuzione.
+* Non è possibile annullare l'operazione dopo l'avvio della verifica.
++
+Se si annulla l'operazione prima della verifica, l'operazione viene annullata e la verifica non verrà eseguita.
+
+* È possibile annullare un'operazione di backup dalla pagina Monitor o dal riquadro Attività.
+* Oltre a utilizzare l'interfaccia utente grafica SnapCenter , è possibile utilizzare i cmdlet di PowerShell per annullare le operazioni.
+* Il pulsante *Annulla lavoro* è disabilitato per le operazioni che non possono essere annullate.
+* Se hai selezionato *Tutti i membri di questo ruolo possono vedere e operare sugli oggetti degli altri membri* nella pagina Utenti\Gruppi durante la creazione di un ruolo, puoi annullare le operazioni di backup in coda degli altri membri mentre utilizzi quel ruolo.
+
+
+.Passi
+Eseguire una delle seguenti azioni:
+
+|===
+| Dal... | Azione 
+
+
+ a| 
+Pagina di monitoraggio
+ a| 
+. Nel riquadro di navigazione a sinistra, seleziona *Monitor* > *Jobs*.
+. Selezionare il lavoro e selezionare *Annulla lavoro*.
+
+
+
+
+ a| 
+Riquadro attività
+ a| 
+. Dopo aver avviato il processo di backup, selezionareimage:../media/activity_pane_icon.gif["icona del riquadro attività"] nel riquadro Attività per visualizzare le cinque operazioni più recenti.
+. Selezionare l'operazione.
+. Nella pagina Dettagli lavoro, seleziona *Annulla lavoro*.
+
+
+|===
+.Risultato
+L'operazione viene annullata e la risorsa torna allo stato precedente.  Se l'operazione annullata non risponde nello stato di annullamento o di esecuzione, è necessario eseguire `Cancel-SmJob -JobID <int> -Force` cmdlet per interrompere forzatamente l'operazione di backup.

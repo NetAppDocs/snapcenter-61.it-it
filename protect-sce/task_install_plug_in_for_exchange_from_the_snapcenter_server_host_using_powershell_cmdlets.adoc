@@ -1,0 +1,37 @@
+---
+permalink: protect-sce/task_install_plug_in_for_exchange_from_the_snapcenter_server_host_using_powershell_cmdlets.html 
+sidebar: sidebar 
+keywords: SnapCenter plug-in for Exchange Server 
+summary: 'Dovresti installare il plug-in per Exchange dall"interfaccia utente grafica SnapCenter .  Se non si desidera utilizzare l"interfaccia utente grafica, è possibile utilizzare i cmdlet di PowerShell sull"host del server SnapCenter o su un host remoto.' 
+---
+= Installa il plug-in per Exchange dall'host del server SnapCenter utilizzando i cmdlet di PowerShell
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Dovresti installare il plug-in per Exchange dall'interfaccia utente grafica SnapCenter .  Se non si desidera utilizzare l'interfaccia utente grafica, è possibile utilizzare i cmdlet di PowerShell sull'host del server SnapCenter o su un host remoto.
+
+.Prima di iniziare
+* SnapCenter Server deve essere installato e configurato.
+* Devi essere un amministratore locale sull'host o un utente con privilegi amministrativi.
+* Devi essere un utente a cui è assegnato un ruolo che dispone delle autorizzazioni per plug-in, installazione e disinstallazione, ad esempio SnapCenter Admin.
+* Prima di installare il plug-in per Exchange, è necessario esaminare i requisiti di installazione e i tipi di configurazioni supportate.
+* L'host su cui si desidera installare il plug-in per Exchange deve essere un host Windows.
+
+
+.Passi
+. Sull'host del server SnapCenter , stabilire una sessione utilizzando il cmdlet _Open-SmConnection_, quindi immettere le credenziali.
+. Aggiungere l'host su cui si desidera installare il plug-in per Exchange utilizzando il cmdlet _Add-SmHost_ con i parametri richiesti.
++
+Le informazioni relative ai parametri che possono essere utilizzati con il cmdlet e le relative descrizioni possono essere ottenute eseguendo _Get-Help command_name_. In alternativa, puoi anche fare riferimento a https://docs.netapp.com/us-en/snapcenter-cmdlets/index.html["Guida di riferimento ai cmdlet del software SnapCenter"^] .
+
++
+L'host può essere un host autonomo o un DAG.  Se si specifica un DAG, è obbligatorio il parametro _-IsDAG_.
+
+. Installare il plug-in per Exchange utilizzando il cmdlet _Install-SmHostPackage_ con i parametri richiesti.
++
+Questo comando installa il plug-in per Exchange sull'host specificato e quindi registra il plug-in con SnapCenter.
+
+

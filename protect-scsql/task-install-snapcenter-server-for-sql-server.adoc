@@ -1,0 +1,78 @@
+---
+permalink: protect-scsql/task-install-snapcenter-server-for-sql-server.html 
+sidebar: sidebar 
+keywords: credentials 
+summary: 'Fornisce istruzioni per l"installazione di SnapCenter Server per Microsoft SQL Server.' 
+---
+= Installa SnapCenter Server per Microsoft SQL Server
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Fornisce un set condensato di istruzioni di installazione per l'installazione di SnapCenter Server per Microsoft SQL Server.
+
+
+
+== Passaggio 1: Scarica e installa SnapCenter Server
+
+. Scaricare il pacchetto di installazione di SnapCenter Server da https://mysupport.netapp.com/site/products/all/details/snapcenter/downloads-tab["Sito di supporto NetApp"^] e quindi fare doppio clic sul file exe.
++
+Dopo aver avviato l'installazione, vengono eseguiti tutti i controlli preliminari e, se i requisiti minimi non vengono soddisfatti, vengono visualizzati messaggi di errore o di avviso appropriati.  È possibile ignorare i messaggi di avviso e procedere con l'installazione; tuttavia, gli errori dovrebbero essere corretti.
+
+. Rivedere i valori precompilati richiesti per l'installazione di SnapCenter Server e modificarli se necessario.
++
+Non è necessario specificare la password per il database del repository di MySQL Server.  Durante l'installazione SnapCenter Server la password viene generata automaticamente.
+
++
+
+NOTE: Il carattere speciale "%" non è supportato nel percorso personalizzato per l'installazione.  Se si include "%" nel percorso, l'installazione fallisce.
+
+. Fare clic su *Installa ora*.
+
+
+
+
+== Passaggio 2: accedi a SnapCenter
+
+. Avviare SnapCenter da un collegamento sul desktop host o dall'URL fornito dall'installazione (_\https://server:8146_ per la porta predefinita 8146 su cui è installato SnapCenter Server).
+. Inserisci le credenziali.
++
+Per un formato di nome utente di amministratore di dominio predefinito, utilizzare: _NetBIOS\<nomeutente>_ o _<nomeutente>@<dominio>_ o _<FQDNDominio>\<nomeutente>_.
+
++
+Per un formato di nome utente di amministratore locale incorporato, utilizzare _<nomeutente>_.
+
+. Fare clic su *Accedi*.
+
+
+
+
+== Passaggio 3: aggiungere una licenza basata sul controller SnapCenter Standard
+
+. Accedere al controller tramite la riga di comando ONTAP e immettere:
++
+`system license add -license-code <license_key>`
+
+. Verificare la licenza:
++
+`license show`
+
+
+
+
+
+== Passaggio 4: configurare le connessioni del sistema di archiviazione
+
+. Nel riquadro a sinistra, fare clic su *Sistemi di archiviazione > Nuovo*.
+. Nella pagina Aggiungi sistema di archiviazione, procedere come segue:
++
+.. Immettere il nome o l'indirizzo IP del sistema di archiviazione.
+.. Inserisci le credenziali utilizzate per accedere al sistema di archiviazione.
+.. Selezionare le caselle di controllo per abilitare Event Management System (EMS) e AutoSupport.
+
+
+. Fare clic su *Altre opzioni* se si desidera modificare i valori predefiniti assegnati a piattaforma, protocollo, porta e timeout.
+. Fare clic su *Invia*.
+

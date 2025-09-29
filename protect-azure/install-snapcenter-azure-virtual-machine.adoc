@@ -1,0 +1,65 @@
+---
+permalink: protect-azure/install-snapcenter-azure-virtual-machine.html 
+sidebar: sidebar 
+keywords: snapcenter server, azure virtual machine, install 
+summary: Scarica e installa SnapCenter sulla macchina virtuale di Azure. 
+---
+= Installa SnapCenter sulla macchina virtuale di Azure
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile scaricare il SnapCenter software dal sito di supporto NetApp e installarlo sulla macchina virtuale di Azure.
+
+.Prima di iniziare
+* Assicurarsi che la macchina virtuale Windows di Azure soddisfi i requisiti per l'installazione di SnapCenter Server. Per informazioni, vederelink:../install/requirements-to-install-snapcenter-server.html["Requisiti per installare SnapCenter Server"] .
+* Se non hai familiarità con Azure NetApp Files e non hai un account NetApp esistente, assicurati di esserti registrato per poter accedere al software SnapCenter .  Per informazioni, vederelink:../install/register_enable_software_access.html["Registrati per accedere al SnapCenter software"] .
+
+
+.Passi
+. Scarica il pacchetto di installazione di SnapCenter Server da https://mysupport.netapp.com/site/products/all/details/snapcenter/downloads-tab["Sito di supporto NetApp"] .
+. Avviare l'installazione di SnapCenter Server facendo doppio clic sul file .exe scaricato.
++
+Dopo aver avviato l'installazione, vengono eseguiti tutti i controlli preliminari e, se i requisiti minimi non vengono soddisfatti, vengono visualizzati i messaggi di errore o di avviso appropriati.  È possibile ignorare i messaggi di avviso e procedere con l'installazione; tuttavia, gli errori dovrebbero essere corretti.
+
+. Rivedere i valori precompilati richiesti per l'installazione di SnapCenter Server e modificarli se necessario.
++
+Non è necessario specificare la password per il database del repository di MySQL Server.  Durante l'installazione SnapCenter Server la password viene generata automaticamente.
+
++
+
+NOTE: Il carattere speciale "%" non è supportato nel percorso personalizzato per il database del repository.  Se si include "%" nel percorso, l'installazione fallisce.
+
+. Fare clic su *Installa ora*.
++
+Se sono stati specificati valori non validi, verranno visualizzati i messaggi di errore appropriati.  Dovresti reinserire i valori e poi avviare l'installazione.
+
++
+
+NOTE: Facendo clic sul pulsante *Annulla*, il passaggio in esecuzione verrà completato e verrà avviata l'operazione di rollback.  Il server SnapCenter verrà completamente rimosso dall'host.
+
++
+Tuttavia, se si fa clic su *Annulla* quando sono in corso le operazioni "Riavvio del sito di SnapCenter Server" o "In attesa dell'avvio di SnapCenter Server", l'installazione procederà senza annullare l'operazione.
+
+
+
+
+
+== Registra il prodotto per abilitare il supporto
+
+Se sei un nuovo utente NetApp e non hai un account NetApp esistente, dovresti registrare il prodotto per abilitare il supporto.
+
+.Passi
+. Dopo aver installato SnapCenter, vai su *Aiuto > Informazioni*.
+. Nella finestra di dialogo _Informazioni su SnapCenter_, prendere nota dell'istanza SnapCenter , un numero di 20 cifre che inizia con 971.
+. Clic https://register.netapp.com[] .
+. Fare clic su *Non sono un cliente NetApp registrato*.
+. Specifica i tuoi dati per registrarti.
+. Lasciare vuoto il campo NetApp Reference SN.
+. Selezionare * SnapCenter* dal menu a discesa Linea di prodotti.
+. Selezionare il fornitore di fatturazione.
+. Immettere l'ID istanza SnapCenter di 20 cifre.
+. Fare clic su *Invia*.
+

@@ -1,0 +1,28 @@
+---
+permalink: protect-sco/task_delete_clone_of_a_pluggable_database.html 
+sidebar: sidebar 
+keywords: delete, PDB, clone PDB 
+summary: 'È possibile eliminare il clone di un database collegabile \(PDB\) se non ne hai più bisogno.' 
+---
+= Elimina il clone di un database collegabile
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile eliminare il clone di un database collegabile (PDB) se non ne hai più bisogno.
+
+Se hai creato un backup del CDB di destinazione in cui è clonato il PDB, quando elimini il clone del PDB, anche il PDB clonato viene rimosso dal backup del CDB di destinazione.
+
+
+NOTE: I cloni PDB non vengono visualizzati nella vista inventario o risorse.
+
+*Passi*
+
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in appropriato dall'elenco.
+. Selezionare il database del contenitore di origine (CDB) dalla vista delle risorse o dei gruppi di risorse.
+. Dalla vista Gestisci copie, seleziona *Cloni* dai sistemi di archiviazione primari o secondari (con mirroring o replica).
+. Selezionare il clone PDB (targetCDB:PDBClone) e quindi fare clic suimage:../media/delete_icon.gif["icona di eliminazione"] .
+. Fare clic su *OK*.
+

@@ -1,0 +1,61 @@
+---
+permalink: protect-scsql/concept_type_of_backups_supported.html 
+sidebar: sidebar 
+keywords: Type of backups 
+summary: 'Per eseguire il backup dei database utente e di sistema di SQL Server tramite SnapCenter, è necessario scegliere il tipo di risorsa, ad esempio database, istanze di SQL Server e gruppi di disponibilità \(AG\).  La tecnologia snapshot viene sfruttata per creare copie online di sola lettura dei volumi su cui risiedono le risorse.' 
+---
+= Tipo di backup supportati
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Per eseguire il backup dei database utente e di sistema di SQL Server tramite SnapCenter, è necessario scegliere il tipo di risorsa, ad esempio database, istanze di SQL Server e gruppi di disponibilità (AG).  La tecnologia snapshot viene sfruttata per creare copie online di sola lettura dei volumi su cui risiedono le risorse.
+
+È possibile selezionare l'opzione di sola copia per specificare che SQL Server non tronchi i registri delle transazioni.  È consigliabile utilizzare questa opzione quando si gestisce SQL Server anche con altre applicazioni di backup.  Mantenere intatti i registri delle transazioni consente a qualsiasi applicazione di backup di ripristinare i database di sistema.  I backup di sola copia sono indipendenti dalla sequenza dei backup pianificati e non influiscono sulle procedure di backup e ripristino del database.
+
+|===
+| Tipo di backup | Descrizione | Opzione di sola copia con tipo di backup 
+
+
+ a| 
+Backup completo e backup del registro
+ a| 
+Esegue il backup del database di sistema e tronca i registri delle transazioni.
+
+SQL Server tronca i registri delle transazioni rimuovendo le voci già salvate nel database.
+
+Una volta completato il backup completo, questa opzione crea un registro delle transazioni che cattura le informazioni sulle transazioni.  In genere, dovresti scegliere questa opzione.  Tuttavia, se il tempo di backup è breve, è possibile scegliere di non eseguire un backup del registro delle transazioni con un backup completo.
+
+Non è possibile creare un backup del log per i database di sistema master e msdb.  Tuttavia, è possibile creare backup del log per il database del sistema modello.
+ a| 
+Esegue il backup dei file del database di sistema e dei registri delle transazioni senza troncare i registri.
+
+Un backup di sola copia non può fungere da base differenziale o backup differenziale e non influisce sulla base differenziale.  Il ripristino di un backup completo di sola copia è uguale al ripristino di qualsiasi altro backup completo.
+
+
+
+ a| 
+Backup completo del database
+ a| 
+Esegue il backup dei file del database di sistema.
+
+È possibile creare un backup completo del database per i database di sistema master, model e msdb.
+ a| 
+Esegue il backup dei file del database di sistema.
+
+
+
+ a| 
+Backup del registro delle transazioni
+ a| 
+Esegue il backup dei registri delle transazioni troncati, copiando solo le transazioni eseguite dopo il backup del registro delle transazioni più recente.
+
+Se si pianificano backup frequenti del registro delle transazioni insieme a backup completi del database, è possibile scegliere punti di ripristino granulari.
+ a| 
+Esegue il backup dei registri delle transazioni senza troncarli.
+
+Questo tipo di backup non influisce sulla sequenza dei backup regolari del registro.  I backup del log di sola copia sono utili per eseguire operazioni di ripristino online.
+
+|===

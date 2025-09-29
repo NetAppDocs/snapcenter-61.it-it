@@ -1,0 +1,50 @@
+---
+permalink: protect-scsql/task_cancel_sql_resources_restore_operations.html 
+sidebar: sidebar 
+keywords: cancel, restore 
+summary: È possibile annullare i processi di ripristino in coda. 
+---
+= Annulla le operazioni di ripristino delle risorse SQL
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile annullare i processi di ripristino in coda.
+
+Per annullare le operazioni di ripristino, è necessario aver effettuato l'accesso come amministratore SnapCenter o come proprietario del processo.
+
+.Informazioni su questo compito
+* È possibile annullare un'operazione di ripristino in coda dalla pagina *Monitor* o dal riquadro *Attività*.
+* Non è possibile annullare un'operazione di ripristino in esecuzione.
+* È possibile utilizzare l'interfaccia utente grafica SnapCenter , i cmdlet di PowerShell o i comandi CLI per annullare le operazioni di ripristino in coda.
+* Il pulsante *Annulla processo* è disabilitato per le operazioni di ripristino che non possono essere annullate.
+* Se hai selezionato *Tutti i membri di questo ruolo possono vedere e operare sugli oggetti degli altri membri* nella pagina Utenti\Gruppi durante la creazione di un ruolo, puoi annullare le operazioni di ripristino in coda degli altri membri mentre utilizzi quel ruolo.
+
+
+.Fare un passo
+Eseguire una delle seguenti azioni:
+
+|===
+| Dal... | Azione 
+
+
+ a| 
+Pagina di monitoraggio
+ a| 
+. Nel riquadro di navigazione a sinistra, fare clic su *Monitor* > *Lavori*.
+. Seleziona il lavoro e clicca su *Annulla lavoro*.
+
+
+
+
+ a| 
+Riquadro attività
+ a| 
+. Dopo aver avviato l'operazione di ripristino, fare clic suimage:../media/activity_pane_icon.gif["icona del riquadro attività"] nel riquadro Attività per visualizzare le cinque operazioni più recenti.
+. Selezionare l'operazione.
+. Nella pagina Dettagli lavoro, fare clic su *Annulla lavoro*.
+
+
+|===

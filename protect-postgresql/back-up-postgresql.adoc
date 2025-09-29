@@ -1,0 +1,240 @@
+---
+permalink: protect-postgresql/back-up-postgresql.html 
+sidebar: sidebar 
+keywords: SnapCenter Plug-in for PostgreSQL 
+summary: Se una risorsa non fa ancora parte di alcun gruppo di risorse, è possibile eseguirne il backup dalla pagina Risorse. 
+---
+= Eseguire il backup di PostgreSQL
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Se una risorsa non fa ancora parte di alcun gruppo di risorse, è possibile eseguirne il backup dalla pagina Risorse.
+
+.Prima di iniziare
+* Devi aver creato una policy di backup.
+* Se si desidera eseguire il backup di una risorsa che ha una relazione SnapMirror con un archivio secondario, il ruolo ONTAP assegnato all'utente dell'archivio deve includere il privilegio "`snapmirror all`".  Tuttavia, se si utilizza il ruolo "`vsadmin`", il privilegio "`snapmirror all`" non è richiesto.
+* Per l'operazione di backup basata su copia snapshot, assicurarsi che tutti i cluster tenant siano validi e attivi.
+* Per i comandi pre e post per le operazioni di quiesce, snapshot e unquiesce, è necessario verificare se i comandi sono presenti nell'elenco dei comandi disponibile sull'host del plug-in dai seguenti percorsi:
++
+** Posizione predefinita sull'host Windows: _C:\Programmi\ NetApp\ SnapCenter\Snapcenter Plug-in Creator\etc\allowed_commands.config_
+** Posizione predefinita sull'host Linux: _/opt/ NetApp/snapcenter/scc/etc/allowed_commands.config_
+
+
+
+
+
+NOTE: Se i comandi non sono presenti nell'elenco dei comandi, l'operazione fallirà.
+
+[role="tabbed-block"]
+====
+.Interfaccia utente SnapCenter
+--
+.Passi
+. Nel riquadro di navigazione a sinistra, seleziona *Risorse*, quindi seleziona il plug-in appropriato dall'elenco.
+. Nella pagina Risorsa, filtra le risorse dall'elenco a discesa *Visualizza* in base al tipo di risorsa.
++
+Seleziona *image:../media/filter_icon.gif["icona del filtro"] *, quindi selezionare il nome host e il tipo di risorsa per filtrare le risorse.  Puoi quindi selezionareimage:../media/filter_icon.gif["icona del filtro"] per chiudere il riquadro del filtro.
+
+. Seleziona la risorsa di cui vuoi eseguire il backup.
+. Nella pagina Risorsa, seleziona *Usa formato nome personalizzato per copia Snapshot*, quindi immetti un formato nome personalizzato che desideri utilizzare per il nome Snapshot.
++
+Ad esempio, _customtext_policy_hostname_ o _resource_hostname_.  Per impostazione predefinita, al nome dello snapshot viene aggiunto un timestamp.
+
+. Nella pagina Impostazioni applicazione, procedere come segue:
++
+** Selezionare la freccia *Backup* per impostare opzioni di backup aggiuntive:
++
+Se necessario, abilitare il backup del gruppo di coerenza ed eseguire le seguenti attività:
+
++
+|===
+| Per questo campo... | Fai questo... 
+
+
+ a| 
+Concediti del tempo per attendere il completamento dell'operazione "Consistency Group Snapshot"
+ a| 
+Selezionare *Urgente*, *Medio* o *Rilassato* per specificare il tempo di attesa per il completamento dell'operazione Snapshot.  Urgente = 5 secondi, Medio = 7 secondi e Rilassato = 20 secondi.
+
+
+
+ a| 
+Disabilita la sincronizzazione WAFL
+ a| 
+Selezionare questa opzione per evitare di forzare un punto di coerenza WAFL .
+
+|===
+** Selezionare la freccia *Script* per eseguire i comandi pre e post per le operazioni di quiesce, snapshot e unquiesce.
++
+È anche possibile eseguire i comandi pre prima di uscire dall'operazione di backup.  I prescript e i postscript vengono eseguiti nel server SnapCenter .
+
+** Selezionare la freccia **Configurazioni personalizzate**, quindi immettere le coppie di valori personalizzati richieste per tutti i processi che utilizzano questa risorsa.
+** Selezionare la freccia *Strumento Copia snapshot* per selezionare lo strumento per creare snapshot:
++
+|===
+| Se vuoi... | Poi... 
+
+
+ a| 
+SnapCenter per creare uno Snapshot a livello di archiviazione
+ a| 
+Selezionare * SnapCenter senza coerenza del file system*.
+
+
+
+ a| 
+SnapCenter per utilizzare il plug-in per Windows per mettere il file system in uno stato coerente e quindi creare uno Snapshot
+ a| 
+Selezionare * SnapCenter con coerenza del file system*.
+
+
+
+ a| 
+Per immettere il comando per creare uno Snapshot
+ a| 
+Selezionare *Altro*, quindi immettere il comando per creare uno Snapshot.
+
+|===
++
+image:../media/application_settings.gif["impostazioni dell'applicazione"]
+
+
+
+. Nella pagina Criteri, procedere come segue:
++
+.. Selezionare una o più policy dall'elenco a discesa.
++
+
+NOTE: Puoi anche creare una policy cliccando *image:../media/add_policy_from_resourcegroup.gif["aggiungi gruppo di risorse del modulo di policy"] *.
+
++
+Nella sezione Configura pianificazioni per policy selezionate vengono elencate le policy selezionate.
+
+.. Seleziona *image:../media/add_policy_from_resourcegroup.gif["aggiungi gruppo di risorse del modulo di policy"] * nella colonna Configura pianificazioni per il criterio per il quale si desidera configurare una pianificazione.
+.. Nella finestra di dialogo Aggiungi pianificazioni per il criterio _nome_criterio_, configurare la pianificazione, quindi selezionare *OK*.
++
+_policy_name_ è il nome della policy selezionata.
+
++
+Le pianificazioni configurate sono elencate nella colonna Pianificazioni applicate.
+
+
+
+. Nella pagina Notifica, dall'elenco a discesa *Preferenza e-mail*, seleziona gli scenari in cui desideri inviare le e-mail.
++
+È necessario specificare anche gli indirizzi email del mittente e del destinatario, nonché l'oggetto dell'email.  SMTP deve essere configurato anche in *Impostazioni* > *Impostazioni globali*.
+
+. Rivedi il riepilogo e seleziona *Fine*.
++
+Viene visualizzata la pagina della topologia delle risorse.
+
+. Seleziona *Esegui backup adesso*.
+. Nella pagina Backup, procedere come segue:
++
+.. Se hai applicato più criteri alla risorsa, dall'elenco a discesa *Criterio* seleziona il criterio che desideri utilizzare per il backup.
++
+Se il criterio selezionato per il backup su richiesta è associato a una pianificazione di backup, i backup su richiesta verranno conservati in base alle impostazioni di conservazione specificate per il tipo di pianificazione.
+
+.. Selezionare *Backup*.
+
+
+. Monitorare l'avanzamento dell'operazione cliccando su *Monitoraggio* > *Lavori*.
++
+** Nelle configurazioni MetroCluster , SnapCenter potrebbe non essere in grado di rilevare una relazione di protezione dopo un failover.
++
+Per informazioni, vedere: https://kb.netapp.com/Advice_and_Troubleshooting/Data_Protection_and_Security/SnapCenter/Unable_to_detect_SnapMirror_or_SnapVault_relationship_after_MetroCluster_failover["Impossibile rilevare la relazione SnapMirror o SnapVault dopo il failover MetroCluster"^]
+
+** Se si esegue il backup dei dati dell'applicazione su VMDK e la dimensione dell'heap Java per il SnapCenter Plug-in for VMware vSphere non è sufficientemente grande, il backup potrebbe non riuscire.
++
+Per aumentare la dimensione dell'heap Java, individuare il file di script _/opt/netapp/init_scripts/scvservice_.  In quello script, il comando _do_start method_ avvia il servizio plug-in SnapCenter VMware.  Aggiornare il comando come segue: _Java -jar -Xmx8192M -Xms4096M_
+
+
+
+
+
+--
+.Cmdlet di PowerShell
+--
+.Passi
+. Avvia una sessione di connessione con SnapCenter Server per un utente specificato utilizzando il cmdlet Open-SmConnection.
++
+[listing]
+----
+PS C:\> Open-SmConnection
+----
++
+Viene visualizzata la richiesta di nome utente e password.
+
+. Aggiungere risorse manuali utilizzando il cmdlet Add-SmResources.
++
+Questo esempio mostra come aggiungere un'istanza PostgreSQL:
+
++
+[listing]
+----
+PS C:\> Add-SmResource -HostName 10.32.212.13 -PluginCode PostgreSQL -ResourceType Instance -ResourceName postgresqlinst1 -StorageFootPrint (@{"VolumeName"="winpostgresql01_data01";"LUNName"="winpostgresql01_data01";"StorageSystem"="scsnfssvm"}) -MountPoints "D:\"
+----
+. Creare un criterio di backup utilizzando il cmdlet Add-SmPolicy.
+. Proteggere la risorsa o aggiungere un nuovo gruppo di risorse a SnapCenter utilizzando il cmdlet Add-SmResourceGroup.
+. Avviare un nuovo processo di backup utilizzando il cmdlet New-SmBackup.
++
+Questo esempio mostra come eseguire il backup di un gruppo di risorse:
+
++
+[listing]
+----
+C:\PS> New-SMBackup -ResourceGroupName 'ResourceGroup_wback-up-clusters-using-powershell-cmdlets-postgresql.adocith_Resources'  -Policy postgresql_policy1
+----
++
+Questo esempio esegue il backup di una risorsa protetta:
+
++
+[listing]
+----
+C:\PS> New-SMBackup -Resources @{"Host"="10.232.204.42";"Uid"="MDC\SID";"PluginName"="postgresql"} -Policy postgresql_policy2
+----
+. Monitorare lo stato del processo (in esecuzione, completato o non riuscito) utilizzando il cmdlet Get-smJobSummaryReport.
++
+[listing]
+----
+PS C:\> Get-smJobSummaryReport -JobID 123
+----
+. Monitorare i dettagli del processo di backup, come ID del backup e nome del backup, per eseguire operazioni di ripristino o clonazione utilizzando il cmdlet Get-SmBackupReport.
++
+[listing]
+----
+PS C:\> Get-SmBackupReport -JobId 351
+Output:
+BackedUpObjects           : {DB1}
+FailedObjects             : {}
+IsScheduled               : False
+HasMetadata               : False
+SmBackupId                : 269
+SmJobId                   : 2361
+StartDateTime             : 10/4/2016 11:20:45 PM
+EndDateTime               : 10/4/2016 11:21:32 PM
+Duration                  : 00:00:46.2536470
+CreatedDateTime           : 10/4/2016 11:21:09 PM
+Status                    : Completed
+ProtectionGroupName       : Verify_ASUP_Message_windows
+SmProtectionGroupId       : 211
+PolicyName                : test2
+SmPolicyId                : 20
+BackupName                : Verify_ASUP_Message_windows_scc54_10-04-2016_23.20.46.2758
+VerificationStatus        : NotVerified
+VerificationStatuses      :
+SmJobError                :
+BackupType                : SCC_BACKUP
+CatalogingStatus          : NotApplicable
+CatalogingStatuses        :
+ReportDataCreatedDateTime :
+----
+
+
+Le informazioni relative ai parametri che possono essere utilizzati con il cmdlet e le relative descrizioni possono essere ottenute eseguendo _Get-Help command_name_. In alternativa, puoi anche fare riferimento a https://docs.netapp.com/us-en/snapcenter-cmdlets/index.html["Guida di riferimento ai cmdlet del software SnapCenter"^] .
+
+--
+====

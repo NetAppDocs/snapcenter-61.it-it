@@ -1,0 +1,178 @@
+---
+permalink: protect-mysql/clone-mysql-backup.html 
+sidebar: sidebar 
+keywords: SnapCenter Plug-in for MySQL,run as 
+summary: È possibile utilizzare SnapCenter per clonare un backup.  È possibile clonare dal backup primario o secondario. 
+---
+= Clonare un backup MySQL
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile utilizzare SnapCenter per clonare un backup.  È possibile clonare dal backup primario o secondario.
+
+.Prima di iniziare
+* Avresti dovuto eseguire il backup delle risorse o del gruppo di risorse.
+* È necessario assicurarsi che gli aggregati che ospitano i volumi siano presenti nell'elenco degli aggregati assegnati della macchina virtuale di archiviazione (SVM).
+* Per i comandi pre-clone o post-clone, è necessario verificare se i comandi sono presenti nell'elenco dei comandi disponibile sull'host del plug-in dai seguenti percorsi:
++
+** Posizione predefinita sull'host Windows: _C:\Programmi\ NetApp\ SnapCenter\Snapcenter Plug-in Creator\etc\allowed_commands.config_
+** Posizione predefinita sull'host Linux: _/opt/ NetApp/snapcenter/scc/etc/allowed_commands.config_
+
+
+
+
+
+NOTE: Se i comandi non sono presenti nell'elenco dei comandi, l'operazione fallirà.  * Per la versione MySQL 5.7, è necessario impostare IGNORE_MYSQLX_PORT = true (per impostazione predefinita false) nel file MySQL. properties.
+
+.Informazioni su questo compito
+* Non è possibile proteggere le istanze MySQL clonate.
+* Per informazioni sulle operazioni di suddivisione del volume FlexClone , vedere,https://docs.netapp.com/us-en/ontap/volumes/split-flexclone-from-parent-task.html["Dividere un volume FlexClone dal suo volume padre"] .
+* Per ONTAP 9.12.1 e versioni precedenti, i cloni creati dagli SnapLock Vault Snapshot come parte del ripristino erediteranno il tempo di scadenza SnapLock Vault. L'amministratore dell'archiviazione deve pulire manualmente i cloni dopo la scadenza SnapLock .
+
+
+[role="tabbed-block"]
+====
+.Interfaccia utente SnapCenter
+--
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in appropriato dall'elenco.
+. Nella pagina Risorse, filtra le risorse dall'elenco a discesa *Visualizza* in base al tipo di risorsa.
++
+Le risorse vengono visualizzate insieme a informazioni quali tipo, host, gruppi di risorse e policy associati e stato.
+
+. Selezionare la risorsa o il gruppo di risorse.
++
+Se si seleziona un gruppo di risorse, è necessario selezionare una risorsa.
+
++
+Viene visualizzata la pagina della topologia della risorsa o del gruppo di risorse.
+
+. Dalla vista Gestisci copie, seleziona *Backup* dai sistemi di archiviazione primari o secondari (con mirroring o in vault).
+. Selezionare il backup dei dati dalla tabella, quindi fare clic suimage:../media/clone_icon.gif["icona clone"] .
+. Nella pagina Posizione, eseguire le seguenti azioni:
++
+|===
+| Per questo campo... | Fai questo... 
+
+
+ a| 
+Server clone
+ a| 
+Scegliere un host su cui creare il clone.
+
+
+
+ a| 
+Porta
+ a| 
+Fornire la porta su cui avviare l'istanza MySQL clonata.
+
+
+
+ a| 
+Indirizzo IP di esportazione NFS
+ a| 
+Immettere gli indirizzi IP o i nomi host su cui verranno esportati i volumi clonati.
+
+|===
+. Nella pagina Script, procedere come segue:
++
+
+NOTE: Gli script vengono eseguiti sull'host del plug-in.
+
++
+.. Immettere i comandi per il pre-clone o il post-clone che devono essere eseguiti rispettivamente prima o dopo l'operazione di clonazione.
++
+*** Comando pre-clone: elimina i database esistenti con lo stesso nome
+*** Comando post-clonazione: verifica un database o avvia un database.
+
+
+.. Immettere il comando mount per montare un file system su un host.
++
+Comando di montaggio per un volume o qtree su una macchina Linux:
+
++
+Esempio per NFS: `mount VSERVER_DATA_IP:%VOLUME_NAME_Clone /mnt`
+
+
+
+. Nella pagina Notifica, dall'elenco a discesa *Preferenza e-mail*, seleziona gli scenari in cui desideri inviare le e-mail.
++
+È necessario specificare anche gli indirizzi email del mittente e del destinatario, nonché l'oggetto dell'email.
+
+. Rivedi il riepilogo e poi clicca su *Fine*.
+. Monitorare l'avanzamento dell'operazione cliccando su *Monitoraggio* > *Lavori*.
+
+
+--
+.Cmdlet di PowerShell
+--
+.Passi
+. Avvia una sessione di connessione con SnapCenter Server per un utente specificato utilizzando il cmdlet Open-SmConnection.
++
+[listing]
+----
+PS C:\> Open-SmConnection  -SMSbaseurl  https:\\snapctr.demo.netapp.com:8146/
+----
+. Recuperare i backup per eseguire l'operazione di clonazione utilizzando il cmdlet Get-SmBackup.
++
+Questo esempio mostra che sono disponibili due backup per la clonazione:
+
++
+[listing]
+----
+ C:\PS> Get-SmBackup
+
+        BackupId                      BackupName                    BackupTime                    BackupType
+        --------                      ----------                    ----------                    ----------
+         1                     Payroll Dataset_vise-f6_08... 8/4/2015 11:02:32 AM          Full Backup
+         2                     Payroll Dataset_vise-f6_08... 8/4/2015 11:23:17 AM
+----
+. Avvia un'operazione di clonazione da un backup esistente e specifica gli indirizzi IP di esportazione NFS su cui vengono esportati i volumi clonati.
++
+Questo esempio mostra che il backup da clonare ha un indirizzo NFSExportIPs pari a 10.32.212.14:
+
++
+[listing]
+----
+PS C:\> New-SmClone -AppPluginCode MySQL -BackupName "scs000211748_gdl_englab_netapp_com_MySQL_mysqld_3306_scs000211748_06-26-2024_06.08.35.4307" -Resources @{"Host"="scs000211748.gdl.englab.netapp.com";"Uid"="mysqld_3306"} -Port 3320 -CloneToHost shivarhel30.rtp.openenglab.netapp.com
+----
++
+
+NOTE: Se NFSExportIPs non è specificato, l'impostazione predefinita è l'esportazione nell'host di destinazione del clone.
+
+. Verificare che i backup siano stati clonati correttamente utilizzando il cmdlet Get-SmCloneReport per visualizzare i dettagli del processo di clonazione.
++
+È possibile visualizzare dettagli quali ID clone, data e ora di inizio, data e ora di fine.
+
++
+[listing]
+----
+PS C:\> Get-SmCloneReport -JobId 186
+
+    SmCloneId           : 1
+    SmJobId             : 186
+    StartDateTime       : 8/3/2015 2:43:02 PM
+    EndDateTime         : 8/3/2015 2:44:08 PM
+    Duration            : 00:01:06.6760000
+    Status              : Completed
+    ProtectionGroupName : Draper
+    SmProtectionGroupId : 4
+    PolicyName          : OnDemand_Clone
+    SmPolicyId          : 4
+    BackupPolicyName    : OnDemand_Full_Log
+    SmBackupPolicyId    : 1
+    CloneHostName       : SCSPR0054212005.mycompany.com
+    CloneHostId         : 4
+    CloneName           : Draper__clone__08-03-2015_14.43.53
+    SourceResources     : {Don, Betty, Bobby, Sally}
+    ClonedResources     : {Don_DRAPER, Betty_DRAPER, Bobby_DRAPER, Sally_DRAPER}
+    SmJobError          :
+----
+
+
+--
+====

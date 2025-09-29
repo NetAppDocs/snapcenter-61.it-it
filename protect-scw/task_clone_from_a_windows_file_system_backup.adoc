@@ -1,0 +1,283 @@
+---
+permalink: protect-scw/task_clone_from_a_windows_file_system_backup.html 
+sidebar: sidebar 
+keywords: clone 
+summary: È possibile utilizzare SnapCenter per clonare un backup del file system di Windows.  Se desideri una copia di un singolo file che è stato eliminato o modificato per errore, puoi clonare un backup e accedere a quel file nel clone. 
+---
+= Clona da un backup del file system di Windows
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile utilizzare SnapCenter per clonare un backup del file system di Windows.  Se desideri una copia di un singolo file che è stato eliminato o modificato per errore, puoi clonare un backup e accedere a quel file nel clone.
+
+.Prima di iniziare
+* Dovresti aver preparato la protezione dei dati completando attività quali l'aggiunta di host, l'identificazione delle risorse e la creazione di connessioni alla macchina virtuale di archiviazione (SVM).
+* Dovresti avere un backup del file system.
+* È necessario assicurarsi che gli aggregati che ospitano i volumi siano presenti nell'elenco degli aggregati assegnati della macchina virtuale di archiviazione (SVM).
+* Non è possibile clonare un gruppo di risorse.  È possibile clonare solo singoli backup del file system.
+* Se un backup risiede su una macchina virtuale con un disco VMDK, SnapCenter non può clonare il backup su un server fisico.
+* Se si clona un cluster Windows (ad esempio, un LUN condiviso o un LUN di un volume condiviso del cluster (CSV)), il clone viene archiviato come LUN dedicato sull'host specificato.
+* Per un'operazione di clonazione, la directory radice del punto di montaggio del volume non può essere una directory condivisa.
+* Non è possibile creare un clone su un nodo che non sia il nodo home dell'aggregato.
+* Non è possibile pianificare operazioni di clonazione ricorrenti (ciclo di vita della clonazione) per i file system Windows; è possibile clonare un backup solo su richiesta.
+* Se si sposta una LUN contenente un clone in un nuovo volume, SnapCenter non potrà più supportare il clone.  Ad esempio, non è possibile utilizzare SnapCenter per eliminare quel clone.
+* Non è possibile clonare tra ambienti diversi.  Ad esempio, la clonazione da un disco fisico a un disco virtuale o viceversa.
+
+
+.Informazioni su questo compito
+* SCRIPTS_PATH viene definito utilizzando la chiave PredefinedWindowsScriptsDirectory che si trova nel file SMCoreServiceHost.exe.Config dell'host del plug-in.
++
+Se necessario, è possibile modificare questo percorso e riavviare il servizio SMcore.  Per motivi di sicurezza, si consiglia di utilizzare il percorso predefinito.
+
++
+Il valore della chiave può essere visualizzato da Swagger tramite l'API: API /4.7/configsettings
+
++
+È possibile utilizzare l'API GET per visualizzare il valore della chiave.  L'API SET non è supportata.
+
+* Per ONTAP 9.12.1 e versioni precedenti, i cloni creati dagli SnapLock Vault Snapshot come parte del ripristino erediteranno il tempo di scadenza SnapLock Vault. L'amministratore dell'archiviazione deve pulire manualmente i cloni dopo la scadenza SnapLock .
+
+
+[role="tabbed-block"]
+====
+.Interfaccia utente SnapCenter
+--
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in appropriato dall'elenco.
+. Nella pagina Risorse, seleziona *File System* dall'elenco.
+. Selezionare l'host.
++
+La vista topologica viene visualizzata automaticamente se la risorsa è protetta.
+
+. Dall'elenco delle risorse, seleziona il backup che desideri clonare, quindi fai clic sull'icona di clonazione.
+. Nella pagina Opzioni, procedi come segue:
++
+|===
+| Per questo campo... | Fai questo... 
+
+
+ a| 
+Server clone
+ a| 
+Selezionare l'host su cui creare il clone.
+
+
+
+ a| 
+"`Assegna automaticamente il punto di montaggio`" o "`Assegna automaticamente il punto di montaggio del volume nel percorso`"
+ a| 
+Scegliere se assegnare automaticamente un punto di montaggio o un punto di montaggio del volume in un percorso.
+
+Assegnazione automatica del punto di montaggio del volume in base al percorso: il punto di montaggio in base a un percorso consente di specificare una directory specifica in cui verranno creati i punti di montaggio.  Prima di scegliere questa opzione, è necessario verificare che la directory sia vuota.  Se nella directory è presente un backup, il backup sarà in uno stato non valido dopo l'operazione di montaggio.
+
+
+
+ a| 
+Posizione dell'archivio
+ a| 
+Se si sta clonando un backup secondario, scegliere una posizione di archivio.
+
+|===
+. Nella pagina Script, specificare eventuali prescript o postscript che si desidera eseguire.
++
+
+NOTE: Il percorso prescripts o postscripts non deve includere unità o condivisioni.  Il percorso dovrebbe essere relativo a SCRIPTS_PATH.
+
+. Rivedi il riepilogo e poi clicca su *Fine*.
+. Monitorare l'avanzamento dell'operazione cliccando su *Monitoraggio* > *Lavori*.
+
+
+--
+.Cmdlet di PowerShell
+--
+.Passi
+. Avvia una sessione di connessione con SnapCenter Server per un utente specificato utilizzando il cmdlet Open-SmConnection.
++
+[listing]
+----
+Open-SmConnection  -SMSbaseurl  https://snapctr.demo.netapp.com:8146
+----
+. Elenca i backup che possono essere clonati utilizzando il cmdlet Get-SmBackup o Get-SmResourceGroup.
++
+Questo esempio visualizza informazioni su tutti i backup disponibili:
+
++
+[listing]
+----
+C:\PS>PS C:\> Get-SmBackup
+
+BackupId   BackupName                     BackupTime   BackupType
+--------   ----------                     ----------   ----------
+1          Payroll Dataset_vise-f6_08...  8/4/2015     Full Backup
+                                          11:02:32 AM
+
+2          Payroll Dataset_vise-f6_08...  8/4/2015
+                                          11:23:17 AM
+----
++
+Questo esempio visualizza informazioni su un gruppo di risorse specificato, sulle sue risorse e sui criteri associati:
+
++
+[listing]
+----
+PS C:\> Get-SmResourceGroup -ListResources –ListPolicies
+
+Description :
+CreationTime : 8/4/2015 3:44:05 PM
+ModificationTime : 8/4/2015 3:44:05 PM
+EnableEmail : False
+EmailSMTPServer :
+EmailFrom :
+EmailTo :
+EmailSubject :
+EnableSysLog : False
+ProtectionGroupType : Backup
+EnableAsupOnFailure : False
+Policies : {FinancePolicy}
+HostResourceMaping : {}
+Configuration : SMCoreContracts.SmCloneConfiguration
+LastBackupStatus :
+VerificationServer :
+EmailBody :
+EmailNotificationPreference : Never
+VerificationServerInfo : SMCoreContracts.SmVerificationServerInfo
+SchedulerSQLInstance :
+CustomText :
+CustomSnapshotFormat :
+SearchResources : False
+ByPassCredential : False
+IsCustomSnapshot :
+MaintenanceStatus : Production
+PluginProtectionGroupTypes : {SMSQL}
+Name : Payrolldataset
+Type : Group
+Id : 1
+Host :
+UserName :
+Passphrase :
+Deleted : False
+Auth : SMCoreContracts.SmAuth
+IsClone : False
+CloneLevel : 0
+ApplySnapvaultUpdate : False
+ApplyRetention : False
+RetentionCount : 0
+RetentionDays : 0
+ApplySnapMirrorUpdate : False
+SnapVaultLabel :
+MirrorVaultUpdateRetryCount : 7
+AppPolicies : {}
+Description : FinancePolicy
+PreScriptPath :
+PreScriptArguments :
+PostScriptPath :
+PostScriptArguments :
+ScriptTimeOut : 60000
+DateModified : 8/4/2015 3:43:30 PM
+DateCreated : 8/4/2015 3:43:30 PM
+Schedule : SMCoreContracts.SmSchedule
+PolicyType : Backup
+PluginPolicyType : SMSQL
+Name : FinancePolicy
+Type :
+Id : 1
+Host :
+UserName :
+Passphrase :
+Deleted : False
+Auth : SMCoreContracts.SmAuth
+IsClone : False
+CloneLevel : 0
+clab-a13-13.sddev.lab.netapp.com
+DatabaseGUID :
+SQLInstance : clab-a13-13
+DbStatus : AutoClosed
+DbAccess : eUndefined
+IsSystemDb : False
+IsSimpleRecoveryMode : False
+IsSelectable : True
+SqlDbFileGroups : {}
+SqlDbLogFiles : {}
+AppFileStorageGroups : {}
+LogDirectory :
+AgName :
+Version :
+VolumeGroupIndex : -1
+IsSecondary : False
+Name : TEST
+Type : SQL Database
+Id : clab-a13-13\TEST
+Host : clab-a13-13.sddev.mycompany.com
+UserName :
+Passphrase :
+Deleted : False
+Auth : SMCoreContracts.SmAuth
+IsClone : False
+----
+. Avviare un'operazione di clonazione da un backup esistente utilizzando il cmdlet New-SmClone.
++
+Questo esempio crea un clone da un backup specificato con tutti i log:
+
++
+[listing]
+----
+PS C:\> New-SmClone
+-BackupName payroll_dataset_vise-f3_08-05-2015_15.28.28.9774
+-Resources @{"Host"="vise-f3.sddev.mycompany.com";
+"Type"="SQL Database";"Names"="vise-f3\SQLExpress\payroll"}
+-CloneToInstance vise-f3\sqlexpress -AutoAssignMountPoint
+-Suffix _clonefrombackup
+-LogRestoreType All -Policy clonefromprimary_ondemand
+
+PS C:> New-SmBackup -ResourceGroupName PayrollDataset -Policy FinancePolicy
+----
++
+Questo esempio crea un clone di un'istanza specificata di Microsoft SQL Server:
+
++
+[listing]
+----
+PS C:\> New-SmClone
+-BackupName "BackupDS1_NY-VM-SC-SQL_12-08-2015_09.00.24.8367"
+-Resources @{"host"="ny-vm-sc-sql";"Type"="SQL Database";
+"Names"="ny-vm-sc-sql\AdventureWorks2012_data"}
+-AppPluginCode SMSQL -CloneToInstance "ny-vm-sc-sql"
+-Suffix _CLPOSH -AssignMountPointUnderPath "C:\SCMounts"
+----
+. Visualizzare lo stato del processo di clonazione utilizzando il cmdlet Get-SmCloneReport.
++
+Questo esempio visualizza un report di clonazione per l'ID processo specificato:
+
++
+[listing]
+----
+PS C:\> Get-SmCloneReport -JobId 186
+
+SmCloneId : 1
+SmJobId : 186
+StartDateTime : 8/3/2015 2:43:02 PM
+EndDateTime : 8/3/2015 2:44:08 PM
+Duration : 00:01:06.6760000
+Status : Completed
+ProtectionGroupName : Draper
+SmProtectionGroupId : 4
+PolicyName : OnDemand_Clone
+SmPolicyId : 4
+BackupPolicyName : OnDemand_Full_Log
+SmBackupPolicyId : 1
+CloneHostName : SCSPR0054212005.mycompany.com
+CloneHostId : 4
+CloneName : Draper__clone__08-03-2015_14.43.53
+SourceResources : {Don, Betty, Bobby, Sally}
+ClonedResources : {Don_DRAPER, Betty_DRAPER, Bobby_DRAPER,
+                   Sally_DRAPER}
+----
+
+
+Le informazioni relative ai parametri che possono essere utilizzati con il cmdlet e le relative descrizioni possono essere ottenute eseguendo _Get-Help command_name_. In alternativa, puoi anche fare riferimento a https://docs.netapp.com/us-en/snapcenter-cmdlets/index.html["Guida di riferimento ai cmdlet del software SnapCenter"^] .
+
+--
+====

@@ -1,0 +1,175 @@
+---
+permalink: protect-nsp/restore_a_resource_backup.html 
+sidebar: sidebar 
+keywords: restore 
+summary: È possibile utilizzare SnapCenter per ripristinare le risorse.  Le capacità delle operazioni di ripristino dipendono dal plug-in utilizzato. 
+---
+= Ripristinare un backup delle risorse
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile utilizzare SnapCenter per ripristinare le risorse.  Le capacità delle operazioni di ripristino dipendono dal plug-in utilizzato.
+
+.Prima di iniziare
+* È necessario aver eseguito il backup della risorsa o dei gruppi di risorse.
+* Se si stanno replicando snapshot su un mirror o un vault, l'amministratore SnapCenter deve aver assegnato le macchine virtuali di archiviazione (SVM) sia per i volumi di origine che per quelli di destinazione.
+* È necessario aver annullato qualsiasi operazione di backup in corso per la risorsa o il gruppo di risorse che si desidera ripristinare.
+
+
+.Informazioni su questo compito
+* L'operazione di ripristino predefinita ripristina solo gli oggetti di archiviazione.  Le operazioni di ripristino a livello di applicazione possono essere eseguite solo se il plug-in supportato NetApp fornisce tale funzionalità.
+* Per ONTAP 9.12.1 e versioni precedenti, i cloni creati dagli SnapLock Vault Snapshot come parte del ripristino erediteranno il tempo di scadenza SnapLock Vault. L'amministratore dell'archiviazione deve pulire manualmente i cloni dopo la scadenza SnapLock .
+
+
+[role="tabbed-block"]
+====
+.Interfaccia utente SnapCenter
+--
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in appropriato dall'elenco.
+. Nella pagina Risorse, filtra le risorse dall'elenco a discesa *Visualizza* in base al tipo di risorsa.
++
+Le risorse vengono visualizzate insieme a informazioni quali tipo, nome dell'host o del cluster, gruppi di risorse e policy associati e stato.
+
++
+
+NOTE: Sebbene un backup possa riguardare un gruppo di risorse, quando si esegue il ripristino è necessario selezionare le singole risorse che si desidera ripristinare.
+
++
+Se la risorsa non è protetta, nella colonna *Stato generale* viene visualizzato _Non protetto_.
+
++
+Lo stato _Non protetto_ nella colonna *Stato generale* può significare che la risorsa non è protetta oppure che è stata sottoposta a backup da un utente diverso.
+
+. Selezionare la risorsa oppure selezionare un gruppo di risorse e quindi selezionare una risorsa in quel gruppo.
++
+Viene visualizzata la pagina della topologia delle risorse.
+
+. Dalla vista *Gestisci copie*, seleziona *Backup* dai sistemi di archiviazione primari o secondari (con mirroring o in vault).
+. Nella tabella Backup primari, seleziona il backup da cui desideri effettuare il ripristino, quindi fai clic suimage:../media/restore_icon.gif["icona di ripristino"] .
++
+image::../media/restoring_resource.gif[ripristino delle risorse]
+
+. Nella pagina Ambito di ripristino, selezionare *Risorsa completa* o *Livello file*.
++
+.. Se hai selezionato *Risorsa completa*, il backup della risorsa verrà ripristinato.
++
+Se la risorsa contiene volumi o qtree come Storage Footprint, gli snapshot più recenti su tali volumi o qtree vengono eliminati e non possono essere recuperati.  Inoltre, se sugli stessi volumi o qtree è ospitata un'altra risorsa, anche tale risorsa verrà eliminata.
+
+.. Se hai selezionato *Livello file*, puoi selezionare *Tutti* oppure selezionare volumi o qtree, quindi immettere il percorso relativo ai volumi o qtree selezionati, separati da virgole.
++
+*** È possibile selezionare più volumi e qtree.
+*** Se il tipo di risorsa è LUN, viene ripristinato l'intero LUN.  È possibile selezionare più LUN.  + NOTA: se si seleziona *Tutti*, verranno ripristinati tutti i file sui volumi, qtree o LUN.
+
+
+
+
+. Nella pagina *Pre ops*, immettere i comandi pre restore e unmount da eseguire prima di eseguire un processo di ripristino.
+. Nella pagina *Post ops*, immettere i comandi mount e post restore da eseguire dopo aver eseguito un processo di ripristino.
+. Nella pagina *Notifica*, dall'elenco a discesa *Preferenza e-mail*, seleziona gli scenari in cui desideri inviare le e-mail.
++
+È necessario specificare anche gli indirizzi email del mittente e del destinatario, nonché l'oggetto dell'email.  SMTP deve essere configurato anche nella pagina *Impostazioni* > *Impostazioni globali*.
+
+. Rivedi il riepilogo e poi clicca su *Fine*.
+. Monitorare l'avanzamento dell'operazione cliccando su *Monitoraggio* > *Lavori*.
+
+
+--
+.Cmdlet di PowerShell
+--
+.Passi
+. Avvia una sessione di connessione con SnapCenter Server per un utente specificato utilizzando il cmdlet Open-SmConnection.
++
+[listing]
+----
+PS C:\> Open-Smconnection
+----
+. Recuperare le informazioni su uno o più backup che si desidera ripristinare utilizzando i cmdlet Get-SmBackup e Get-SmBackupReport.
++
+Questo esempio visualizza informazioni su tutti i backup disponibili:
+
++
+[listing]
+----
+PS C:\> Get-SmBackup
+
+BackupId                      BackupName                    BackupTime                    BackupType
+--------                      ----------                    ----------                    ----------
+  1               Payroll Dataset_vise-f6_08... 8/4/2015    11:02:32 AM                 Full Backup
+  2               Payroll Dataset_vise-f6_08... 8/4/2015    11:23:17 AM
+----
++
+Questo esempio mostra informazioni dettagliate sul backup dal 29 gennaio 2015 al 3 febbraio 2015:
+
++
+[listing]
+----
+PS C:\> Get-SmBackupReport -FromDateTime "1/29/2015" -ToDateTime "2/3/2015"
+
+   SmBackupId           : 113
+   SmJobId              : 2032
+   StartDateTime        : 2/2/2015 6:57:03 AM
+   EndDateTime          : 2/2/2015 6:57:11 AM
+   Duration             : 00:00:07.3060000
+   CreatedDateTime      : 2/2/2015 6:57:23 AM
+   Status               : Completed
+   ProtectionGroupName  : Clone
+   SmProtectionGroupId  : 34
+   PolicyName           : Vault
+   SmPolicyId           : 18
+   BackupName           : Clone_SCSPR0019366001_02-02-2015_06.57.08
+   VerificationStatus   : NotVerified
+
+   SmBackupId           : 114
+   SmJobId              : 2183
+   StartDateTime        : 2/2/2015 1:02:41 PM
+   EndDateTime          : 2/2/2015 1:02:38 PM
+   Duration             : -00:00:03.2300000
+   CreatedDateTime      : 2/2/2015 1:02:53 PM
+   Status               : Completed
+   ProtectionGroupName  : Clone
+   SmProtectionGroupId  : 34
+   PolicyName           : Vault
+   SmPolicyId           : 18
+   BackupName           : Clone_SCSPR0019366001_02-02-2015_13.02.45
+   VerificationStatus   : NotVerified
+----
+. Ripristinare i dati dal backup utilizzando il cmdlet Restore-SmBackup.
++
+[listing]
+----
+Restore-SmBackup -PluginCode 'DummyPlugin' -AppObjectId 'scc54.sccore.test.com\DummyPlugin\NTP\DB1' -BackupId 269 -Confirm:$false
+output:
+Name                : Restore 'scc54.sccore.test.com\DummyPlugin\NTP\DB1'
+Id                  : 2368
+StartTime           : 10/4/2016 11:22:02 PM
+EndTime             :
+IsCancellable       : False
+IsRestartable       : False
+IsCompleted         : False
+IsVisible           : True
+IsScheduled         : False
+PercentageCompleted : 0
+Description         :
+Status              : Queued
+Owner               :
+Error               :
+Priority            : None
+Tasks               : {}
+ParentJobID         : 0
+EventId             : 0
+JobTypeId           :
+ApisJobKey          :
+ObjectId            : 0
+PluginCode          : NONE
+PluginName          :
+----
+
+
+Le informazioni relative ai parametri che possono essere utilizzati con il cmdlet e le relative descrizioni possono essere ottenute eseguendo _Get-Help command_name_. In alternativa, puoi anche fare riferimento a https://docs.netapp.com/us-en/snapcenter-cmdlets/index.html["Guida di riferimento ai cmdlet del software SnapCenter"^] .
+
+--
+====

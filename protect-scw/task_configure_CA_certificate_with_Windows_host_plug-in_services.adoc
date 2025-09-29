@@ -1,0 +1,44 @@
+---
+permalink: protect-scw/task_configure_CA_certificate_with_Windows_host_plug-in_services.html 
+sidebar: sidebar 
+keywords: SnapCenter 
+summary: Configurare il certificato CA con i servizi plug-in host di Windows 
+---
+= Configurare il certificato CA con i servizi plug-in host di Windows
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È necessario configurare il certificato CA con i servizi plug-in host di Windows per attivare il certificato digitale installato.
+
+Eseguire i seguenti passaggi sul server SnapCenter e su tutti gli host plug-in in cui sono già distribuiti i certificati CA.
+
+.Passi
+. Rimuovere l'associazione del certificato esistente con la porta predefinita SMCore 8145, eseguendo il seguente comando:
++
+`> netsh http delete sslcert ipport=0.0.0.0:_<SMCore Port>`
+
++
+Per esempio:
+
++
+ > netsh http delete sslcert ipport=0.0.0.0:8145
+. Associare il certificato appena installato ai servizi plug-in host di Windows eseguendo i seguenti comandi:
++
+....
+> $cert = “_<certificate thumbprint>_”
+> $guid = [guid]::NewGuid().ToString("B")
+> netsh http add sslcert ipport=0.0.0.0: _<SMCore Port>_ certhash=$cert appid="$guid"
+....
++
+Per esempio:
+
++
+....
+> $cert = “a909502dd82ae41433e6f83886b00d4277a32a7b”
+> $guid = [guid]::NewGuid().ToString("B")
+> netsh http add sslcert ipport=0.0.0.0: _<SMCore Port>_ certhash=$cert appid="$guid"
+....
+

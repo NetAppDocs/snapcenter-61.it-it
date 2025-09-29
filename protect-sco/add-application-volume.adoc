@@ -1,0 +1,64 @@
+---
+permalink: protect-sco/add-application-volume.html 
+sidebar: sidebar 
+keywords: application volume, overview, add, modify, delete, Oracle database 
+summary: 'Dovresti aggiungere manualmente i volumi dell"applicazione.' 
+---
+= Aggiungere volumi di applicazione
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+SnapCenter supporta il backup e la clonazione dei volumi applicativi del database Oracle.  Dovresti aggiungere manualmente i volumi dell'applicazione.  Il rilevamento automatico dei volumi delle applicazioni non è supportato.
+
+
+NOTE: I volumi applicativi supportano solo connessioni NFS dirette e iSCSI dirette.
+
+*Passi*
+
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in Oracle Database dall'elenco.
+. Fare clic su *Aggiungi volume applicazione*.
+. Nella pagina Nome, eseguire le seguenti azioni:
++
+** Nel campo Nome, immettere il nome del volume dell'applicazione.
+** Nel campo Nome host, immettere il nome dell'host.
+
+
+. Nella pagina Storage Footprint, immettere il nome del sistema di archiviazione, selezionare uno o più volumi e specificare i LUN o i Qtree associati.
++
+È possibile aggiungere più sistemi di archiviazione.
+
+. Rivedi il riepilogo e poi clicca su *Fine*.
+. Nella pagina Risorse, seleziona *Volume applicazione* dall'elenco *Visualizza* per visualizzare tutti i volumi applicazione che hai aggiunto.
+
+
+
+
+== Modificare il volume dell'applicazione
+
+Se non vengono creati backup, è possibile modificare tutti i valori specificati durante l'aggiunta del volume dell'applicazione.  Se il backup viene creato, è possibile modificare solo i dettagli del sistema di archiviazione.
+
+*Passi*
+
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in Oracle Database dall'elenco.
+. Nella pagina Risorse, seleziona *Volume applicazione* dall'elenco *Visualizza*.
+. Clicimage:../media/edit_icon.gif["icona di modifica"] per modificare i valori.
+. Clicimage:../media/edit_icon.gif["icona di modifica"] per modificare i valori.
+
+
+
+
+== Elimina il volume dell'applicazione
+
+Quando si elimina un volume applicativo, se sono presenti backup associati al volume applicativo, il volume applicativo verrà messo in modalità di manutenzione e non verranno creati nuovi backup né conservati i backup precedenti.  Se non sono presenti backup associati, tutti i metadati verranno eliminati.
+
+Se necessario, SnapCenter consente di annullare l'operazione di eliminazione.
+
+*Passi*
+
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in Oracle Database dall'elenco.
+. Nella pagina Risorse, seleziona *Volume applicazione* dall'elenco *Visualizza*.
+. Clicimage:../media/delete_icon.gif["icona di eliminazione"] [elimina icona] per modificare i valori.
+

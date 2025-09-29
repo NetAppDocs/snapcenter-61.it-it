@@ -1,0 +1,16 @@
+---
+permalink: protect-scsql/task_install_snapcenter_plug_in_for_microsoft_sql_server_database.html 
+sidebar: sidebar 
+keywords: installing 
+summary: Se si desidera proteggere i database di SQL Server, è necessario installare e configurare il plug-in SnapCenter per Microsoft SQL Server. 
+---
+= Flusso di lavoro di installazione per il plug-in SnapCenter per Microsoft SQL Server
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Se si desidera proteggere i database di SQL Server, è necessario installare e configurare il plug-in SnapCenter per Microsoft SQL Server.
+
+image::../media/scsql_install_configure_workflow.gif[installa il flusso di lavoro del flusso di lavoro SQL]

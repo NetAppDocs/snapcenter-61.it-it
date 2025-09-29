@@ -1,0 +1,139 @@
+---
+permalink: install/concept_provision_storage_in_vmware_environments.html 
+sidebar: sidebar 
+keywords: guest OS, VMware ESXi server, limitations, RDM, Microsoft cluster 
+summary: È possibile utilizzare il plug-in SnapCenter per Microsoft Windows negli ambienti VMware per creare e gestire LUN e copie di backup Snapshot. 
+---
+= Fornire storage in ambienti VMware
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile utilizzare il plug-in SnapCenter per Microsoft Windows negli ambienti VMware per creare e gestire LUN e snapshot.
+
+
+
+== Piattaforme di sistemi operativi guest VMware supportate
+
+* Versioni supportate di Windows Server
+* Configurazioni del cluster Microsoft
++
+Supporto per un massimo di 16 nodi supportati su VMware quando si utilizza Microsoft iSCSI Software Initiator o fino a due nodi utilizzando FC
+
+* LUN RDM
++
+Supporto per un massimo di 56 RDM LUN con quattro controller LSI Logic SCSI per RDMS normale o 42 RDM LUN con tre controller LSI Logic SCSI su un plug-in box-to-box VMware VM MSCS per la configurazione Windows
+
++
+Supporta il controller VMware ParaVirtual SCSI.  Sui dischi RDM possono essere supportati 256 dischi.
+
+
+
+Per le informazioni più recenti sulle versioni supportate, vedere https://imt.netapp.com/matrix/imt.jsp?components=121034;&solution=1517&isHWU&src=IMT["Strumento matrice di interoperabilità NetApp"^] .
+
+
+
+=== Limitazioni relative al server VMware ESXi
+
+* L'installazione del plug-in per Windows su un cluster Microsoft su macchine virtuali utilizzando le credenziali ESXi non è supportata.
++
+Quando si installa il plug-in per Windows su macchine virtuali in cluster, è necessario utilizzare le credenziali vCenter.
+
+* Tutti i nodi del cluster devono utilizzare lo stesso ID di destinazione (sulla scheda SCSI virtuale) per lo stesso disco del cluster.
+* Quando si crea un LUN RDM al di fuori del plug-in per Windows, è necessario riavviare il servizio plug-in per consentirgli di riconoscere il disco appena creato.
+* Non è possibile utilizzare contemporaneamente gli iniziatori iSCSI e FC su un sistema operativo guest VMware.
+
+
+
+
+=== Privilegi minimi vCenter richiesti per le operazioni SnapCenter RDM
+
+Per eseguire operazioni RDM in un sistema operativo guest, è necessario disporre dei seguenti privilegi vCenter sull'host:
+
+* Datastore: Rimuovi file
+* Host: Configurazione > Configurazione partizione di archiviazione
+* Macchina virtuale: configurazione
+
+
+È necessario assegnare questi privilegi a un ruolo a livello di Virtual Center Server.  Il ruolo a cui assegni questi privilegi non può essere assegnato a nessun utente senza privilegi di root.
+
+Dopo aver assegnato questi privilegi, è possibile installare il plug-in per Windows sul sistema operativo guest.
+
+
+
+== Gestire le LUN FC RDM in un cluster Microsoft
+
+È possibile utilizzare il plug-in per Windows per gestire un cluster Microsoft mediante LUN FC RDM, ma è necessario prima creare il quorum RDM condiviso e l'archiviazione condivisa all'esterno del plug-in, quindi aggiungere i dischi alle macchine virtuali nel cluster.
+
+A partire da ESXi 5.5, è possibile utilizzare anche hardware ESX iSCSI e FCoE per gestire un cluster Microsoft.  Il plug-in per Windows include il supporto immediato per i cluster Microsoft.
+
+
+
+=== Requisiti
+
+Il plug-in per Windows fornisce supporto per cluster Microsoft che utilizzano LUN FC RDM su due diverse macchine virtuali appartenenti a due diversi server ESX o ESXi, noti anche come cluster across box, quando si soddisfano requisiti di configurazione specifici.
+
+* Le macchine virtuali (VM) devono eseguire la stessa versione di Windows Server.
+* Le versioni del server ESX o ESXi devono essere le stesse per ogni host padre VMware.
+* Ogni host padre deve disporre di almeno due schede di rete.
+* Deve essere presente almeno un datastore VMware Virtual Machine File System (VMFS) condiviso tra i due server ESX o ESXi.
+* VMware consiglia di creare il datastore condiviso su una SAN FC.
++
+Se necessario, il datastore condiviso può essere creato anche tramite iSCSI.
+
+* La LUN RDM condivisa deve essere in modalità di compatibilità fisica.
+* Il LUN RDM condiviso deve essere creato manualmente all'esterno del plug-in per Windows.
++
+Non è possibile utilizzare dischi virtuali per l'archiviazione condivisa.
+
+* Su ogni macchina virtuale del cluster deve essere configurato un controller SCSI in modalità di compatibilità fisica:
++
+Windows Server 2008 R2 richiede di configurare il controller SCSI LSI Logic SAS su ogni macchina virtuale.  Le LUN condivise non possono utilizzare il controller LSI Logic SAS esistente se ne esiste solo uno del suo tipo ed è già collegato all'unità C:.
+
++
+I controller SCSI di tipo paravirtuale non sono supportati sui cluster VMware Microsoft.
+
++
+
+NOTE: Quando si aggiunge un controller SCSI a una LUN condivisa su una macchina virtuale in modalità di compatibilità fisica, è necessario selezionare l'opzione *Raw Device Mappings* (RDM) e non l'opzione *Crea un nuovo disco* in VMware Infrastructure Client.
+
+* I cluster di macchine virtuali Microsoft non possono far parte di un cluster VMware.
+* Quando si installa il plug-in per Windows su macchine virtuali appartenenti a un cluster Microsoft, è necessario utilizzare le credenziali vCenter e non quelle ESX o ESXi.
+* Il plug-in per Windows non può creare un singolo igroup con iniziatori provenienti da più host.
++
+L'igroup contenente gli iniziatori di tutti gli host ESXi deve essere creato sul controller di archiviazione prima di creare i LUN RDM che verranno utilizzati come dischi del cluster condivisi.
+
+* Assicurarsi di creare un LUN RDM su ESXi 5.0 utilizzando un iniziatore FC.
++
+Quando si crea un LUN RDM, viene creato un gruppo di iniziatori con ALUA.
+
+
+
+
+
+=== Limitazioni
+
+Il plug-in per Windows supporta i cluster Microsoft che utilizzano LUN RDM FC/iSCSI su diverse macchine virtuali appartenenti a diversi server ESX o ESXi.
+
+
+NOTE: Questa funzionalità non è supportata nelle versioni precedenti a ESX 5.5i.
+
+* Il plug-in per Windows non supporta cluster su datastore ESX iSCSI e NFS.
+* Il plug-in per Windows non supporta iniziatori misti in un ambiente cluster.
++
+Gli iniziatori devono essere FC o Microsoft iSCSI, ma non entrambi.
+
+* Gli iniziatori iSCSI e gli HBA ESX non sono supportati sui dischi condivisi in un cluster Microsoft.
+* Il plug-in per Windows non supporta la migrazione di macchine virtuali con vMotion se la macchina virtuale fa parte di un cluster Microsoft.
+* Il plug-in per Windows non supporta MPIO su macchine virtuali in un cluster Microsoft.
+
+
+
+
+=== Creare un LUN FC RDM condiviso
+
+Prima di poter utilizzare le LUN FC RDM per condividere lo storage tra i nodi in un cluster Microsoft, è necessario creare il disco quorum condiviso e il disco di storage condiviso, quindi aggiungerli a entrambe le macchine virtuali nel cluster.
+
+Il disco condiviso non viene creato utilizzando il plug-in per Windows.  Dovresti creare e poi aggiungere la LUN condivisa a ciascuna macchina virtuale nel cluster. Per informazioni, vedere https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/6-7/setup-for-failover-clustering-and-microsoft-cluster-service.html["Cluster di macchine virtuali su host fisici"^] .

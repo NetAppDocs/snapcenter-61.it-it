@@ -1,0 +1,70 @@
+---
+permalink: protect-scu/task_monitor_unix_file_systems_backup_operations.html 
+sidebar: sidebar 
+keywords: SnapCenter Server, monitor, backup, activity pane, data protection 
+summary: 'È possibile monitorare l"avanzamento delle diverse operazioni di backup utilizzando la pagina SnapCenter Jobs.  Potrebbe essere opportuno controllare lo stato di avanzamento per determinare quando il processo è completato o se si è verificato un problema.' 
+---
+= Monitorare il backup dei file system Unix
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Scopri come monitorare l'avanzamento delle operazioni di backup e di protezione dei dati.
+
+
+
+== Monitorare le operazioni di backup dei file system Unix
+
+È possibile monitorare l'avanzamento delle diverse operazioni di backup utilizzando la pagina SnapCenterJobs.  Potrebbe essere opportuno controllare lo stato di avanzamento per determinare quando il processo è completato o se si è verificato un problema.
+
+.Informazioni su questo compito
+Nella pagina Lavori vengono visualizzate le seguenti icone che indicano lo stato corrispondente delle operazioni:
+
+* image:../media/progress_icon.gif["Icona in corso"]In corso
+* image:../media/success_icon.gif["Icona completata"]Completato con successo
+* image:../media/failed_icon.gif["Icona fallita"]Fallito
+* image:../media/warning_icon.gif["Completato con icona di avviso"]Completato con avvisi o non è stato possibile avviarlo a causa di avvisi
+* image:../media/verification_job_in_queue.gif["Il lavoro di verifica è in coda"]In coda
+* image:../media/cancel_icon.gif["Icona Annulla"]Annullato
+
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Monitor*.
+. Nella pagina Monitor, fare clic su *Lavori*.
+. Nella pagina Lavori, procedere come segue:
++
+.. Clicimage:../media/filter_icon.gif["icona del filtro"] per filtrare l'elenco in modo che vengano elencate solo le operazioni di backup.
+.. Specificare le date di inizio e fine.
+.. Dall'elenco a discesa *Tipo*, selezionare *Backup*.
+.. Dal menu a discesa *Stato*, seleziona lo stato del backup.
+.. Fare clic su *Applica* per visualizzare le operazioni completate correttamente.
+
+
+. Selezionare un processo di backup, quindi fare clic su *Dettagli* per visualizzare i dettagli del processo.
++
+
+NOTE: Sebbene lo stato del processo di backup venga visualizzatoimage:../media/success_icon.gif["Icona completata"] , quando fai clic sui dettagli del processo, potresti vedere che alcune delle attività secondarie dell'operazione di backup sono ancora in corso o contrassegnate con segnali di avviso.
+
+. Nella pagina Dettagli lavoro, fare clic su *Visualizza registri*.
++
+Il pulsante *Visualizza registri* visualizza i registri dettagliati per l'operazione selezionata.
+
+
+
+
+
+== Monitorare le operazioni di protezione dei dati nel riquadro Attività
+
+Il riquadro Attività visualizza le cinque operazioni eseguite più di recente.  Nel riquadro Attività viene inoltre visualizzato quando è stata avviata l'operazione e il suo stato.
+
+Il riquadro Attività visualizza informazioni relative alle operazioni di backup, ripristino, clonazione e backup pianificato.
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in appropriato dall'elenco.
+. Clicimage:../media/activity_pane_icon.gif["icona del riquadro attività"] nel riquadro Attività per visualizzare le cinque operazioni più recenti.
++
+Quando si fa clic su una delle operazioni, i dettagli dell'operazione vengono elencati nella pagina *Dettagli lavoro*.
+
+

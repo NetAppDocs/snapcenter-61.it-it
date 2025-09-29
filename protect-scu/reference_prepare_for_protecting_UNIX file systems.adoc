@@ -1,0 +1,30 @@
+---
+permalink: protect-scu/reference_prepare_for_protecting_UNIX file systems.html 
+sidebar: sidebar 
+keywords: unix file systems, preparation for protection, prerequisites 
+summary: 'Prima di eseguire qualsiasi operazione di protezione dei dati, come backup, clonazione o ripristino, è necessario configurare l"ambiente.' 
+---
+= Prepararsi alla protezione dei file system Unix
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Prima di eseguire qualsiasi operazione di protezione dei dati, come backup, clonazione o ripristino, è necessario configurare l'ambiente.  È anche possibile configurare SnapCenter Server per utilizzare la tecnologia SnapMirror e SnapVault .
+
+Per sfruttare i vantaggi della tecnologia SnapVault e SnapMirror , è necessario configurare e inizializzare una relazione di protezione dei dati tra i volumi di origine e di destinazione sul dispositivo di archiviazione.  Per eseguire queste attività è possibile utilizzare NetAppSystem Manager oppure la riga di comando della console di archiviazione.
+
+Prima di utilizzare il plug-in per i file system Unix, l'amministratore SnapCenter deve installare e configurare SnapCenter Server ed eseguire le attività preliminari.
+
+* Installa e configura SnapCenter Server.link:../install/task_install_the_snapcenter_server_using_the_install_wizard.html["Saperne di più"^]
+* Configurare l'ambiente SnapCenter aggiungendo connessioni al sistema di archiviazione.link:../install/task_add_storage_systems.html["Saperne di più"^]
++
+
+NOTE: SnapCenter non supporta più SVM con lo stesso nome su cluster diversi.  Ogni SVM registrato con SnapCenter tramite la registrazione SVM o la registrazione cluster deve essere univoco.
+
+* Aggiungi host, installa i plug-in e scopri le risorse.
+* Se si utilizza SnapCenter Server per proteggere i file system Unix che risiedono su VMware RDM LUN o VMDK, è necessario distribuire il SnapCenter Plug-in for VMware vSphere e registrare il plug-in con SnapCenter.
+* Installa Java sul tuo host Linux.
+* Se si desidera la replica del backup, configurare SnapMirror e SnapVault su ONTAP.
+

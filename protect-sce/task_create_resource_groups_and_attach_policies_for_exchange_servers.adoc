@@ -1,0 +1,133 @@
+---
+permalink: protect-sce/task_create_resource_groups_and_attach_policies_for_exchange_servers.html 
+sidebar: sidebar 
+keywords: resource group 
+summary: Per qualsiasi attività di protezione dei dati è necessario un gruppo di risorse.  È inoltre necessario allegare una o più policy al gruppo di risorse per definire il tipo di processo di protezione dei dati che si desidera eseguire e la pianificazione della protezione. 
+---
+= Creare gruppi di risorse e allegare criteri per i server Exchange
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Per qualsiasi attività di protezione dei dati è necessario un gruppo di risorse.  È inoltre necessario allegare una o più policy al gruppo di risorse per definire il tipo di processo di protezione dei dati che si desidera eseguire e la pianificazione della protezione.
+
+.Informazioni su questo compito
+* SCRIPTS_PATH viene definito utilizzando la chiave PredefinedWindowsScriptsDirectory che si trova nel file SMCoreServiceHost.exe.Config dell'host del plug-in.
++
+Se necessario, è possibile modificare questo percorso e riavviare il servizio SMcore.  Per motivi di sicurezza, si consiglia di utilizzare il percorso predefinito.
+
++
+Il valore della chiave può essere visualizzato da Swagger tramite l'API: API /4.7/configsettings
+
++
+È possibile utilizzare l'API GET per visualizzare il valore della chiave.  L'API SET non è supportata.
+
+* Per ONTAP 9.12.1 e versioni precedenti, i cloni creati dagli SnapLock Vault Snapshot come parte del ripristino erediteranno il tempo di scadenza SnapLock Vault. L'amministratore dell'archiviazione deve pulire manualmente i cloni dopo la scadenza SnapLock .
+* L'aggiunta di nuovi database senza SnapMirror ActiveSync a un gruppo di risorse esistente che contiene risorse con SnapMirror ActiveSync non è supportata.
+* L'aggiunta di nuovi database a un gruppo di risorse esistente in modalità failover di SnapMirror ActiveSync non è supportata.  È possibile aggiungere risorse al gruppo di risorse solo nello stato normale o di failback.
+
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in Microsoft Exchange Server dall'elenco.
+. Nella pagina Risorse, seleziona *Database* dall'elenco *Visualizza*.
++
+
+NOTE: Se hai aggiunto di recente una risorsa a SnapCenter, fai clic su *Aggiorna risorse* per visualizzare la risorsa appena aggiunta.
+
+. Fare clic su *Nuovo gruppo di risorse*.
+. Nella pagina Nome, eseguire le seguenti azioni:
++
+|===
+| Per questo campo... | Fai questo... 
+
+
+ a| 
+Nome
+ a| 
+Immettere il nome del gruppo di risorse.
+
+
+NOTE: Il nome del gruppo di risorse non deve superare i 250 caratteri.
+
+
+
+ a| 
+Etichette
+ a| 
+Inserisci una o più etichette che ti aiuteranno a cercare in seguito il gruppo di risorse.
+
+Ad esempio, se aggiungi HR come tag a più gruppi di risorse, potrai successivamente trovare tutti i gruppi di risorse associati al tag HR.
+
+
+
+ a| 
+Utilizza il formato nome personalizzato per la copia Snapshot
+ a| 
+Facoltativo: inserisci un nome e un formato personalizzati per lo snapshot.
+
+Ad esempio, _customtext_resourcegroup_policy_hostname_ o _resourcegroup_hostname_.  Per impostazione predefinita, al nome dello snapshot viene aggiunto un timestamp.
+
+|===
+. Nella pagina Risorse, procedere come segue:
++
+.. Selezionare il tipo di risorsa e il gruppo di disponibilità del database dagli elenchi a discesa per filtrare l'elenco delle risorse disponibili.
++
+
+NOTE: Se hai aggiunto risorse di recente, queste appariranno nell'elenco delle Risorse disponibili solo dopo aver aggiornato l'elenco delle risorse.
+
+
+
++
+Nelle sezioni Risorse disponibili e Risorse selezionate, il nome del database viene visualizzato con l'FQDN dell'host.  Questo FQDN indica solo che il database è attivo su quell'host specifico e potrebbe non eseguire il backup su questo host.  È necessario selezionare uno o più server di backup dall'opzione Selezione server, dove si desidera eseguire il backup nel caso in cui sia stata selezionata l'opzione *Copie di backup sui server da selezionare al momento della creazione del processo di backup* nella policy.
+
++
+.. Digita il nome della risorsa nella casella di testo di ricerca oppure scorri per individuare una risorsa.
+.. Per spostare le risorse dalla sezione Risorse disponibili alla sezione Risorse selezionate, eseguire uno dei seguenti passaggi:
++
+*** Selezionare *Seleziona automaticamente tutte le risorse sullo stesso volume di archiviazione* per spostare tutte le risorse sullo stesso volume nella sezione Risorse selezionate.
+*** Selezionare le risorse dalla sezione Risorse disponibili, quindi fare clic sulla freccia destra per spostarle nella sezione Risorse selezionate.
++
+I gruppi di risorse di SnapCenter per Microsoft Exchange Server non possono avere più di 30 database per snapshot.  Se in un gruppo di risorse sono presenti più di 30 database, viene creato un secondo Snapshot per i database aggiuntivi.  Pertanto, vengono creati 2 sotto-processi sotto il processo di backup principale.  Per i backup con replica secondaria, mentre è in corso l'aggiornamento SnapMirror o SnapVault , potrebbero verificarsi scenari in cui l'aggiornamento di entrambi i sottoprocessi si sovrappone.  Il processo di backup principale continua a essere eseguito all'infinito, anche se i registri indicano che il processo è stato completato.
+
+
+
+
+
+. Nella pagina Criteri, procedere come segue:
++
+.. Selezionare una o più policy dall'elenco a discesa.
++
+
+NOTE: Puoi anche creare una policy cliccando *image:../media/add_policy_from_resourcegroup.gif["Icona più"] *.
+
++
+
+NOTE: Se un criterio contiene l'opzione *Esegui copie di backup sui server da selezionare al momento della creazione del processo di backup*, viene visualizzata un'opzione di selezione del server per selezionare uno o più server.  L'opzione di selezione del server elencherà solo il server in cui si trova il database selezionato nello storage NetApp .
+
++
+Nella sezione Configura pianificazioni per policy selezionate vengono elencate le policy selezionate.
+
+.. Nella sezione Configura pianificazioni per policy selezionate, fai clic su *image:../media/add_policy_from_resourcegroup.gif["Icona più"] * nella colonna *Configura pianificazioni* per la policy per la quale si desidera configurare la pianificazione.
+.. Nella finestra di dialogo Aggiungi pianificazioni per la policy _nome_policy_, configurare la pianificazione specificando la data di inizio, la data di scadenza e la frequenza, quindi fare clic su *OK*.
++
+È necessario effettuare questa operazione per ogni frequenza indicata nella polizza.  Le pianificazioni configurate sono elencate nella colonna *Pianificazioni applicate* nella sezione Configura pianificazioni per policy selezionate.
+
++
+Le pianificazioni di backup di terze parti non sono supportate quando si sovrappongono alle pianificazioni di backup SnapCenter .
+
+
+
+. Nella pagina Notifica, dall'elenco a discesa *Preferenza e-mail*, seleziona gli scenari in cui desideri inviare le e-mail.
++
+È necessario specificare anche gli indirizzi email del mittente e del destinatario, nonché l'oggetto dell'email.  Se si desidera allegare il report dell'operazione eseguita sul gruppo di risorse, selezionare *Allega report lavoro*.
+
++
+Per la notifica via e-mail, è necessario aver specificato i dettagli del server SMTP utilizzando l'interfaccia grafica utente o il comando PowerShell `Set-SmSmtpServer` .
+
++
+Le informazioni relative ai parametri che possono essere utilizzati con il cmdlet e le relative descrizioni possono essere ottenute eseguendo _Get-Help command_name_. In alternativa, puoi anche fare riferimento a https://docs.netapp.com/us-en/snapcenter-cmdlets/index.html["Guida di riferimento ai cmdlet del software SnapCenter"^] .
+
+. Rivedi il riepilogo e poi clicca su *Fine*.
+

@@ -1,0 +1,128 @@
+---
+permalink: protect-scu/task_create_backup_policies_for_unix_file_systems.html 
+sidebar: sidebar 
+keywords: backup policies, policies, unix file systems, file systems 
+summary: Creare una policy di backup per i file system Unix di cui si desidera eseguire il backup. 
+---
+= Creare policy di backup per i file system Unix
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Prima di utilizzare SnapCenter per eseguire il backup dei file system Unix, è necessario creare una policy di backup per la risorsa o il gruppo di risorse di cui si desidera eseguire il backup.  Una policy di backup è un insieme di regole che regolano il modo in cui si gestiscono, si pianificano e si conservano i backup.  È inoltre possibile specificare le impostazioni relative a replica, script e tipo di backup.  La creazione di un criterio consente di risparmiare tempo quando si desidera riutilizzarlo su un'altra risorsa o un altro gruppo di risorse.
+
+.Prima di iniziare
+* È necessario prepararsi alla protezione dei dati completando attività quali l'installazione SnapCenter, l'aggiunta di host, l'individuazione dei file system e la creazione di connessioni al sistema di archiviazione.
+* Se si replicano gli snapshot su un mirror o su un archivio secondario vault, l'amministratore SnapCenter deve aver assegnato le SVM sia per il volume di origine che per quello di destinazione.
+* Esaminare i prerequisiti e le limitazioni specifici SnapMirror ActiveSync. Per informazioni, fare riferimento https://docs.netapp.com/us-en/ontap/smbc/considerations-limits.html#volumes["Limiti degli oggetti per la sincronizzazione attiva SnapMirror"] .
+
+
+.Informazioni su questo compito
+* SnapLock
++
+** Se è selezionata l'opzione "Conserva le copie di backup per un numero specifico di giorni", il periodo di conservazione SnapLock deve essere inferiore o uguale ai giorni di conservazione indicati.
++
+Specificando un periodo di blocco degli snapshot si impedisce l'eliminazione degli snapshot fino alla scadenza del periodo di conservazione. Ciò potrebbe comportare la conservazione di un numero di snapshot maggiore rispetto al conteggio specificato nella policy.
+
++
+Per ONTAP 9.12.1 e versioni precedenti, i cloni creati dagli SnapLock Vault Snapshot come parte del ripristino erediteranno il tempo di scadenza SnapLock Vault. L'amministratore dell'archiviazione deve pulire manualmente i cloni dopo la scadenza SnapLock .
+
+
+
+
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Impostazioni*.
+. Nella pagina Impostazioni, fare clic su *Criteri*.
+. Selezionare *File System Unix* dall'elenco a discesa.
+. Fare clic su *Nuovo*.
+. Nella pagina Nome, immettere il nome e i dettagli della policy.
+. Nella pagina Backup e replica, eseguire le seguenti azioni:
++
+.. Specificare le impostazioni di backup.
+.. Specificare la frequenza di programmazione selezionando *Su richiesta*, *Ogni ora*, *Giornaliera*, *Settimanale* o *Mensile*.
+.. Nella sezione Seleziona opzioni di replicazione secondaria, seleziona una o entrambe le seguenti opzioni di replicazione secondaria:
+
+
++
+|===
+| Per questo campo... | Fai questo... 
+
+
+ a| 
+Aggiorna SnapMirror dopo aver creato una copia Snapshot locale
+ a| 
+Selezionare questo campo per creare copie mirror dei set di backup su un altro volume (replica SnapMirror ).
+
+Questa opzione dovrebbe essere abilitata per la sincronizzazione attiva SnapMirror .
+
+
+
+ a| 
+Aggiorna SnapVault dopo aver creato una copia Snapshot locale
+ a| 
+Selezionare questa opzione per eseguire la replica del backup da disco a disco (backup SnapVault ).
+
+
+
+ a| 
+Errore nel conteggio dei tentativi
+ a| 
+Immettere il numero massimo di tentativi di replica consentiti prima che l'operazione venga interrotta.
+
+|===
+. Nella pagina Conservazione, specificare le impostazioni di conservazione per il tipo di backup e il tipo di pianificazione selezionati nella pagina Backup e replica:
++
+|===
+
+
+| Se lo desidera... | Poi... 
+
+
+ a| 
+Conserva un certo numero di snapshot
+ a| 
+Seleziona *Copie da conservare*, quindi specifica il numero di snapshot che desideri conservare.
+
+Se il numero di Snapshot supera il numero specificato, gli Snapshot vengono eliminati partendo dalle copie più vecchie.
+
+
+NOTE: Il valore massimo di ritenzione è 1018. I backup non riusciranno se la conservazione è impostata su un valore superiore a quello supportato dalla versione ONTAP sottostante.
+
+
+IMPORTANT: Se si prevede di abilitare la replica SnapVault , è necessario impostare il conteggio di conservazione su 2 o su un valore superiore.  Se si imposta il conteggio di conservazione su 1, l'operazione di conservazione potrebbe non riuscire perché il primo Snapshot è lo Snapshot di riferimento per la relazione SnapVault finché uno Snapshot più recente non viene replicato sulla destinazione.
+
+
+
+ a| 
+Conserva gli snapshot per un certo numero di giorni
+ a| 
+Selezionare *Conserva copie per*, quindi specificare il numero di giorni per cui si desidera conservare gli snapshot prima di eliminarli.
+
+
+
+ a| 
+Periodo di blocco della copia snapshot
+ a| 
+Selezionare *Periodo di blocco della copia snapshot* e specificare la durata in giorni, mesi o anni.
+
+Il periodo di conservazione di Snaplock dovrebbe essere inferiore a 100 anni.
+
+|===
+. Seleziona l'etichetta della policy.
++
+
+NOTE: È possibile assegnare etichette SnapMirror agli snapshot primari per la replica remota, consentendo agli snapshot primari di trasferire l'operazione di replica degli snapshot da SnapCenter ai sistemi secondari ONTAP . Questa operazione può essere eseguita senza abilitare l'opzione SnapMirror o SnapVault nella pagina dei criteri.
+
+. Nella pagina Script, immettere il percorso e gli argomenti del prescript o del postscript che si desidera eseguire rispettivamente prima o dopo l'operazione di backup.
++
+
+NOTE: Dovresti controllare se i comandi sono presenti nell'elenco dei comandi disponibile sull'host del plug-in dal percorso _ /opt/ NetApp/snapcenter/scc/etc/allowed_commands.config_.
+
++
+È anche possibile specificare il valore di timeout dello script. Il valore predefinito è 60 secondi.
+
+. Rivedi il riepilogo e poi clicca su *Fine*.
+

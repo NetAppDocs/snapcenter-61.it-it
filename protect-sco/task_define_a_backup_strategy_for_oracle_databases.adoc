@@ -1,0 +1,304 @@
+---
+permalink: protect-sco/task_define_a_backup_strategy_for_oracle_databases.html 
+sidebar: sidebar 
+keywords: backup type, preferred nodes, catalog backups, schedules, backup name format, retention, verification 
+summary: Definire una strategia di backup garantisce di avere i mezzi per ripristinare o clonare con successo i database. 
+---
+= Definire una strategia di backup per i database Oracle
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Definisci una strategia di backup per assicurarti di avere i mezzi per ripristinare o clonare correttamente i tuoi database.
+
+Il contratto di servizio (SLA), l'obiettivo del tempo di ripristino (RTO) e l'obiettivo del punto di ripristino (RPO) determinano in larga misura la strategia di backup.
+
+* L'SLA definisce il livello di servizio previsto e affronta questioni relative al servizio, come la disponibilità e le prestazioni del servizio.
+* L'RTO definisce il tempo necessario al ripristino di un processo aziendale dopo un'interruzione del servizio.
+* RPO definisce l'età dei file che devono essere recuperati dall'archivio di backup affinché le normali operazioni possano riprendere dopo un errore.
+
+
+
+
+== Configurazioni del database Oracle supportate per i backup
+
+SnapCenter supporta il backup di diverse configurazioni di database Oracle.
+
+* Oracle autonomo
+* Cluster di applicazioni reali Oracle (RAC)
+* Oracle Standalone Legacy
+* Database contenitore autonomo Oracle (CDB)
+* Oracle Data Guard in standby
++
+È possibile creare solo backup offline dei database standby di Data Guard.  Il backup con arresto offline, il backup del solo registro di archivio e il backup completo non sono supportati.
+
+* Oracle Active Data Guard standby
++
+È possibile creare backup online solo dei database standby di Active Data Guard.  Non sono supportati il backup del solo registro di archivio e il backup completo.
+
++
+
+NOTE: Prima di creare un backup del database Data Guard standby o Active Data Guard standby, il processo di ripristino gestito (MRP) viene arrestato e, una volta creato il backup, MRP viene avviato.
+
+* Gestione automatica dell'archiviazione (ASM)
++
+** ASM standalone e ASM RAC su disco macchina virtuale (VMDK)
++
+
+NOTE: Tra tutti i metodi di ripristino supportati per i database Oracle, è possibile eseguire solo il ripristino di tipo connect-and-copy dei database ASM RAC su VMDK.
+
+** ASM standalone e ASM RAC su Raw Device Mapping (RDM) È possibile eseguire operazioni di backup, ripristino e clonazione su database Oracle su ASM, con o senza ASMLib.
+** Driver filtro Oracle ASM (ASMFD)
++
+
+NOTE: Le operazioni di migrazione e clonazione PDB non sono supportate.
+
+** Oracle Flex ASM
+
+
+
+
+Per le informazioni più recenti sulle versioni Oracle supportate, vedere https://imt.netapp.com/matrix/imt.jsp?components=121071;&solution=1259&isHWU&src=IMT["Strumento matrice di interoperabilità NetApp"^] .
+
+
+
+== Tipi di backup supportati per i database Oracle
+
+Tipo di backup specifica il tipo di backup che si desidera creare.  SnapCenter supporta tipi di backup online e offline per i database Oracle.
+
+
+
+=== Backup online
+
+Un backup creato quando il database è online è detto backup online.  Chiamato anche backup a caldo, il backup online consente di creare un backup del database senza doverlo arrestare.
+
+Come parte del backup online, puoi creare un backup dei seguenti file:
+
+* Solo file di dati e file di controllo
+* Archivia solo i file di registro (in questo scenario il database non viene portato in modalità di backup)
+* Database completo che include file di dati, file di controllo e file di registro di archivio
+
+
+
+
+=== Backup offline
+
+Un backup creato quando il database è in stato di montaggio o di spegnimento è chiamato backup offline.  Un backup offline è anche chiamato backup a freddo.  Nei backup offline è possibile includere solo file di dati e file di controllo.  È possibile creare un backup di montaggio offline o di arresto offline.
+
+* Quando si crea un backup di montaggio offline, è necessario assicurarsi che il database sia in uno stato montato.
++
+Se il database si trova in uno stato diverso, l'operazione di backup fallisce.
+
+* Quando si crea un backup di arresto offline, il database può trovarsi in qualsiasi stato.
++
+Lo stato del database viene modificato nello stato richiesto per creare un backup.  Dopo aver creato il backup, lo stato del database viene ripristinato allo stato originale.
+
+
+
+
+
+== Come SnapCenter scopre i database Oracle
+
+Le "Risorse" sono database Oracle sull'host gestiti da SnapCenter.  È possibile aggiungere questi database ai gruppi di risorse per eseguire operazioni di protezione dei dati dopo aver individuato i database disponibili.  È opportuno conoscere il processo seguito da SnapCenter per individuare diversi tipi e versioni di database Oracle.
+
+|===
+| Per le versioni di Oracle da 11__g__ a 12__c__R1 | Per le versioni di Oracle da 12__c__R2 a 18__c__ 
+
+
+ a| 
+*Database RAC*: i database RAC vengono scoperti solo sulla base delle voci /etc/oratab.
+
+Le voci del database dovrebbero essere nel file /etc/oratab.
+ a| 
+*Database RAC*: i database RAC vengono rilevati tramite il comando srvctl config.
+
+
+
+ a| 
+*Autonomo*: i database autonomi vengono rilevati solo sulla base delle voci /etc/oratab.
+
+Le voci del database dovrebbero essere nel file /etc/oratab.
+ a| 
+*Autonomo*: i database autonomi vengono rilevati in base alle voci nel file /etc/oratab e all'output del comando srvctl config.
+
+
+
+ a| 
+*ASM*: La voce dell'istanza ASM dovrebbe essere disponibile nel file /etc/oratab.
+ a| 
+*ASM*: La voce dell'istanza ASM non deve trovarsi nel file /etc/oratab.
+
+
+
+ a| 
+*RAC One Node*: i database RAC One Node vengono rilevati solo sulla base delle voci /etc/oratab.
+
+I database devono essere nello stato _nomount_, _mount_ o _open_.  Le voci del database dovrebbero essere nel file /etc/oratab.
+
+Lo stato del database RAC One Node verrà contrassegnato come rinominato o eliminato se il database è già stato rilevato e sono associati backup al database.
+
+Se il database viene spostato, è necessario eseguire i seguenti passaggi:
+
+. Aggiungere manualmente la voce del database riposizionato nel file /etc/oratab sul nodo RAC sottoposto a failover.
+. Aggiorna manualmente le risorse.
+. Selezionare il database RAC One Node dalla pagina delle risorse, quindi fare clic su *Impostazioni database*.
+. Configurare il database per impostare i nodi del cluster preferiti sul nodo RAC che attualmente ospita il database.
+. Eseguire le operazioni SnapCenter .
+
+
+
+NOTE: Se hai spostato un database da un nodo a un altro e la voce oratab nel nodo precedente non è stata eliminata, dovresti eliminare manualmente la voce oratab per evitare che lo stesso database venga visualizzato due volte.
+ a| 
+*RAC One Node*: i database RAC One Node vengono rilevati solo tramite il comando srvctl config.
+
+I database devono essere nello stato _nomount_, _mount_ o _open_.  Lo stato del database RAC One Node verrà contrassegnato come rinominato o eliminato se il database è già stato rilevato e sono associati backup al database.
+
+Se il database viene spostato, è necessario eseguire i seguenti passaggi:
+
+. Aggiorna manualmente le risorse.
+. Selezionare il database RAC One Node dalla pagina delle risorse, quindi fare clic su **Impostazioni database**.
+. Configurare il database per impostare i nodi del cluster preferiti sul nodo RAC che attualmente ospita il database.
+. Eseguire le operazioni SnapCenter .
+
+
+|===
+
+NOTE: Se nel file /etc/oratab sono presenti voci di database Oracle 12__c__R2 e 18__c__ e lo stesso database è registrato con il comando srvctl config, SnapCenter eliminerà le voci di database duplicate.  Se sono presenti voci obsolete nel database, il database verrà rilevato ma non sarà raggiungibile e lo stato sarà offline.
+
+
+
+== Nodi preferiti nella configurazione RAC
+
+Nella configurazione di Oracle Real Application Clusters (RAC), è possibile specificare i nodi preferiti su cui verrà eseguita l'operazione di backup.  Se non si specifica il nodo preferito, SnapCenter assegna automaticamente un nodo come preferito e su tale nodo viene creato un backup.
+
+I nodi preferiti potrebbero essere uno o tutti i nodi del cluster in cui sono presenti le istanze del database RAC.  L'operazione di backup verrà attivata solo su questi nodi preferiti, nell'ordine di preferenza.
+
+Esempio: il database RAC cdbrac ha tre istanze: cdbrac1 sul nodo 1, cdbrac2 sul nodo 2 e cdbrac3 sul nodo 3.  Le istanze node1 e node2 sono configurate per essere i nodi preferiti, con node2 come prima preferenza e node1 come seconda preferenza.  Quando si esegue un'operazione di backup, l'operazione viene tentata prima sul nodo 2 perché è il primo nodo preferito.  Se node2 non è nello stato di backup, il che potrebbe essere dovuto a molteplici motivi, ad esempio l'agente plug-in non è in esecuzione sull'host, l'istanza del database sull'host non è nello stato richiesto per il tipo di backup specificato o l'istanza del database su node2 in una configurazione FlexASM non è servita dall'istanza ASM locale; l'operazione verrà tentata su node1.  Il nodo3 non verrà utilizzato per il backup perché non è presente nell'elenco dei nodi preferiti.
+
+In una configurazione Flex ASM, i nodi Leaf non verranno elencati come nodi preferiti se la cardinalità è inferiore al numero di nodi nel cluster RAC.  Se si verificano modifiche nei ruoli dei nodi del cluster Flex ASM, è necessario rilevarle manualmente in modo che i nodi preferiti vengano aggiornati.
+
+
+
+=== Stato del database richiesto
+
+Affinché il backup venga completato correttamente, le istanze del database RAC sui nodi preferiti devono essere nello stato richiesto:
+
+* Per creare un backup online, una delle istanze del database RAC nei nodi preferiti configurati deve essere nello stato aperto.
+* Una delle istanze del database RAC nei nodi preferiti configurati deve essere nello stato di montaggio e tutte le altre istanze, inclusi gli altri nodi preferiti, devono essere nello stato di montaggio o in uno stato inferiore per creare un backup di montaggio offline.
+* Le istanze del database RAC possono trovarsi in qualsiasi stato, ma è necessario specificare i nodi preferiti per creare un backup di arresto offline.
+
+
+
+
+== Come catalogare i backup con Oracle Recovery Manager
+
+I backup dei database Oracle possono essere catalogati con Oracle Recovery Manager (RMAN) per archiviare le informazioni di backup nel repository Oracle RMAN.
+
+I backup catalogati possono essere utilizzati in seguito per operazioni di ripristino a livello di blocco o di ripristino point-in-time dello spazio tabella.  Quando non hai bisogno di questi backup catalogati, puoi rimuovere le informazioni del catalogo.
+
+Per la catalogazione, il database deve essere montato o in uno stato superiore.  È possibile eseguire la catalogazione su backup di dati, backup di log di archivio e backup completi.  Se la catalogazione è abilitata per un backup di un gruppo di risorse che dispone di più database, la catalogazione viene eseguita per ciascun database.  Per i database Oracle RAC, la catalogazione verrà eseguita sul nodo preferito in cui il database è almeno nello stato montato.
+
+
+NOTE: Se si desidera catalogare i backup di un database RAC, assicurarsi che non sia in esecuzione nessun altro processo per quel database.  Se è in esecuzione un altro processo, l'operazione di catalogazione fallisce anziché essere messa in coda.
+
+Per impostazione predefinita, per la catalogazione viene utilizzato il file di controllo del database di destinazione.  Se si desidera aggiungere un database di catalogo esterno, è possibile configurarlo specificando le credenziali e il nome del substrato di rete trasparente (TNS) del catalogo esterno tramite la procedura guidata Impostazioni database dall'interfaccia utente grafica (GUI) di SnapCenter .  È anche possibile configurare il database del catalogo esterno dalla CLI eseguendo il comando Configure-SmOracleDatabase con le opzioni -OracleRmanCatalogCredentialName e -OracleRmanCatalogTnsName.
+
+Se è stata abilitata l'opzione di catalogazione durante la creazione di un criterio di backup Oracle dalla GUI SnapCenter , i backup vengono catalogati utilizzando Oracle RMAN come parte dell'operazione di backup.  È anche possibile eseguire la catalogazione differita dei backup eseguendo il comando Catalog-SmBackupWithOracleRMAN.  Dopo aver catalogato i backup, è possibile eseguire il comando Get-SmBackupDetails per ottenere le informazioni sui backup catalogati, ad esempio il tag per i file di dati catalogati, il percorso del catalogo dei file di controllo e le posizioni dei registri di archivio catalogati.
+
+Se il nome del gruppo di dischi ASM è maggiore o uguale a 16 caratteri, da SnapCenter 3.0, il formato di denominazione utilizzato per il backup è SC_HASHCODEofDISKGROUP_DBSID_BACKUPID.  Tuttavia, se il nome del gruppo di dischi è inferiore a 16 caratteri, il formato di denominazione utilizzato per il backup è DISKGROUPNAME_DBSID_BACKUPID, che è lo stesso formato utilizzato in SnapCenter 2.0.
+
+
+NOTE: HASHCODEofDISKGROUP è un numero generato automaticamente (da 2 a 10 cifre) univoco per ciascun gruppo di dischi ASM.
+
+È possibile eseguire controlli incrociati per aggiornare le informazioni obsolete del repository RMAN sui backup i cui record del repository non corrispondono al loro stato fisico.  Ad esempio, se un utente rimuove i registri archiviati dal disco con un comando del sistema operativo, il file di controllo indica comunque che i registri sono sul disco, quando in realtà non è così.  L'operazione di controllo incrociato consente di aggiornare il file di controllo con le informazioni.  È possibile abilitare il controllo incrociato eseguendo il comando Set-SmConfigSettings e assegnando il valore TRUE al parametro ENABLE_CROSSCHECK.  Il valore predefinito è impostato su FALSE.
+
+`sccli Set-SmConfigSettings-ConfigSettingsTypePlugin-PluginCodeSCO-ConfigSettings "KEY=ENABLE_CROSSCHECK, VALUE=TRUE"`
+
+È possibile rimuovere le informazioni del catalogo eseguendo il comando Uncatalog-SmBackupWithOracleRMAN.  Non è possibile rimuovere le informazioni del catalogo utilizzando l'interfaccia utente grafica SnapCenter .  Tuttavia, le informazioni di un backup catalogato vengono rimosse durante l'eliminazione del backup o durante l'eliminazione del gruppo di conservazione e di risorse associato a tale backup catalogato.
+
+
+NOTE: Quando si forza l'eliminazione dell'host SnapCenter , le informazioni dei backup catalogati associati a tale host non vengono rimosse.  È necessario rimuovere le informazioni di tutti i backup catalogati per quell'host prima di forzare l'eliminazione dell'host.
+
+Se la catalogazione e la decatalogazione non riescono perché il tempo dell'operazione ha superato il valore di timeout specificato per il parametro ORACLE_PLUGIN_RMAN_CATALOG_TIMEOUT, è necessario modificare il valore del parametro eseguendo il seguente comando:
+
+`/opt/Netapp/snapcenter/spl/bin/sccli Set-SmConfigSettings-ConfigSettingsType Plugin -PluginCode SCO-ConfigSettings "KEY=ORACLE_PLUGIN_RMAN_CATALOG_TIMEOUT,VALUE=user_defined_value"`
+
+Dopo aver modificato il valore del parametro, riavviare il servizio SnapCenter Plug-in Loader (SPL) eseguendo il seguente comando:
+
+`/opt/NetApp/snapcenter/spl/bin/spl restart`
+
+Le informazioni sui parametri che possono essere utilizzati con il comando e le relative descrizioni possono essere ottenute eseguendo Get-Help nome_comando. In alternativa, puoi anche fare riferimento a https://library.netapp.com/ecm/ecm_download_file/ECMLP3337666["Guida di riferimento ai comandi del software SnapCenter"^] .
+
+
+
+== Pianificazioni di backup
+
+La frequenza del backup (tipo di pianificazione) è specificata nei criteri; una pianificazione del backup è specificata nella configurazione del gruppo di risorse.  Il fattore più critico nella determinazione della frequenza o della pianificazione di un backup è la velocità di modifica della risorsa e l'importanza dei dati.  Potresti eseguire il backup di una risorsa molto utilizzata ogni ora, mentre potresti eseguire il backup di una risorsa raramente utilizzata una volta al giorno.  Altri fattori includono l'importanza della risorsa per la tua organizzazione, il tuo Service Level Agreement (SLA) e il tuo Recover Point Objective (RPO).
+
+Un SLA definisce il livello di servizio previsto e affronta molti aspetti correlati al servizio, tra cui la disponibilità e le prestazioni del servizio.  Un RPO definisce la strategia per l'età dei file che devono essere recuperati dall'archivio di backup affinché le normali operazioni possano riprendere dopo un errore.  L'SLA e l'RPO contribuiscono alla strategia di protezione dei dati.
+
+Anche per una risorsa molto utilizzata, non è necessario eseguire un backup completo più di una o due volte al giorno.  Ad esempio, potrebbero essere sufficienti backup regolari del registro delle transazioni per garantire di disporre dei backup necessari.  Quanto più spesso si esegue il backup dei database, tanto minore sarà il numero di registri delle transazioni che SnapCenter dovrà utilizzare al momento del ripristino, il che può comportare operazioni di ripristino più rapide.
+
+Le pianificazioni dei backup sono composte da due parti, come segue:
+
+* Frequenza di backup
++
+La frequenza di backup (la frequenza con cui devono essere eseguiti i backup), denominata _tipo di pianificazione_ per alcuni plug-in, fa parte della configurazione di una policy.  È possibile selezionare la frequenza di backup oraria, giornaliera, settimanale o mensile per la policy.  Se non si seleziona nessuna di queste frequenze, la policy creata sarà una policy solo on-demand.  È possibile accedere alle policy facendo clic su *Impostazioni* > *Policy*.
+
+* Pianificazioni di backup
++
+Le pianificazioni dei backup (ovvero quando devono essere eseguiti esattamente) fanno parte della configurazione di un gruppo di risorse.  Ad esempio, se si dispone di un gruppo di risorse con un criterio configurato per backup settimanali, è possibile configurare la pianificazione in modo che il backup venga eseguito ogni giovedì alle 22:00.  È possibile accedere alle pianificazioni dei gruppi di risorse facendo clic su *Risorse* > *Gruppi di risorse*.
+
+
+
+
+
+== Convenzioni di denominazione del backup
+
+È possibile utilizzare la convenzione di denominazione predefinita di Snapshot oppure una convenzione di denominazione personalizzata.  La convenzione di denominazione predefinita per i backup aggiunge un timestamp ai nomi degli snapshot che consente di identificare quando sono state create le copie.
+
+Lo Snapshot utilizza la seguente convenzione di denominazione predefinita:
+
+`resourcegroupname_hostname_timestamp`
+
+Dovresti assegnare nomi logici ai gruppi di risorse di backup, come nell'esempio seguente:
+
+[listing]
+----
+dts1_mach1x88_03-12-2015_23.17.26
+----
+In questo esempio, gli elementi della sintassi hanno i seguenti significati:
+
+* _dts1_ è il nome del gruppo di risorse.
+* _mach1x88_ è il nome host.
+* _03-12-2015_23.17.26_ è la data e l'ora.
+
+
+In alternativa, è possibile specificare il formato del nome dello snapshot durante la protezione delle risorse o dei gruppi di risorse selezionando *Usa formato nome personalizzato per la copia dello snapshot*.  Ad esempio, customtext_resourcegroup_policy_hostname o resourcegroup_hostname.  Per impostazione predefinita, il suffisso timestamp viene aggiunto al nome dello Snapshot.
+
+
+
+== Opzioni di conservazione del backup
+
+È possibile scegliere il numero di giorni per cui conservare le copie di backup oppure specificare il numero di copie di backup che si desidera conservare, fino a un massimo ONTAP di 255 copie.  Ad esempio, la tua organizzazione potrebbe richiedere di conservare 10 giorni di copie di backup o 130 copie di backup.
+
+Durante la creazione di un criterio, è possibile specificare le opzioni di conservazione per il tipo di backup e il tipo di pianificazione.
+
+Se si imposta la replica SnapMirror , il criterio di conservazione viene replicato sul volume di destinazione.
+
+SnapCenter elimina i backup conservati che hanno etichette di conservazione corrispondenti al tipo di pianificazione.  Se il tipo di pianificazione è stato modificato per la risorsa o il gruppo di risorse, i backup con la vecchia etichetta del tipo di pianificazione potrebbero comunque rimanere sul sistema.
+
+
+NOTE: Per la conservazione a lungo termine delle copie di backup, è consigliabile utilizzare il backup SnapVault .
+
+
+
+== Verificare la copia di backup utilizzando il volume di archiviazione primario o secondario
+
+È possibile verificare le copie di backup sul volume di archiviazione primario o sul volume di archiviazione secondario SnapMirror o SnapVault .  La verifica tramite un volume di archiviazione secondario riduce il carico sul volume di archiviazione primario.
+
+Quando si verifica un backup presente sul volume di archiviazione primario o secondario, tutti gli snapshot primari e secondari vengono contrassegnati come verificati.
+
+Per verificare le copie di backup sui volumi di archiviazione secondari SnapMirror e SnapVault è necessaria la licenza SnapRestore .

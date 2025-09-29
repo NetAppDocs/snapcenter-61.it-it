@@ -1,0 +1,30 @@
+---
+permalink: protect-nsp/how_resources_resource_groups_policies_used_for_protecting_netapp_supported_plugins_resources.html 
+sidebar: sidebar 
+keywords: NetApp supported plug-in 
+summary: Prima di utilizzare SnapCenter, è utile comprendere i concetti di base relativi alle operazioni di backup, clonazione e ripristino che si desidera eseguire.  Interagisci con risorse, gruppi di risorse e policy per diverse operazioni. 
+---
+= Come vengono utilizzate risorse, gruppi di risorse e policy per proteggere le risorse dei plug-in supportati da NetApp
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Prima di utilizzare SnapCenter, è utile comprendere i concetti di base relativi alle operazioni di backup, clonazione e ripristino che si desidera eseguire.  Interagisci con risorse, gruppi di risorse e policy per diverse operazioni.
+
+* Le risorse sono in genere database, file system Windows o macchine virtuali di cui si esegue il backup o la clonazione con SnapCenter.
+* Un gruppo di risorse SnapCenter è una raccolta di risorse su un host o cluster.
++
+Quando si esegue un'operazione su un gruppo di risorse, tale operazione viene eseguita sulle risorse definite nel gruppo di risorse in base alla pianificazione specificata per il gruppo di risorse.
+
++
+È possibile eseguire il backup su richiesta di una singola risorsa o di un gruppo di risorse.  È anche possibile eseguire backup pianificati per singole risorse e gruppi di risorse.
+
+* Le policy specificano la frequenza di backup, la conservazione delle copie, la replica, gli script e altre caratteristiche delle operazioni di protezione dei dati.
++
+Quando si crea un gruppo di risorse, si selezionano una o più policy per quel gruppo.  È anche possibile selezionare un criterio quando si esegue un backup su richiesta per una singola risorsa.
+
+
+
+Pensa a un gruppo di risorse come a qualcosa che definisce _cosa_ vuoi proteggere e quando vuoi proteggerlo in termini di giorno e ora.  Pensa a una politica come a qualcosa che definisce _come_ vuoi proteggerla.  Ad esempio, se si esegue il backup di tutti i database o di tutti i file system di un host, è possibile creare un gruppo di risorse che includa tutti i database o tutti i file system nell'host.  È quindi possibile associare due policy al gruppo di risorse: una policy giornaliera e una policy oraria.  Quando si crea il gruppo di risorse e si associano i criteri, è possibile configurare il gruppo di risorse per eseguire un backup basato su file ogni giorno e un'altra pianificazione che esegue un backup basato su snapshot ogni ora.

@@ -1,0 +1,43 @@
+---
+permalink: protect-sco/task_clone_oracle_database_backups_using_unix_commands.html 
+sidebar: sidebar 
+keywords: clone, CLI, commands 
+summary: 'Il flusso di lavoro della clonazione comprende la pianificazione, l"esecuzione dell"operazione di clonazione e il monitoraggio dell"operazione.' 
+---
+= Clonare i backup del database Oracle utilizzando i comandi UNIX
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Il flusso di lavoro della clonazione comprende la pianificazione, l'esecuzione dell'operazione di clonazione e il monitoraggio dell'operazione.
+
+*Informazioni su questo compito*
+
+È necessario eseguire i seguenti comandi per creare il file di specifica del clone del database Oracle e avviare l'operazione di clonazione.
+
+Le informazioni riguardanti i parametri che possono essere utilizzati con il comando e le relative descrizioni possono essere ottenute eseguendo Get-Help _command_name_. In alternativa, puoi anche fare riferimento a https://library.netapp.com/ecm/ecm_download_file/ECMLP3337666["Guida di riferimento ai comandi del software SnapCenter"^] .
+
+*Passi*
+
+. Crea una specifica di clone del database Oracle da un backup specificato: _New-SmOracleCloneSpecification_
++
+
+NOTE: Se il criterio di protezione dei dati secondari è mirror-vault unificato, specificare solo -IncludeSecondaryDetails.  Non è necessario specificare -SecondaryStorageType.
+
++
+Questo comando crea automaticamente un file di specifica del clone del database Oracle per il database di origine specificato e il relativo backup.  È inoltre necessario fornire un SID del database clone in modo che il file di specifiche creato contenga i valori generati automaticamente per il database clone che verrà creato.
+
++
+
+NOTE: Il file di specifica del clone viene creato in _/var/opt/snapcenter/sco/clone_specs_.
+
+. Avvia un'operazione di clonazione da un gruppo di risorse di clonazione o da un backup esistente: _New-SmClone_
++
+Questo comando avvia un'operazione di clonazione.  È inoltre necessario fornire un percorso del file di specifica del clone Oracle per l'operazione di clonazione.  È inoltre possibile specificare le opzioni di ripristino, l'host su cui eseguire l'operazione di clonazione, i prescript, i postscript e altri dettagli.
+
++
+Per impostazione predefinita, il file di destinazione del registro di archivio per il database clone viene automaticamente popolato in _$ORACLE_HOME/CLONE_SIDs_.
+
+

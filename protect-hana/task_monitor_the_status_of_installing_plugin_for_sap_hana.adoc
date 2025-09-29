@@ -1,0 +1,40 @@
+---
+permalink: protect-hana/task_monitor_the_status_of_installing_plugin_for_sap_hana.html 
+sidebar: sidebar 
+keywords: monitor, install, snapCenter plug-in for SAP HANA 
+summary: 'È possibile monitorare l"avanzamento dell"installazione del pacchetto plug-in SnapCenter tramite la pagina Lavori.  Potrebbe essere opportuno controllare l"avanzamento dell"installazione per stabilire quando è completa o se si è verificato un problema.' 
+---
+= Monitora lo stato di installazione del plug-in per SAP HANA
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile monitorare l'avanzamento dell'installazione del pacchetto plug-in SnapCenter tramite la pagina Lavori.  Potrebbe essere opportuno controllare l'avanzamento dell'installazione per stabilire quando è completa o se si è verificato un problema.
+
+.Informazioni su questo compito
+Le seguenti icone compaiono nella pagina Lavori e indicano lo stato dell'operazione:
+
+* image:../media/progress_icon.gif["Icona in corso"]In corso
+* image:../media/success_icon.gif["Icona completata"]Completato con successo
+* image:../media/failed_icon.gif["Icona fallita"]Fallito
+* image:../media/warning_icon.gif["Completato con icona di avviso"]Completato con avvisi o non è stato possibile avviarlo a causa di avvisi
+* image:../media/verification_job_in_queue.gif["Il lavoro di verifica è in coda"]In coda
+
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Monitor*.
+. Nella pagina *Monitor*, fare clic su *Lavori*.
+. Nella pagina *Lavori*, per filtrare l'elenco in modo che vengano elencate solo le operazioni di installazione dei plug-in, procedere come segue:
++
+.. Fare clic su *Filtro*.
+.. Facoltativo: specificare la data di inizio e di fine.
+.. Dal menu a discesa Tipo, seleziona *Installazione plug-in*.
+.. Dal menu a discesa Stato, selezionare lo stato dell'installazione.
+.. Fare clic su *Applica*.
+
+
+. Selezionare il lavoro di installazione e fare clic su *Dettagli* per visualizzare i dettagli del lavoro.
+. Nella pagina *Dettagli lavoro*, fare clic su *Visualizza registri*.
+

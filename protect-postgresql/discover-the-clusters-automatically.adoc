@@ -1,0 +1,47 @@
+---
+permalink: protect-postgresql/discover-the-clusters-automatically.html 
+sidebar: sidebar 
+keywords: credentials 
+summary: 'Le risorse sono cluster PostgreSQL sull"host Linux gestiti da SnapCenter.  È possibile aggiungere queste risorse ai gruppi di risorse per eseguire operazioni di protezione dei dati dopo aver individuato i cluster PostgreSQL disponibili.' 
+---
+= Scopri automaticamente i cluster
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Le risorse sono cluster PostgreSQL sull'host Linux gestiti da SnapCenter.  È possibile aggiungere le risorse ai gruppi di risorse per eseguire operazioni di protezione dei dati dopo aver individuato i cluster PostgreSQL disponibili.
+
+.Prima di iniziare
+* È necessario aver già completato attività quali l'installazione di SnapCenter Server, l'aggiunta di host e la configurazione delle connessioni del sistema di archiviazione.
+* Il plug-in SnapCenter per PostgreSQL non supporta il rilevamento automatico delle risorse residenti negli ambienti virtuali RDM/VMDK.
+
+
+.Informazioni su questo compito
+* Dopo aver installato il plug-in, tutti i cluster presenti sull'host Linux vengono automaticamente rilevati e visualizzati nella pagina Risorse.
+* Solo i cluster vengono rilevati automaticamente.
+
+
+Le risorse rilevate automaticamente non possono essere modificate o eliminate.
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in per PostgreSQL dall'elenco.
+. Nella pagina Risorse seleziona il tipo di risorsa dall'elenco Visualizza.
+. (Facoltativo) Fai clic su *image:../media/filter_icon.gif["icona del filtro"] *, quindi selezionare il nome host.
++
+Puoi quindi cliccare su *image:../media/filter_icon.gif["icona del filtro"] * per chiudere il riquadro del filtro.
+
+. Fare clic su *Aggiorna risorse* per scoprire le risorse disponibili sull'host.
++
+Le risorse vengono visualizzate insieme a informazioni quali tipo di risorsa, nome host, gruppi di risorse associati, tipo di backup, criteri e stato generale.
+
++
+** Se il cluster si trova su uno storage NetApp e non è protetto, nella colonna Stato generale viene visualizzato Non protetto.
+** Se il cluster si trova su un sistema di archiviazione NetApp ed è protetto e non viene eseguita alcuna operazione di backup, nella colonna Stato generale viene visualizzato Backup non eseguito.  In caso contrario, lo stato cambierà in Backup non riuscito o Backup riuscito in base allo stato dell'ultimo backup.
+
+
+
+
+
+IMPORTANT: È necessario aggiornare le risorse se i cluster vengono rinominati all'esterno di SnapCenter.

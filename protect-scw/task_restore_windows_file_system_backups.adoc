@@ -1,0 +1,188 @@
+---
+permalink: protect-scw/task_restore_windows_file_system_backups.html 
+sidebar: sidebar 
+keywords: restore 
+summary: È possibile utilizzare SnapCenter per ripristinare i backup del file system.  Il ripristino del file system è un processo multifase che copia tutti i dati da un backup specificato nella posizione originale del file system. 
+---
+= Ripristinare i backup del file system di Windows
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile utilizzare SnapCenter per ripristinare i backup del file system.  Il ripristino del file system è un processo multifase che copia tutti i dati da un backup specificato nella posizione originale del file system.
+
+.Prima di iniziare
+* È necessario aver eseguito il backup del file system.
+* Se è in corso un'operazione pianificata, ad esempio un'operazione di backup, per un file system, è necessario annullare tale operazione prima di poter avviare un'operazione di ripristino.
+* È possibile ripristinare un backup del file system solo nella posizione originale, non in un percorso alternativo.
++
+Non è possibile ripristinare un singolo file da un backup perché il file system ripristinato sovrascrive tutti i dati presenti nella posizione originale del file system.  Per ripristinare un singolo file da un backup del file system, è necessario clonare il backup e accedere al file nel clone.
+
+* Non è possibile ripristinare un volume di sistema o di avvio.
+* SnapCenter può ripristinare i file system in un cluster Windows senza disconnettere il gruppo di cluster.
+
+
+.Informazioni su questo compito
+* SCRIPTS_PATH viene definito utilizzando la chiave PredefinedWindowsScriptsDirectory che si trova nel file SMCoreServiceHost.exe.Config dell'host del plug-in.
++
+Se necessario, è possibile modificare questo percorso e riavviare il servizio SMcore.  Per motivi di sicurezza, si consiglia di utilizzare il percorso predefinito.
+
++
+Il valore della chiave può essere visualizzato da Swagger tramite l'API: API /4.7/configsettings
+
++
+È possibile utilizzare l'API GET per visualizzare il valore della chiave.  L'API SET non è supportata.
+
+* Per l'operazione di ripristino di SnapMirror ActiveSync, è necessario selezionare il backup dalla posizione principale.
+* Per ONTAP 9.12.1 e versioni precedenti, i cloni creati dagli SnapLock Vault Snapshot come parte del ripristino erediteranno il tempo di scadenza SnapLock Vault. L'amministratore dell'archiviazione deve pulire manualmente i cloni dopo la scadenza SnapLock .
+
+
+[role="tabbed-block"]
+====
+.Interfaccia utente SnapCenter
+--
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in appropriato dall'elenco.
+. Per filtrare l'elenco delle risorse, selezionare le opzioni File System e Gruppo di risorse.
+. Selezionare un gruppo di risorse dall'elenco, quindi fare clic su *Ripristina*.
+. Nella pagina Backup, seleziona se desideri effettuare il ripristino dai sistemi di archiviazione primari o secondari, quindi seleziona un backup da ripristinare.
+. Seleziona le opzioni desiderate nella procedura guidata di ripristino.
+. È possibile immettere il percorso e gli argomenti del prescript o del postscript che si desidera che SnapCenter esegua rispettivamente prima o dopo l'operazione di ripristino.
++
+Ad esempio, è possibile eseguire uno script per aggiornare le trap SNMP, automatizzare gli avvisi, inviare registri e così via.
+
++
+
+NOTE: Il percorso prescripts o postscripts non deve includere unità o condivisioni.  Il percorso dovrebbe essere relativo a SCRIPTS_PATH.
+
+. Nella pagina Notifiche, seleziona una delle seguenti opzioni:
++
+|===
+| Per questo campo... | Fai questo... 
+
+
+ a| 
+Registra gli eventi del server SnapCenter nel sistema di archiviazione syslog
+ a| 
+Selezionare questa opzione per registrare gli eventi di SnapCenter Server nel syslog del sistema di archiviazione.
+
+
+
+ a| 
+Invia notifica AutoSupport per operazioni non riuscite al sistema di archiviazione
+ a| 
+Selezionare questa opzione per inviare informazioni su eventuali operazioni non riuscite a NetApp tramite AutoSupport.
+
+
+
+ a| 
+Preferenza e-mail
+ a| 
+Selezionare *Sempre*, *In caso di errore* o *In caso di errore o avviso* per inviare messaggi di posta elettronica ai destinatari dopo il ripristino dei backup.  Inserisci il server SMTP, l'oggetto predefinito dell'e-mail e gli indirizzi e-mail A e Da.
+
+|===
+. Rivedi il riepilogo e poi clicca su *Fine*.
+. Monitorare l'avanzamento dell'operazione cliccando su *Monitoraggio* > *Lavori*.
+
+
+
+IMPORTANT: Se il file system ripristinato contiene un database, è necessario ripristinare anche il database.  Se non si ripristina il database, è possibile che lo stato del database non sia valido.  Per informazioni sul ripristino dei database, consultare la Guida alla protezione dei dati per quel database.
+
+--
+.Cmdlet di PowerShell
+--
+.Passi
+. Avvia una sessione di connessione con SnapCenter Server per un utente specificato utilizzando il cmdlet Open-SmConnection.
++
+[listing]
+----
+PS C:\> Open-Smconnection
+----
+. Recuperare le informazioni su uno o più backup che si desidera ripristinare utilizzando i cmdlet Get-SmBackup e Get-SmBackupReport.
++
+Questo esempio visualizza informazioni su tutti i backup disponibili:
+
++
+[listing]
+----
+PS C:\> Get-SmBackup
+
+BackupId                      BackupName                    BackupTime                    BackupType
+--------                      ----------                    ----------                    ----------
+  1               Payroll Dataset_vise-f6_08... 8/4/2015    11:02:32 AM                 Full Backup
+  2               Payroll Dataset_vise-f6_08... 8/4/2015    11:23:17 AM
+----
++
+Questo esempio mostra informazioni dettagliate sul backup dal 29 gennaio 2015 al 3 febbraio 2015:
+
++
+[listing]
+----
+PS C:\> Get-SmBackupReport -FromDateTime "1/29/2015" -ToDateTime "2/3/2015"
+
+   SmBackupId           : 113
+   SmJobId              : 2032
+   StartDateTime        : 2/2/2015 6:57:03 AM
+   EndDateTime          : 2/2/2015 6:57:11 AM
+   Duration             : 00:00:07.3060000
+   CreatedDateTime      : 2/2/2015 6:57:23 AM
+   Status               : Completed
+   ProtectionGroupName  : Clone
+   SmProtectionGroupId  : 34
+   PolicyName           : Vault
+   SmPolicyId           : 18
+   BackupName           : Clone_SCSPR0019366001_02-02-2015_06.57.08
+   VerificationStatus   : NotVerified
+
+   SmBackupId           : 114
+   SmJobId              : 2183
+   StartDateTime        : 2/2/2015 1:02:41 PM
+   EndDateTime          : 2/2/2015 1:02:38 PM
+   Duration             : -00:00:03.2300000
+   CreatedDateTime      : 2/2/2015 1:02:53 PM
+   Status               : Completed
+   ProtectionGroupName  : Clone
+   SmProtectionGroupId  : 34
+   PolicyName           : Vault
+   SmPolicyId           : 18
+   BackupName           : Clone_SCSPR0019366001_02-02-2015_13.02.45
+   VerificationStatus   : NotVerified
+----
+. Ripristinare i dati dal backup utilizzando il cmdlet Restore-SmBackup.
++
+[listing]
+----
+Restore-SmBackup -PluginCode 'DummyPlugin' -AppObjectId 'scc54.sccore.test.com\DummyPlugin\NTP\DB1' -BackupId 269 -Confirm:$false
+output:
+Name                : Restore 'scc54.sccore.test.com\DummyPlugin\NTP\DB1'
+Id                  : 2368
+StartTime           : 10/4/2016 11:22:02 PM
+EndTime             :
+IsCancellable       : False
+IsRestartable       : False
+IsCompleted         : False
+IsVisible           : True
+IsScheduled         : False
+PercentageCompleted : 0
+Description         :
+Status              : Queued
+Owner               :
+Error               :
+Priority            : None
+Tasks               : {}
+ParentJobID         : 0
+EventId             : 0
+JobTypeId           :
+ApisJobKey          :
+ObjectId            : 0
+PluginCode          : NONE
+PluginName          :
+----
+
+
+Le informazioni relative ai parametri che possono essere utilizzati con il cmdlet e le relative descrizioni possono essere ottenute eseguendo _Get-Help command_name_. In alternativa, puoi anche fare riferimento a https://docs.netapp.com/us-en/snapcenter-cmdlets/index.html["Guida di riferimento ai cmdlet del software SnapCenter"^] .
+
+--
+====

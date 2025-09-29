@@ -1,0 +1,325 @@
+---
+permalink: protect-db2/clone-ibm-db2-backup.html 
+sidebar: sidebar 
+keywords: SnapCenter Plug-in for IBM Db2,run as 
+summary: È possibile utilizzare SnapCenter per clonare un backup.  È possibile clonare dal backup primario o secondario. 
+---
+= Clonare un backup IBM Db2
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile utilizzare SnapCenter per clonare un backup.  È possibile clonare dal backup primario o secondario.
+
+.Prima di iniziare
+* Avresti dovuto eseguire il backup delle risorse o del gruppo di risorse.
+* È necessario assicurarsi che gli aggregati che ospitano i volumi siano presenti nell'elenco degli aggregati assegnati della macchina virtuale di archiviazione (SVM).
+* Durante la creazione di un clone per Db2 su un host alternativo, è necessario creare una struttura di directory n-1 per il percorso di montaggio del clone, uguale al percorso di montaggio originale sull'altro host.  Il percorso di montaggio dovrebbe avere l'autorizzazione di esecuzione _755_.
+* Per i comandi pre-clone o post-clone, è necessario verificare se i comandi sono presenti nell'elenco dei comandi disponibile sull'host del plug-in dai seguenti percorsi:
++
+** Posizione predefinita sull'host Windows: _C:\Programmi\ NetApp\ SnapCenter\Snapcenter Plug-in Creator\etc\allowed_commands.config_
+** Posizione predefinita sull'host Linux: _/opt/ NetApp/snapcenter/scc/etc/allowed_commands.config_
+
+
+
+
+
+NOTE: Se i comandi non sono presenti nell'elenco dei comandi, l'operazione fallirà.
+
+.Informazioni su questo compito
+* Per informazioni sulle operazioni di suddivisione del volume FlexClone , vedere,https://docs.netapp.com/us-en/ontap/volumes/split-flexclone-from-parent-task.html["Dividere un volume FlexClone dal suo volume padre"] .
+* Per ONTAP 9.12.1 e versioni precedenti, i cloni creati dagli SnapLock Vault Snapshot come parte del ripristino erediteranno il tempo di scadenza SnapLock Vault. L'amministratore dell'archiviazione deve pulire manualmente i cloni dopo la scadenza SnapLock .
+
+
+[role="tabbed-block"]
+====
+.Interfaccia utente SnapCenter
+--
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in appropriato dall'elenco.
+. Nella pagina Risorse, filtra le risorse dall'elenco a discesa *Visualizza* in base al tipo di risorsa.
++
+Le risorse vengono visualizzate insieme a informazioni quali tipo, host, gruppi di risorse e policy associati e stato.
+
+. Selezionare la risorsa o il gruppo di risorse.
++
+Se si seleziona un gruppo di risorse, è necessario selezionare una risorsa.
+
++
+Viene visualizzata la pagina della topologia della risorsa o del gruppo di risorse.
+
+. Dalla vista Gestisci copie, seleziona *Backup* dai sistemi di archiviazione primari o secondari (con mirroring o in vault).
+. Selezionare il backup dei dati dalla tabella, quindi fare clic suimage:../media/clone_icon.gif["icona clone"] .
+. Nella pagina Posizione, eseguire le seguenti azioni:
++
+|===
+| Per questo campo... | Fai questo... 
+
+
+ a| 
+Server clone
+ a| 
+Scegliere un host su cui creare il clone.
+
+
+
+ a| 
+Istanza clone di destinazione
+ a| 
+Immettere l'ID dell'istanza clone Db2 di destinazione da clonare dai backup esistenti.
+
+Ciò è applicabile solo per le risorse di tipo storage ANF.
+
+
+
+ a| 
+Nome clone di destinazione
+ a| 
+Inserisci il nome del clone.
+
+Questo è applicabile solo alle risorse del database Db2.
+
+
+
+ a| 
+Indirizzo IP di esportazione NFS
+ a| 
+Immettere gli indirizzi IP o i nomi host su cui verranno esportati i volumi clonati.
+
+Questo è applicabile solo alle risorse di tipo archiviazione NFS.
+
+
+
+ a| 
+Capacità massima del pool (MiB/s)
+ a| 
+Immettere la capacità massima di un pool di capacità.
+
+|===
+. Nella pagina Script, procedere come segue:
++
+
+NOTE: Gli script vengono eseguiti sull'host del plug-in.
+
++
+.. Immettere i comandi per il pre-clone o il post-clone che devono essere eseguiti rispettivamente prima o dopo l'operazione di clonazione.
++
+*** Comando pre-clone: elimina i database esistenti con lo stesso nome
+*** Comando post-clonazione: verifica un database o avvia un database.
+
+
+.. Immettere il comando mount per montare un file system su un host.
++
+Comando di montaggio per un volume o qtree su una macchina Linux:
+
++
+Esempio per NFS: `mount VSERVER_DATA_IP:%VOLUME_NAME_Clone /mnt`
+
+
+
+. Nella pagina Notifica, dall'elenco a discesa *Preferenza e-mail*, seleziona gli scenari in cui desideri inviare le e-mail.
++
+È necessario specificare anche gli indirizzi email del mittente e del destinatario, nonché l'oggetto dell'email.
+
+. Rivedi il riepilogo e poi clicca su *Fine*.
+. Monitorare l'avanzamento dell'operazione cliccando su *Monitoraggio* > *Lavori*.
+
+
+.Dopo aver finito
+Dopo aver clonato le risorse Db2 rilevate automaticamente, la risorsa clonata viene contrassegnata come risorsa manuale.  Fare clic su *Aggiorna risorse* per recuperare la risorsa Db2 clonata.  Quando si elimina il clone, vengono ripuliti anche l'archivio e l'host.
+
+Se non si aggiornano le risorse dopo l'operazione di clonazione e si tenta di eliminare il clone, l'archiviazione e l'host non verranno ripuliti.  È necessario eliminare manualmente le voci in fstab.
+
+--
+.Cmdlet di PowerShell
+--
+.Passi
+. Avvia una sessione di connessione con SnapCenter Server per un utente specificato utilizzando il cmdlet Open-SmConnection.
++
+[listing]
+----
+Open-SmConnection  -SMSbaseurl  https://snapctr.demo.netapp.com:8146
+----
+. Elenca i backup che possono essere clonati utilizzando il cmdlet Get-SmBackup o Get-SmResourceGroup.
++
+Questo esempio visualizza informazioni su tutti i backup disponibili:
+
++
+[listing]
+----
+C:\PS>PS C:\> Get-SmBackup
+
+BackupId   BackupName                     BackupTime   BackupType
+--------   ----------                     ----------   ----------
+1          Payroll Dataset_vise-f6_08...  8/4/2015     Full Backup
+                                          11:02:32 AM
+
+2          Payroll Dataset_vise-f6_08...  8/4/2015
+                                          11:23:17 AM
+----
++
+Questo esempio visualizza informazioni su un gruppo di risorse specificato, sulle sue risorse e sui criteri associati:
+
++
+[listing]
+----
+PS C:\> Get-SmResourceGroup -ListResources –ListPolicies
+
+Description :
+CreationTime : 8/4/2015 3:44:05 PM
+ModificationTime : 8/4/2015 3:44:05 PM
+EnableEmail : False
+EmailSMTPServer :
+EmailFrom :
+EmailTo :
+EmailSubject :
+EnableSysLog : False
+ProtectionGroupType : Backup
+EnableAsupOnFailure : False
+Policies : {FinancePolicy}
+HostResourceMaping : {}
+Configuration : SMCoreContracts.SmCloneConfiguration
+LastBackupStatus :
+VerificationServer :
+EmailBody :
+EmailNotificationPreference : Never
+VerificationServerInfo : SMCoreContracts.SmVerificationServerInfo
+SchedulerSQLInstance :
+CustomText :
+CustomSnapshotFormat :
+SearchResources : False
+ByPassCredential : False
+IsCustomSnapshot :
+MaintenanceStatus : Production
+PluginProtectionGroupTypes : {SMSQL}
+Name : Payrolldataset
+Type : Group
+Id : 1
+Host :
+UserName :
+Passphrase :
+Deleted : False
+Auth : SMCoreContracts.SmAuth
+IsClone : False
+CloneLevel : 0
+ApplySnapvaultUpdate : False
+ApplyRetention : False
+RetentionCount : 0
+RetentionDays : 0
+ApplySnapMirrorUpdate : False
+SnapVaultLabel :
+MirrorVaultUpdateRetryCount : 7
+AppPolicies : {}
+Description : FinancePolicy
+PreScriptPath :
+PreScriptArguments :
+PostScriptPath :
+PostScriptArguments :
+ScriptTimeOut : 60000
+DateModified : 8/4/2015 3:43:30 PM
+DateCreated : 8/4/2015 3:43:30 PM
+Schedule : SMCoreContracts.SmSchedule
+PolicyType : Backup
+PluginPolicyType : SMSQL
+Name : FinancePolicy
+Type :
+Id : 1
+Host :
+UserName :
+Passphrase :
+Deleted : False
+Auth : SMCoreContracts.SmAuth
+IsClone : False
+CloneLevel : 0
+clab-a13-13.sddev.lab.netapp.com
+DatabaseGUID :
+SQLInstance : clab-a13-13
+DbStatus : AutoClosed
+DbAccess : eUndefined
+IsSystemDb : False
+IsSimpleRecoveryMode : False
+IsSelectable : True
+SqlDbFileGroups : {}
+SqlDbLogFiles : {}
+AppFileStorageGroups : {}
+LogDirectory :
+AgName :
+Version :
+VolumeGroupIndex : -1
+IsSecondary : False
+Name : TEST
+Type : SQL Database
+Id : clab-a13-13\TEST
+Host : clab-a13-13.sddev.mycompany.com
+UserName :
+Passphrase :
+Deleted : False
+Auth : SMCoreContracts.SmAuth
+IsClone : False
+----
+. Avviare un'operazione di clonazione da un backup esistente utilizzando il cmdlet New-SmClone.
++
+Questo esempio crea un clone da un backup specificato con tutti i log:
+
++
+[listing]
+----
+PS C:\> New-SmClone
+-BackupName payroll_dataset_vise-f3_08-05-2015_15.28.28.9774
+-Resources @{"Host"="vise-f3.sddev.mycompany.com";
+"Type"="SQL Database";"Names"="vise-f3\SQLExpress\payroll"}
+-CloneToInstance vise-f3\sqlexpress -AutoAssignMountPoint
+-Suffix _clonefrombackup
+-LogRestoreType All -Policy clonefromprimary_ondemand
+
+PS C:> New-SmBackup -ResourceGroupName PayrollDataset -Policy FinancePolicy
+----
++
+Questo esempio crea un clone di un'istanza specificata di Microsoft SQL Server:
+
++
+[listing]
+----
+PS C:\> New-SmClone
+-BackupName "BackupDS1_NY-VM-SC-SQL_12-08-2015_09.00.24.8367"
+-Resources @{"host"="ny-vm-sc-sql";"Type"="SQL Database";
+"Names"="ny-vm-sc-sql\AdventureWorks2012_data"}
+-AppPluginCode SMSQL -CloneToInstance "ny-vm-sc-sql"
+-Suffix _CLPOSH -AssignMountPointUnderPath "C:\SCMounts"
+----
+. Visualizzare lo stato del processo di clonazione utilizzando il cmdlet Get-SmCloneReport.
++
+Questo esempio visualizza un report di clonazione per l'ID processo specificato:
+
++
+[listing]
+----
+PS C:\> Get-SmCloneReport -JobId 186
+
+SmCloneId : 1
+SmJobId : 186
+StartDateTime : 8/3/2015 2:43:02 PM
+EndDateTime : 8/3/2015 2:44:08 PM
+Duration : 00:01:06.6760000
+Status : Completed
+ProtectionGroupName : Draper
+SmProtectionGroupId : 4
+PolicyName : OnDemand_Clone
+SmPolicyId : 4
+BackupPolicyName : OnDemand_Full_Log
+SmBackupPolicyId : 1
+CloneHostName : SCSPR0054212005.mycompany.com
+CloneHostId : 4
+CloneName : Draper__clone__08-03-2015_14.43.53
+SourceResources : {Don, Betty, Bobby, Sally}
+ClonedResources : {Don_DRAPER, Betty_DRAPER, Bobby_DRAPER,
+                   Sally_DRAPER}
+----
+
+
+Le informazioni relative ai parametri che possono essere utilizzati con il cmdlet e le relative descrizioni possono essere ottenute eseguendo _Get-Help command_name_. In alternativa, puoi anche fare riferimento a https://docs.netapp.com/us-en/snapcenter-cmdlets/index.html["Guida di riferimento ai cmdlet del software SnapCenter"^] .
+
+--
+====

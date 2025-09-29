@@ -1,0 +1,82 @@
+---
+permalink: protect-scw/task_define_a_backup_strategy_for_windows_file_systems.html 
+sidebar: sidebar 
+keywords: backup strategy 
+summary: 'Definire una strategia di backup prima di creare i backup ti fornisce i backup necessari per ripristinare o clonare correttamente i tuoi file system.  Il contratto di servizio (SLA), l"obiettivo del tempo di ripristino (RTO) e l"obiettivo del punto di ripristino (RPO) determinano in larga misura la strategia di backup.' 
+---
+= Definire una strategia di backup per i file system di Windows
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Definire una strategia di backup prima di creare i backup ti fornisce i backup necessari per ripristinare o clonare correttamente i tuoi file system.  Il contratto di servizio (SLA), l'obiettivo del tempo di ripristino (RTO) e l'obiettivo del punto di ripristino (RPO) determinano in larga misura la strategia di backup.
+
+Un SLA definisce il livello di servizio previsto e affronta molti aspetti correlati al servizio, tra cui la disponibilità e le prestazioni del servizio.  L'RTO è il tempo entro il quale un processo aziendale deve essere ripristinato dopo un'interruzione del servizio.  RPO definisce la strategia per l'età dei file che devono essere recuperati dall'archivio di backup affinché le normali operazioni possano riprendere dopo un errore.  SLA, RTO e RPO contribuiscono alla strategia di protezione dei dati.
+
+
+
+== Pianificazioni di backup per i file system di Windows
+
+La frequenza del backup è specificata nei criteri; una pianificazione del backup è specificata nella configurazione del gruppo di risorse.  Il fattore più critico nella determinazione della frequenza o della pianificazione di un backup è la velocità di modifica della risorsa e l'importanza dei dati.  Potresti eseguire il backup di una risorsa molto utilizzata ogni ora, mentre potresti eseguire il backup di una risorsa raramente utilizzata una volta al giorno.  Altri fattori includono l'importanza della risorsa per la tua organizzazione, il tuo Service Level Agreement (SLA) e il tuo Recover Point Objective (RPO).
+
+Un SLA definisce il livello di servizio previsto e affronta molti aspetti correlati al servizio, tra cui la disponibilità e le prestazioni del servizio.  Un RPO definisce la strategia per l'età dei file che devono essere recuperati dall'archivio di backup affinché le normali operazioni possano riprendere dopo un errore.  L'SLA e l'RPO contribuiscono alla strategia di protezione dei dati.
+
+Anche per una risorsa molto utilizzata, non è necessario eseguire un backup completo più di una o due volte al giorno.
+
+Le pianificazioni dei backup sono composte da due parti, come segue:
+
+* Frequenza di backup
++
+La frequenza di backup (la frequenza con cui devono essere eseguiti i backup), denominata _tipo di pianificazione_ per alcuni plug-in, fa parte della configurazione di una policy.  Ad esempio, è possibile configurare la frequenza di backup come oraria, giornaliera, settimanale o mensile, oppure specificare *Nessuno*, che rende il criterio un criterio solo su richiesta.  È possibile accedere alle policy facendo clic su *Impostazioni* > *Policy*.
+
+* Pianificazioni di backup
++
+Le pianificazioni dei backup (ovvero quando devono essere eseguiti esattamente) fanno parte della configurazione di un gruppo di risorse.  Ad esempio, se si dispone di un gruppo di risorse con un criterio configurato per backup settimanali, è possibile configurare la pianificazione in modo che il backup venga eseguito ogni giovedì alle 22:00.  È possibile accedere alle pianificazioni dei gruppi di risorse facendo clic su *Risorse* > *Gruppi di risorse*.
+
+
+
+
+
+== Numero di backup necessari per i file system di Windows
+
+I fattori che determinano il numero di backup necessari includono le dimensioni del file system di Windows, il numero di volumi utilizzati, la velocità di modifica del file system e il contratto di servizio (SLA).
+
+
+
+== Convenzione di denominazione del backup per i file system di Windows
+
+I backup del file system di Windows utilizzano la convenzione di denominazione predefinita Snapshot.  La convenzione di denominazione predefinita per i backup aggiunge un timestamp ai nomi degli snapshot che consente di identificare quando sono state create le copie.
+
+Lo Snapshot utilizza la seguente convenzione di denominazione predefinita: resourcegroupname_hostname_timestamp
+
+Dovresti assegnare nomi logici ai gruppi di risorse di backup, come nell'esempio seguente:
+
+[listing]
+----
+dts1_mach1x88_03-12-2015_23.17.26
+----
+In questo esempio, gli elementi della sintassi hanno i seguenti significati:
+
+* `dts1`è il nome del gruppo di risorse.
+* `mach1x88`è il nome host.
+* `03-12-2016_23.17.26`è la data e l'ora.
+
+
+Quando si crea un backup, è anche possibile aggiungere un tag descrittivo per facilitare l'identificazione del backup.  Al contrario, se si desidera utilizzare una convenzione di denominazione personalizzata per il backup, è necessario rinominare il backup al termine dell'operazione di backup.
+
+
+
+== Opzioni di conservazione del backup
+
+È possibile scegliere il numero di giorni per cui conservare le copie di backup oppure specificare il numero di copie di backup che si desidera conservare, fino a un massimo ONTAP di 255 copie.  Ad esempio, la tua organizzazione potrebbe richiedere di conservare 10 giorni di copie di backup o 130 copie di backup.
+
+Durante la creazione di un criterio, è possibile specificare le opzioni di conservazione per il tipo di backup e il tipo di pianificazione.
+
+Se si imposta la replica SnapMirror , il criterio di conservazione viene replicato sul volume di destinazione.
+
+SnapCenter elimina i backup conservati che hanno etichette di conservazione corrispondenti al tipo di pianificazione.  Se il tipo di pianificazione è stato modificato per la risorsa o il gruppo di risorse, i backup con la vecchia etichetta del tipo di pianificazione potrebbero comunque rimanere sul sistema.
+
+
+NOTE: Per la conservazione a lungo termine delle copie di backup, è consigliabile utilizzare il backup SnapVault .

@@ -1,0 +1,46 @@
+---
+permalink: protect-scsql/task_define_a_clone_strategy_for_sql_server.html 
+sidebar: sidebar 
+keywords: clone strategy 
+summary: Definire una strategia di clonazione consente di clonare il database con successo. 
+---
+= Definire una strategia di clonazione per SQL Server
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Definire una strategia di clonazione consente di clonare il database con successo.
+
+. Esaminare le limitazioni relative alle operazioni di clonazione.
+. Decidi il tipo di clone di cui hai bisogno.
+
+
+
+
+== Limitazioni delle operazioni di clonazione
+
+Prima di clonare i database, è necessario essere consapevoli dei limiti delle operazioni di clonazione.
+
+* Se si utilizza una versione di Oracle dalla 11.2.0.4 alla 12.1.0.1, l'operazione di clonazione sarà bloccata quando si esegue il comando _renamedg_.  Per risolvere questo problema, è possibile applicare la patch Oracle 19544733.
+* La clonazione di database da una LUN direttamente collegata a un host (ad esempio, utilizzando Microsoft iSCSI Initiator su un host Windows) a un VMDK o a una LUN RDM sullo stesso host Windows o su un altro host Windows, o viceversa, non è supportata.
+* La directory radice del punto di montaggio del volume non può essere una directory condivisa.
+* Se si sposta una LUN contenente un clone in un nuovo volume, il clone non potrà essere eliminato.
+
+
+
+
+== Tipi di operazioni di clonazione
+
+È possibile utilizzare SnapCenter per clonare un backup del database SQL Server o un database di produzione.
+
+* Clonazione da un backup del database
++
+Il database clonato può fungere da base per lo sviluppo di nuove applicazioni e aiutare a isolare gli errori applicativi che si verificano nell'ambiente di produzione.  Il database clonato può essere utilizzato anche per il ripristino da errori software del database.
+
+* Ciclo di vita del clone
++
+È possibile utilizzare SnapCenter per pianificare attività di clonazione ricorrenti che verranno eseguite quando il database di produzione non è occupato.
+
+

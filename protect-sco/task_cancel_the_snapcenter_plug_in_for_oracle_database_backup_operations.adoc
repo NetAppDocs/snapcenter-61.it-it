@@ -1,0 +1,64 @@
+---
+permalink: protect-sco/task_cancel_the_snapcenter_plug_in_for_oracle_database_backup_operations.html 
+sidebar: sidebar 
+keywords:  
+summary: È possibile annullare le operazioni di backup in esecuzione, in coda o che non rispondono. 
+---
+= Annullare le operazioni di backup dei database Oracle
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile annullare le operazioni di backup in esecuzione, in coda o che non rispondono.
+
+Per annullare le operazioni di backup, è necessario aver effettuato l'accesso come amministratore SnapCenter o come proprietario del processo.
+
+*Informazioni su questo compito*
+
+Quando si annulla un'operazione di backup, SnapCenter Server interrompe l'operazione e rimuove tutti gli snapshot dall'archivio se il backup creato non è registrato con SnapCenter Server.  Se il backup è già registrato con SnapCenter Server, non verrà eseguito il rollback dello Snapshot già creato, anche dopo l'attivazione dell'annullamento.
+
+* È possibile annullare solo il registro o l'operazione di backup completo in coda o in esecuzione.
+* Non è possibile annullare l'operazione dopo l'avvio della verifica.
++
+Se si annulla l'operazione prima della verifica, l'operazione viene annullata e la verifica non verrà eseguita.
+
+* Non è possibile annullare l'operazione di backup dopo l'avvio delle operazioni di catalogo.
+* È possibile annullare un'operazione di backup dalla pagina Monitor o dal riquadro Attività.
+* Oltre a utilizzare l'interfaccia grafica utente SnapCenter , è possibile utilizzare i comandi CLI per annullare le operazioni.
+* Il pulsante *Annulla lavoro* è disabilitato per le operazioni che non possono essere annullate.
+* Se hai selezionato *Tutti i membri di questo ruolo possono vedere e operare sugli oggetti degli altri membri* nella pagina Utenti\Gruppi durante la creazione di un ruolo, puoi annullare le operazioni di backup in coda degli altri membri mentre utilizzi quel ruolo.
+
+
+*Fare un passo*
+
+Eseguire una delle seguenti azioni:
+
+|===
+| Dal... | Azione 
+
+
+ a| 
+Pagina di monitoraggio
+ a| 
+. Nel riquadro di navigazione a sinistra, fare clic su *Monitor* > *Lavori*.
+. Selezionare l'operazione e fare clic su *Annulla lavoro*.
+
+
+
+
+ a| 
+Riquadro attività
+ a| 
+. Dopo aver avviato il processo di backup, fare clic suimage:../media/activity_pane_icon.gif["icona del riquadro attività"] nel riquadro Attività per visualizzare le cinque operazioni più recenti.
+. Selezionare l'operazione.
+. Nella pagina Dettagli lavoro, fare clic su *Annulla lavoro*.
+
+
+|===
+*Risultati*
+
+L'operazione viene annullata e la risorsa viene ripristinata allo stato originale.
+
+Se l'operazione annullata non risponde nello stato di annullamento o di esecuzione, è necessario eseguire Cancel-SmJob -JobID <int> -Force per interrompere forzatamente l'operazione di backup.

@@ -1,0 +1,33 @@
+---
+permalink: uninstall/task_uninstall_plug_ins_locally_on_a_host.html 
+sidebar: sidebar 
+keywords: uninstall, uninstall plug-in locally, uninstall plug-in from a host 
+summary: 'È possibile disinstallare i plug-in SnapCenter localmente su un host se non è possibile raggiungere l"host dal server SnapCenter .' 
+---
+= Disinstallare i plug-in localmente su un host
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile disinstallare i plug-in SnapCenter localmente su un host se non è possibile raggiungere l'host dal server SnapCenter .
+
+.Informazioni su questo compito
+La procedura consigliata per disinstallare singoli plug-in o pacchetti di plug-in è quella di utilizzare l'interfaccia utente grafica SnapCenter oppure il cmdlet Uninstall-SmHostPackage sull'interfaccia della riga di comando dell'host di SnapCenter Server.  Queste procedure aiutano il server SnapCenter a rimanere aggiornato su eventuali modifiche.
+
+Tuttavia, in rari casi, potrebbe essere necessario disinstallare i plug-in localmente.  Ad esempio, potresti aver eseguito un processo di disinstallazione da SnapCenter Server ma il processo non è riuscito oppure potresti aver disinstallato SnapCenter Server e i plug-in orfani rimangono su un host.
+
+
+IMPORTANT: La disinstallazione di un pacchetto plug-in localmente su un host non elimina i dati associati all'host, ad esempio i processi pianificati e i metadati di backup.
+
+
+IMPORTANT: Non tentare di disinstallare localmente il pacchetto plug-in SnapCenter per Windows dal Pannello di controllo.  È necessario utilizzare l'interfaccia utente grafica SnapCenter per assicurarsi che il plug-in SnapCenter per Microsoft Windows sia stato disinstallato correttamente.
+
+.Passi
+. Sul sistema host, vai al Pannello di controllo e clicca su *Disinstalla un programma*.
+. Nell'elenco dei programmi, seleziona il plug-in o il pacchetto plug-in SnapCenter che desideri disinstallare e fai clic su *Disinstalla*.
++
+Windows disinstalla tutti i plug-in nel pacchetto selezionato.
+
+

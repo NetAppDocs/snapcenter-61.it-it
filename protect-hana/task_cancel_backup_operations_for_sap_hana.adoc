@@ -1,0 +1,54 @@
+---
+permalink: protect-hana/task_cancel_backup_operations_for_sap_hana.html 
+sidebar: sidebar 
+keywords: plug-in for SAP HANA database 
+summary: È possibile annullare le operazioni di backup in coda. 
+---
+= Annulla le operazioni di backup per SAP HANA
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile annullare le operazioni di backup in coda.
+
+*Cosa ti servirà*
+
+* Per annullare le operazioni, è necessario aver effettuato l'accesso come amministratore SnapCenter o come proprietario del lavoro.
+* È possibile annullare un'operazione di backup dalla pagina *Monitor* o dal riquadro *Attività*.
+* Non è possibile annullare un'operazione di backup in esecuzione.
+* È possibile utilizzare l'interfaccia utente grafica SnapCenter , i cmdlet di PowerShell o i comandi CLI per annullare le operazioni di backup.
+* Il pulsante *Annulla lavoro* è disabilitato per le operazioni che non possono essere annullate.
+* Se hai selezionato *Tutti i membri di questo ruolo possono vedere e operare sugli oggetti degli altri membri* nella pagina Utenti\Gruppi durante la creazione di un ruolo, puoi annullare le operazioni di backup in coda degli altri membri mentre utilizzi quel ruolo.
+
+
+*Passi*
+
+. Eseguire una delle seguenti azioni:
++
+|===
+| Dal... | Azione 
+
+
+ a| 
+Pagina di monitoraggio
+ a| 
+.. Nel riquadro di navigazione a sinistra, fare clic su *Monitor* > *Lavori*.
+.. Selezionare l'operazione, quindi fare clic su *Annulla lavoro*.
+
+
+
+
+ a| 
+Riquadro attività
+ a| 
+.. Dopo aver avviato l'operazione di backup, fare clic su *image:../media/activity_pane_icon.gif["icona del riquadro attività"] * nel riquadro Attività per visualizzare le cinque operazioni più recenti.
+.. Selezionare l'operazione.
+.. Nella pagina Dettagli lavoro, fare clic su *Annulla lavoro*.
+
+
+|===
+
+
+L'operazione viene annullata e la risorsa torna allo stato precedente.

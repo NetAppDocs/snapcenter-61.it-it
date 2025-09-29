@@ -1,0 +1,46 @@
+---
+permalink: protect-nsp/monitor_resources_restore_operations.html 
+sidebar: sidebar 
+keywords: monitor, NetApp supported plug-in 
+summary: 'È possibile monitorare l"avanzamento delle diverse operazioni di ripristino SnapCenter utilizzando la pagina Lavori.  Potrebbe essere opportuno controllare lo stato di avanzamento di un"operazione per stabilire quando è stata completata o se si è verificato un problema.' 
+---
+= Monitora le operazioni di ripristino delle risorse dei plug-in supportati NetApp
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile monitorare l'avanzamento delle diverse operazioni di ripristino SnapCenter utilizzando la pagina Lavori.  Potrebbe essere opportuno controllare lo stato di avanzamento di un'operazione per stabilire quando è stata completata o se si è verificato un problema.
+
+.Informazioni su questo compito
+Gli stati post-ripristino descrivono le condizioni della risorsa dopo un'operazione di ripristino e qualsiasi ulteriore azione di ripristino che è possibile intraprendere.
+
+Nella pagina Lavori vengono visualizzate le seguenti icone che indicano lo stato dell'operazione:
+
+* image:../media/progress_icon.gif["Icona in corso"]In corso
+* image:../media/success_icon.gif["Icona completata"]Completato con successo
+* image:../media/failed_icon.gif["Icona fallita"]Fallito
+* image:../media/warning_icon.gif["Completato con icona di avviso"]Completato con avvisi o non è stato possibile avviarlo a causa di avvisi
+* image:../media/verification_job_in_queue.gif["Il lavoro di verifica è in coda"]In coda
+* image:../media/cancel_icon.gif["Icona Annulla"]Annullato
+
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Monitor*.
+. Nella pagina *Monitor*, fare clic su *Lavori*.
+. Nella pagina *Lavori*, procedere come segue:
++
+.. Clicimage:../media/filter_icon.gif["icona del filtro"] per filtrare l'elenco in modo che vengano elencate solo le operazioni di ripristino.
+.. Specificare le date di inizio e fine.
+.. Dall'elenco a discesa *Tipo*, seleziona *Ripristina*.
+.. Dall'elenco a discesa *Stato*, selezionare lo stato di ripristino.
+.. Fare clic su *Applica* per visualizzare le operazioni completate correttamente.
+
+
+. Selezionare il processo di ripristino, quindi fare clic su *Dettagli* per visualizzare i dettagli del processo.
+. Nella pagina *Dettagli lavoro*, fare clic su *Visualizza registri*.
++
+Il pulsante *Visualizza registri* visualizza i registri dettagliati per l'operazione selezionata.
+
+

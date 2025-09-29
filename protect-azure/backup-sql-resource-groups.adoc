@@ -1,0 +1,28 @@
+---
+permalink: protect-azure/backup-sql-resource-groups.html 
+sidebar: sidebar 
+keywords: SnapCenter Plug-in for SQL Server Database, back up, resource groups 
+summary: 'Un gruppo di risorse è una raccolta di risorse su un host.  Un"operazione di backup sul gruppo di risorse viene eseguita su tutte le risorse definite nel gruppo di risorse.' 
+---
+= Eseguire il backup dei gruppi di risorse di SQL Server
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile eseguire il backup dei gruppi di risorse costituiti da più risorse.  Un'operazione di backup sul gruppo di risorse viene eseguita su tutte le risorse definite nel gruppo di risorse.
+
+.Passi
+. Nel riquadro di navigazione a sinistra, seleziona *Risorse*, quindi seleziona il plug-in appropriato dall'elenco.
+. Nella pagina Risorse, seleziona *Gruppo di risorse* dall'elenco *Visualizza*.
+. Nella pagina Gruppi di risorse, seleziona il gruppo di risorse di cui vuoi eseguire il backup, quindi seleziona *Esegui backup ora*.
+. Nella pagina Backup, procedere come segue:
++
+.. Se al gruppo di risorse sono associati più criteri, dall'elenco a discesa *Criterio* selezionare il criterio che si desidera utilizzare per il backup.
+.. Dopo il backup, seleziona *Verifica* per verificare il backup su richiesta.
+.. Selezionare *Backup*.
+
+
+. Monitorare l'avanzamento dell'operazione selezionando *Monitoraggio* > *Lavori*.
+

@@ -1,0 +1,88 @@
+---
+permalink: protect-sco/reference_requirements_for_cloning_an_oracle_database.html 
+sidebar: sidebar 
+keywords:  
+summary: Prima di clonare un database Oracle, è necessario assicurarsi che i prerequisiti siano stati completati. 
+---
+= Requisiti per la clonazione di un database Oracle
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Prima di clonare un database Oracle, è necessario assicurarsi che i prerequisiti siano stati completati.
+
+* Avresti dovuto creare un backup del database utilizzando SnapCenter.
++
+Per far sì che l'operazione di clonazione vada a buon fine, è necessario aver creato correttamente backup dei dati e dei log online oppure backup offline (montaggio o arresto).
+
+* Se si desidera personalizzare i percorsi del file di controllo o del file di registro redo, è necessario aver predisposto il file system richiesto o il gruppo di dischi Automatic Storage Management (ASM).
++
+Per impostazione predefinita, i file di controllo e di redo log del database clonato vengono creati sul gruppo di dischi ASM o sul file system fornito da SnapCenter per i file di dati del database clone.
+
+* Se si utilizza ASM su NFS, è necessario aggiungere _/var/opt/snapcenter/scu/clones/*/*_ al percorso esistente definito nel parametro asm_diskstring.
+* Nel parametro asm_diskstring, dovresti configurare _AFD:*_ se stai utilizzando ASMFD o configurare _ORCL:*_ se stai utilizzando ASMLIB.
++
+Per informazioni su come modificare il parametro asm_diskstring, vedere https://kb.netapp.com/Advice_and_Troubleshooting/Data_Protection_and_Security/SnapCenter/Disk_paths_are_not_added_to_the_asm_diskstring_database_parameter["Come aggiungere percorsi disco a asm_diskstring"^] .
+
+* Se si crea il clone su un host alternativo, quest'ultimo deve soddisfare i seguenti requisiti:
++
+** Il plug-in SnapCenter per Oracle Database deve essere installato sull'host alternativo.
+** L'host clone dovrebbe essere in grado di rilevare le LUN dall'archiviazione primaria o secondaria.
++
+*** Se si esegue la clonazione da un archivio primario o secondario (Vault o Mirror) a un host alternativo, assicurarsi che sia stabilita una sessione iSCSI tra l'archivio secondario e l'host alternativo oppure che sia suddivisa in zone appropriate per FC.
+*** Se si esegue la clonazione da un archivio Vault o Mirror sullo stesso host, assicurarsi che sia stata stabilita una sessione iSCSI tra l'archivio Vault o Mirror e l'host oppure che sia stata suddivisa in zone appropriate per FC.
+*** Se si esegue la clonazione in un ambiente virtualizzato, assicurarsi che sia stabilita una sessione iSCSI tra l'archiviazione primaria o secondaria e il server ESX che ospita l'host alternativo oppure che sia suddivisa in zone appropriate per FC.
++
+Per informazioni, fare riferimento a https://docs.netapp.com/us-en/ontap-sanhost/["documentazione delle utilità host"] .
+
+
+
+** Se il database di origine è un database ASM:
++
+*** L'istanza ASM deve essere attiva e funzionante sull'host in cui verrà eseguita la clonazione.
+*** Se si desidera posizionare i file di registro di archivio del database clonato in un gruppo di dischi ASM dedicato, è necessario predisporre il gruppo di dischi ASM prima dell'operazione di clonazione.
+*** È possibile configurare il nome del gruppo di dischi dati, ma assicurarsi che il nome non sia utilizzato da nessun altro gruppo di dischi ASM sull'host in cui verrà eseguita la clonazione.
++
+I file di dati residenti sul gruppo di dischi ASM vengono forniti come parte del flusso di lavoro di clonazione SnapCenter .
+
+
+
+** Per NVMe, è necessario installare NVMe util
+
+
+* Il tipo di protezione per la LUN dei dati e la LUN del registro, ad esempio mirror, vault o mirror-vault, deve essere lo stesso per individuare i localizzatori secondari durante la clonazione su un host alternativo mediante backup del registro.
+* È necessario impostare il valore di exclude_seed_cdb_view su FALSE nel file dei parametri del database di origine per recuperare le informazioni relative al seed PDB per la clonazione di un backup del database 12_c_.
++
+Il seed PDB è un modello fornito dal sistema che il CDB può utilizzare per creare i PDB.  Il seed PDB è denominato PDB$SEED.  Per informazioni su PDB$SEED, vedere Oracle Doc ID 1940806.1.
+
++
+
+NOTE: È necessario impostare il valore prima di eseguire il backup del database 12_c_.
+
+* SnapCenter supporta il backup dei file system gestiti dal sottosistema autofs.  Se si sta clonando il database, assicurarsi che i punti di montaggio dei dati non si trovino nella radice del punto di montaggio autofs, perché l'utente root dell'host del plug-in non ha l'autorizzazione per creare directory nella radice del punto di montaggio autofs.
++
+Se i file di controllo e di redo log si trovano nel punto di montaggio dei dati, è necessario modificare il percorso del file di controllo e quindi il percorso del file di redo log di conseguenza.
+
++
+
+NOTE: È possibile registrare manualmente i nuovi punti di montaggio clonati con il sottosistema autofs.  I nuovi punti di montaggio clonati non verranno registrati automaticamente.
+
+* Se si dispone di un TDE (accesso automatico) e si desidera clonare il database sullo stesso host o su uno alternativo, è necessario copiare il portafoglio (file chiave) in _/etc/ORACLE/WALLET/$ORACLE_SID_ dal database di origine al database clonato.
+* È necessario impostare il valore di use_lvmetad = 0 in _/etc/lvm/lvm.conf_ e arrestare il servizio lvm2-lvmetad per eseguire correttamente la clonazione in ambienti SAN (Storage Area Network) su Oracle Linux 7 o versioni successive o Red Hat Enterprise Linux (RHEL) 7 o versioni successive.
+* Se si utilizza il database Oracle 11.2.0.3 o versione successiva e l'ID del database per l'istanza ausiliaria viene modificato tramite uno script NID, è necessario installare la patch Oracle 13366202.
+* È necessario assicurarsi che gli aggregati che ospitano i volumi siano presenti nell'elenco degli aggregati assegnati della macchina virtuale di archiviazione (SVM).
+* Per NVMe, se una porta di destinazione deve essere esclusa dalla connessione, è necessario aggiungere il nome del nodo di destinazione e il nome della porta nel file /var/opt/snapcenter/scu/etc/nvme.conf.
++
+Se il file non esiste, dovresti crearlo come mostrato nell'esempio seguente:
+
++
+....
+blacklist {
+nn-0x<target_node_name_1>:pn-0x<target_port_name_1>
+nn-0x<target_node_name_2>:pn-0x<target_port_name_2>
+}
+....
+* È necessario assicurarsi che la LUN non sia mappata sull'host AIX utilizzando iGroup costituito da protocolli misti iSCSI e FC. Per ulteriori informazioni, vedere  https://kb.netapp.com/mgmt/SnapCenter/SnapCenter_Plug-in_for_Oracle_operations_fail_with_error_Unable_to_discover_the_device_for_LUN_LUN_PATH["L'operazione fallisce con errore Impossibile rilevare il dispositivo per LUN"^] .
+

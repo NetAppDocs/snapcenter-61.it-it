@@ -1,0 +1,41 @@
+---
+permalink: protect-scsql/task_failback_from_scsql_secondary_storage_to_primary_storage.html 
+sidebar: sidebar 
+keywords: failback, snapcenter 
+summary: 'Dopo che il plug-in SnapCenter per l"archiviazione primaria di SQL Server è di nuovo online, è necessario eseguire il failback all"archiviazione primaria.' 
+---
+= Failback dal plug-in SnapCenter per l'archiviazione secondaria di SQL Server all'archiviazione primaria
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Dopo che il plug-in SnapCenter per l'archiviazione primaria di SQL Server è di nuovo online, è necessario eseguire il failback all'archiviazione primaria.
+
+.Prima di iniziare
+* Impostare il plug-in SnapCenter per SQL Server in modalità *Manutenzione* dalla pagina Host gestiti.
+* Scollegare l'archiviazione secondaria dall'host e connettersi dall'archiviazione primaria.
+* Per eseguire il failback sullo storage primario, assicurarsi che la direzione della relazione rimanga la stessa di prima del failover eseguendo l'operazione di risincronizzazione inversa.
++
+Per mantenere i ruoli di storage primario e secondario dopo l'operazione di risincronizzazione inversa, eseguire nuovamente l'operazione di risincronizzazione inversa.
+
++
+Per maggiori informazioni vederelink:https://docs.netapp.com/us-en/ontap-sm-classic/online-help-96-97/task_reverse_resynchronizing_snapmirror_relationships.html["Relazioni speculari di risincronizzazione inversa"]
+
+* Riavviare il servizio del server MSSQL.
+* Assicurarsi che le risorse SQL siano di nuovo online.
+
+
+
+NOTE: Durante il failover o il failback del plug-in, lo stato generale del plug-in non viene aggiornato immediatamente.  Lo stato generale dell'host e del plug-in viene aggiornato durante la successiva operazione di aggiornamento dell'host.
+
+.Passi
+. Nella pagina Impostazioni, vai su *Impostazioni* > *Impostazioni globali* > *Ripristino di emergenza*.
+. Deseleziona *Abilita ripristino di emergenza*.
+. Fare clic su *Applica*.
+. Verificare se il processo DR è abilitato o meno facendo clic su *Monitor* > *Processi*.
+
+
+.Dopo aver finito
+È possibile eliminare il plug-in SnapCenter per i backup di SQL Server creati durante il failover tramite l'interfaccia utente o il seguente cmdlet: `Remove-SmDRFailoverBackups`

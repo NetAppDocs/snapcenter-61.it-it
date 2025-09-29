@@ -1,0 +1,106 @@
+---
+permalink: protect-hana/concept_minimum_privileges_required_for_sap_hana_and_exchange_plug_in.html 
+sidebar: sidebar 
+keywords: Minimum ONTAP privileges 
+summary: I privilegi ONTAP minimi richiesti variano a seconda dei plug-in SnapCenter utilizzati per la protezione dei dati. 
+---
+= Privilegi ONTAP minimi richiesti per il plug-in SAP HANA
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+I privilegi ONTAP minimi richiesti variano a seconda dei plug-in SnapCenter utilizzati per la protezione dei dati.
+
+* Comandi di accesso completo: privilegi minimi richiesti per ONTAP 9.12.1 e versioni successive
++
+** evento genera-autosupport-log
+** spettacolo di storia lavorativa
+** interruzione del lavoro
+** luna
+** lun crea
+** lun crea
+** lun crea
+** lun cancella
+** lun igroup aggiungi
+** lun igroup create
+** lun igroup elimina
+** rinomina lun igroup
+** rinomina lun igroup
+** spettacolo di gruppo lun
+** mappatura lun aggiungi-nodi-di-segnalazione
+** creazione di mappatura lun
+** eliminazione della mappatura LUN
+** rimozione-nodi-di-segnalazione-mapping-lun
+** spettacolo di mappatura lun
+** lun modifica
+** lun sposta-in-volume
+** lun offline
+** lun online
+** lun persistent-reservation clear
+** ridimensionamento lun
+** serie lun
+** spettacolo di lunedì
+** aggiunta regola politica snapmirror
+** modifica regola policy snapmirror
+** regola di rimozione della policy di SnapMirror
+** mostra politica di SnapMirror
+** ripristino snapmirror
+** spettacolo snapmirror
+** snapmirror mostra-cronologia
+** aggiornamento snapmirror
+** snapmirror update-ls-set
+** elenco-destinazioni snapmirror
+** versione
+** creazione di cloni di volume
+** spettacolo di clonazione del volume
+** inizio divisione clone volume
+** volume clone divisione stop
+** creazione del volume
+** distruzione del volume
+** creazione di clonazione di file di volume
+** file di volume mostra-utilizzo-disco
+** volume offline
+** volume online
+** modifica del volume
+** creazione di volume qtree
+** eliminazione del volume qtree
+** modifica del volume qtree
+** volume qtree mostra
+** limitazione del volume
+** spettacolo di volume
+** creazione di snapshot del volume
+** eliminazione snapshot volume
+** modifica snapshot volume
+** modifica-scadenza-snaplock-istantanea-volume
+** rinomina snapshot volume
+** ripristino snapshot del volume
+** file di ripristino dello snapshot del volume
+** mostra snapshot del volume
+** smontare il volume
+** server virtuale cifs
+** vserver cifs share create
+** vserver cifs share delete
+** vserver cifs shadowcopy mostra
+** vserver cifs share show
+** spettacolo cifs del server virtuale
+** politica di esportazione del server virtuale
+** creazione di criteri di esportazione vserver
+** eliminazione della policy di esportazione del server virtuale
+** creazione regola policy di esportazione vserver
+** regola di esportazione-politica del vserver mostra
+** mostra politica di esportazione vserver
+** server virtuale iscsi
+** visualizzazione della connessione vserver iscsi
+** spettacolo vserver
+
+
+* Comandi di sola lettura: privilegi minimi richiesti per ONTAP 8.3.0 e versioni successive
++
+** interfaccia di rete
+** mostra interfaccia di rete
+** server virtuale
+
+
+

@@ -1,0 +1,26 @@
+---
+permalink: protect-postgresql/considerations-for-determining-backup-schedules-for-postgresql.html 
+sidebar: sidebar 
+keywords: SnapCenter Plug-in for PostgreSQL 
+summary: 'Il fattore più critico nella determinazione di una pianificazione di backup è la velocità di modifica della risorsa.  Potresti eseguire il backup di una risorsa molto utilizzata ogni ora, mentre potresti eseguire il backup di una risorsa raramente utilizzata una volta al giorno.  Altri fattori includono l"importanza della risorsa per la tua organizzazione, il tuo accordo sul livello di servizio (SLA) e il tuo obiettivo del punto di ripristino (RPO).' 
+---
+= Considerazioni per la determinazione delle pianificazioni di backup per PostgreSQL
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Il fattore più critico nella determinazione di una pianificazione di backup è la velocità di modifica della risorsa.  Potresti eseguire il backup di una risorsa molto utilizzata ogni ora, mentre potresti eseguire il backup di una risorsa raramente utilizzata una volta al giorno.  Altri fattori includono l'importanza della risorsa per la tua organizzazione, il tuo contratto di servizio (SLA) e il tuo obiettivo del punto di ripristino (RPO).
+
+Le pianificazioni dei backup sono composte da due parti, come segue:
+
+* Frequenza di backup (con quale frequenza devono essere eseguiti i backup)
++
+La frequenza di backup, detta anche tipo di pianificazione per alcuni plug-in, fa parte della configurazione di una policy.  Ad esempio, è possibile configurare la frequenza del backup come oraria, giornaliera, settimanale o mensile.
+
+* Pianificazioni di backup (quando esattamente devono essere eseguiti i backup)
++
+Le pianificazioni di backup fanno parte della configurazione di una risorsa o di un gruppo di risorse.  Ad esempio, se si dispone di un gruppo di risorse con un criterio configurato per i backup settimanali, è possibile configurare la pianificazione in modo che il backup venga eseguito ogni giovedì alle 22:00.
+
+

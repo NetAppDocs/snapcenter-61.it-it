@@ -1,0 +1,20 @@
+---
+permalink: protect-mysql/back-up-mysql-resources.html 
+sidebar: sidebar 
+keywords: SnapCenter Plug-in for MySQL 
+summary: 'È possibile creare un backup di una risorsa \(database\) o di un gruppo di risorse.  Il flusso di lavoro del backup include la pianificazione, l"identificazione dei database per il backup, la gestione dei criteri di backup, la creazione di gruppi di risorse e l"associazione di criteri, la creazione di backup e il monitoraggio delle operazioni.' 
+---
+= Eseguire il backup delle risorse MySQL
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile creare un backup di una risorsa (database) o di un gruppo di risorse.  Il flusso di lavoro del backup include la pianificazione, l'identificazione dei database per il backup, la gestione dei criteri di backup, la creazione di gruppi di risorse e l'associazione di criteri, la creazione di backup e il monitoraggio delle operazioni.
+
+Il seguente flusso di lavoro mostra la sequenza in cui è necessario eseguire l'operazione di backup:
+
+image:../media/db2_backup_workflow.gif["Flusso di lavoro del backup MySQL"]
+
+È anche possibile utilizzare i cmdlet di PowerShell manualmente o negli script per eseguire operazioni di backup, ripristino e clonazione.  La guida del cmdlet SnapCenter e le informazioni di riferimento sul cmdlet contengono ulteriori informazioni sui cmdlet di PowerShell. https://docs.netapp.com/us-en/snapcenter-cmdlets/index.html["Guida di riferimento ai cmdlet del software SnapCenter"^] .

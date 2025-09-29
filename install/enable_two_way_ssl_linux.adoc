@@ -1,0 +1,33 @@
+---
+permalink: install/enable_two_way_ssl_linux.html 
+sidebar: sidebar 
+keywords: security,enable two-way ssL, windows host, one-way ssl 
+summary: 'È possibile abilitare la comunicazione SSL per proteggere la comunicazione reciproca tra SnapCenter Server sull"host Linux e i plug-in utilizzando i comandi di PowerShell.' 
+---
+= Abilita la comunicazione SSL sull'host Linux
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile abilitare la comunicazione SSL bidirezionale per proteggere la comunicazione reciproca tra SnapCenter Server sull'host Linux e i plug-in utilizzando i comandi di PowerShell.
+
+.Fare un passo
+. Per abilitare la comunicazione SSL unidirezionale, procedere come segue.
++
+.. Accedi all'interfaccia grafica utente SnapCenter .
+.. Fare clic su *Impostazioni* > *Impostazioni globali* e selezionare *Abilita convalida certificato su SnapCenter Server*.
+.. Fare clic su *Host* > *Host gestiti* e selezionare l'host del plug-in per il quale si desidera abilitare SSL unidirezionale.
+.. Clicimage:../media/more_icon.gif["più icona"] icona, quindi fare clic su *Abilita convalida certificato*.
+
+
+. Abilita la comunicazione SSL bidirezionale dall'host Linux di SnapCenter Server.
++
+** `Open-SmConnection`
+** `Set-SmConfigSettings -Agent -configSettings @{"EnableTwoWaySSL"="true"} -HostName <Plugin Host Name>`
+** `Set-SmConfigSettings -Agent -configSettings @{"EnableTwoWaySSL"="true"} -HostName localhost`
+** `Set-SmConfigSettings -Server -configSettings @{"EnableTwoWaySSL"="true"}`
+
+
+

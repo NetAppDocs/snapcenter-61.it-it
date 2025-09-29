@@ -1,0 +1,46 @@
+---
+permalink: protect-scsql/task_back_up_sql_server_resource_groups.html 
+sidebar: sidebar 
+keywords: SnapCenter Plug-in for SQL Server 
+summary: È possibile eseguire il backup di un gruppo di risorse su richiesta dalla pagina Risorse.  Se a un gruppo di risorse è associato un criterio e configurata una pianificazione, i backup vengono eseguiti automaticamente in base alla pianificazione. 
+---
+= Eseguire il backup dei gruppi di risorse di SQL Server
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile eseguire il backup di un gruppo di risorse su richiesta dalla pagina Risorse.  Se a un gruppo di risorse è associato un criterio e configurata una pianificazione, i backup vengono eseguiti automaticamente in base alla pianificazione.
+
+.Passi
+. Nel riquadro di navigazione a sinistra, seleziona *Risorse*, quindi seleziona il plug-in appropriato dall'elenco.
+. Nella pagina Risorse, seleziona *Gruppo di risorse* dall'elenco *Visualizza*.
++
+È possibile cercare il gruppo di risorse inserendo il nome del gruppo di risorse nella casella di ricerca oppure selezionandoimage:../media/filter_icon.gif["Icona filtro"] e quindi selezionando il tag.  Puoi quindi selezionareimage:../media/filter_icon.gif["Icona filtro"] per chiudere il riquadro del filtro.
+
+. Nella pagina Gruppi di risorse, seleziona il gruppo di risorse di cui vuoi eseguire il backup, quindi seleziona *Esegui backup ora*.
+. Nella pagina Backup, procedere come segue:
++
+.. Se hai associato più policy al gruppo di risorse, dall'elenco a discesa *Policy* seleziona la policy che desideri utilizzare per il backup.
++
+Se il criterio selezionato per il backup su richiesta è associato a una pianificazione di backup, i backup su richiesta verranno conservati in base alle impostazioni di conservazione specificate per il tipo di pianificazione.
+
+.. Dopo il backup, seleziona *Verifica* per verificare il backup su richiesta.
++
+L'opzione *Verifica* nella policy si applica solo ai lavori pianificati.
+
+.. Selezionare *Backup*.
+
+
+. Monitorare l'avanzamento dell'operazione selezionando *Monitoraggio* > *Lavori*.
+
+
+.Informazioni correlate
+link:task_create_backup_policies_for_sql_server_databases.html["Creare criteri di backup per i database di SQL Server"]
+
+link:task_create_resource_groups_and_attach_policies_for_sql_server.html["Creare gruppi di risorse e associare criteri per SQL Server"]
+
+https://kb.netapp.com/Advice_and_Troubleshooting/Data_Protection_and_Security/SnapCenter/Clone_operation_might_fail_or_take_longer_time_to_complete_with_default_TCP_TIMEOUT_value["Le operazioni di backup falliscono con un errore di connessione MySQL a causa del ritardo nel TCP_TIMEOUT"]
+
+https://kb.netapp.com/Advice_and_Troubleshooting/Data_Protection_and_Security/SnapCenter/Backup_fails_with_Windows_scheduler_error["Il backup non riesce con un errore di pianificazione di Windows"]

@@ -1,0 +1,16 @@
+---
+permalink: protect-nsp/number_of_backup_jobs_needed.html 
+sidebar: sidebar 
+keywords: backup jobs 
+summary: 'I fattori che determinano il numero di processi di backup necessari includono la dimensione della risorsa, il numero di volumi utilizzati, la frequenza di modifica della risorsa e il contratto di servizio (SLA).' 
+---
+= Numero di processi di backup necessari
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+I fattori che determinano il numero di processi di backup necessari includono la dimensione della risorsa, il numero di volumi utilizzati, la frequenza di modifica della risorsa e il contratto di servizio (SLA).
+
+Il numero di processi di backup scelti dipende in genere dal numero di volumi su cui sono posizionate le risorse.  Ad esempio, se si posiziona un gruppo di risorse di piccole dimensioni su un volume e una risorsa di grandi dimensioni su un altro volume, è possibile creare un processo di backup per le risorse di piccole dimensioni e un processo di backup per la risorsa di grandi dimensioni.

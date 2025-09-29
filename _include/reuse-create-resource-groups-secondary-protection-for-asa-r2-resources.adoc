@@ -1,0 +1,132 @@
+= 
+:allow-uri-read: 
+
+
+È necessario creare il gruppo di risorse per aggiungere le risorse presenti sui sistemi ASA r2.  È anche possibile predisporre la protezione secondaria durante la creazione del gruppo di risorse.
+
+.Prima di iniziare
+* È necessario assicurarsi di non aggiungere risorse ONTAP 9.x e risorse ASA r2 allo stesso gruppo di risorse.
+* È necessario assicurarsi di non disporre di un database con risorse ONTAP 9.x e risorse ASA r2.
+
+
+.Informazioni su questo compito
+* La protezione secondaria è disponibile solo se all'utente connesso è assegnato il ruolo per cui è abilitata la funzionalità *SecondaryProtection*.
+* Se è stata abilitata la protezione secondaria, il gruppo di risorse viene messo in modalità di manutenzione durante la creazione dei gruppi di coerenza primario e secondario.  Dopo aver creato i gruppi di coerenza primari e secondari, il gruppo di risorse esce dalla modalità di manutenzione.
+* SnapCenter non supporta la protezione secondaria per una risorsa clone.
+
+
+.Passi
+. Nel riquadro di navigazione a sinistra, seleziona *Risorse* e il plug-in appropriato dall'elenco.
+. Nella pagina Risorse, fare clic su *Nuovo gruppo di risorse*.
+. Nella pagina Nome, eseguire le seguenti azioni:
++
+.. Immettere un nome per il gruppo di risorse nel campo Nome.
++
+
+NOTE: Il nome del gruppo di risorse non deve superare i 250 caratteri.
+
+.. Inserisci una o più etichette nel campo Tag per aiutarti a cercare il gruppo di risorse in un secondo momento.
++
+Ad esempio, se aggiungi HR come tag a più gruppi di risorse, potrai successivamente trovare tutti i gruppi di risorse associati al tag HR.
+
+.. Selezionare questa casella di controllo e immettere un formato di nome personalizzato che si desidera utilizzare per il nome dello snapshot.
++
+Ad esempio, customtext_resource group_policy_hostname o resource group_hostname.  Per impostazione predefinita, al nome dello snapshot viene aggiunto un timestamp.
+
+.. Specificare le destinazioni dei file di registro dell'archivio di cui non si desidera eseguire il backup.
++
+
+NOTE: Dovresti usare esattamente la stessa destinazione impostata nell'applicazione, incluso il prefisso, se necessario.
+
+
+
+. Nella pagina Risorse, seleziona il nome host del database dall'elenco a discesa *Host*.
++
+
+NOTE: Le risorse vengono elencate nella sezione Risorse disponibili solo se la risorsa viene rilevata correttamente.  Se hai aggiunto risorse di recente, queste appariranno nell'elenco delle risorse disponibili solo dopo aver aggiornato l'elenco delle risorse.
+
+. Selezionare le risorse ASA r2 dalla sezione Risorse disponibili e spostarle nella sezione Risorse selezionate.
+. Nella pagina Impostazioni applicazione, seleziona l'opzione di backup.
+. Nella pagina Criteri, procedere come segue:
++
+.. Selezionare una o più policy dall'elenco a discesa.
++
+
+NOTE: Puoi anche creare una policy cliccandoimage:../media/add_policy_from_resourcegroup.gif["aggiungi simbolo"] .
+
++
+Nella sezione Configura pianificazioni per policy selezionate vengono elencate le policy selezionate.
+
+.. Clicimage:../media/add_policy_from_resourcegroup.gif["aggiungi simbolo"] nella colonna Configura pianificazioni per il criterio per il quale si desidera configurare una pianificazione.
+.. Nella finestra Aggiungi pianificazioni per il criterio _nome_criterio_, configura la pianificazione, quindi fai clic su *OK*.
++
+Dove _policy_name_ è il nome della policy selezionata.
+
++
+Le pianificazioni configurate sono elencate nella colonna Pianificazioni applicate.
+
+
+
++
+Le pianificazioni di backup di terze parti non sono supportate quando si sovrappongono alle pianificazioni di backup SnapCenter .
+
+. Se la protezione secondaria è abilitata per il criterio selezionato, viene visualizzata la pagina Protezione secondaria ed è necessario eseguire i seguenti passaggi:
++
+.. Selezionare il tipo di criterio di replica.
++
+
+NOTE: La politica di replica sincrona non è supportata.
+
+.. Specificare il suffisso del gruppo di coerenza che si desidera utilizzare.
+.. Dai menu a discesa Cluster di destinazione e SVM di destinazione, seleziona il cluster peer e l'SVM che desideri utilizzare.
++
+
+NOTE: Il cluster e il peering SVM non sono supportati da SnapCenter.  Per eseguire il peering di cluster e SVM, è necessario utilizzare System Manager o ONTAP CLI.
+
+
+
+
+
+
+NOTE: Se le risorse sono già protette all'esterno di SnapCenter, verranno visualizzate nella sezione Risorse secondarie protette.
+
+. Nella pagina Verifica, procedere come segue:
++
+.. Fare clic su *Carica localizzatori* per caricare i volumi SnapMirror o SnapVault ed eseguire la verifica sull'archiviazione secondaria.
+.. Clicimage:../media/add_policy_from_resourcegroup.gif["aggiungi simbolo"] nella colonna Configura pianificazioni per configurare la pianificazione di verifica per tutti i tipi di pianificazione del criterio.
+.. Nella finestra di dialogo Aggiungi pianificazioni di verifica policy_name, eseguire le seguenti azioni:
++
+|===
+| Se lo desidera... | Fai questo... 
+
+
+ a| 
+Esegui la verifica dopo il backup
+ a| 
+Selezionare *Esegui verifica dopo il backup*.
+
+
+
+ a| 
+Pianifica una verifica
+ a| 
+Selezionare *Esegui verifica pianificata*, quindi selezionare il tipo di pianificazione dall'elenco a discesa.
+
+|===
+.. Seleziona *Verifica su posizione secondaria* per verificare i backup sul sistema di archiviazione secondario.
+.. Fare clic su *OK*.
++
+Le pianificazioni di verifica configurate sono elencate nella colonna Pianificazioni applicate.
+
+
+
+. Nella pagina Notifica, dall'elenco a discesa *Preferenza e-mail*, seleziona gli scenari in cui desideri inviare le e-mail.
++
+È necessario specificare anche gli indirizzi email del mittente e del destinatario, nonché l'oggetto dell'email.  Se si desidera allegare il report dell'operazione eseguita sul gruppo di risorse, selezionare *Allega report lavoro*.
+
++
+
+NOTE: Per la notifica tramite e-mail, è necessario aver specificato i dettagli del server SMTP tramite l'interfaccia grafica utente (GUI) o il comando PowerShell Set-SmSmtpServer.
+
+. Rivedi il riepilogo e poi clicca su *Fine*.
+

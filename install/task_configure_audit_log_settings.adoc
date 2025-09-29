@@ -1,0 +1,70 @@
+---
+permalink: install/task_configure_audit_log_settings.html 
+sidebar: sidebar 
+keywords: audit, log, configure 
+summary: È possibile configurare la registrazione degli eventi di sicurezza delle piattaforme software e di tutti i software in esecuzione su tali piattaforme. 
+---
+= Configurare le impostazioni del registro di controllo
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+I registri di controllo vengono generati per ogni singola attività del server SnapCenter .  Per impostazione predefinita, i registri di controllo sono protetti nel percorso di installazione predefinito _C:\Programmi\ NetApp\ SnapCenter WebApp\audit\_.
+
+I registri di controllo sono protetti mediante la generazione di un digest firmato digitalmente per ogni singolo evento di controllo, per proteggerlo da modifiche non autorizzate.  I digest generati vengono conservati in un file di checksum di controllo separato e sottoposti a controlli di integrità periodici per garantire l'integrità del contenuto.
+
+Dovresti aver effettuato l'accesso con il ruolo "SnapCenterAdmin".
+
+.Informazioni su questo compito
+* Gli avvisi vengono inviati nei seguenti scenari:
++
+** La pianificazione del controllo dell'integrità del registro di controllo o il server Syslog è abilitato o disabilitato
+** Controllo dell'integrità del registro di controllo, registro di controllo o errore del registro del server Syslog
+** Poco spazio su disco
+
+
+* L'e-mail viene inviata solo quando il controllo di integrità fallisce.
+* È necessario modificare contemporaneamente i percorsi della directory del registro di controllo e della directory del registro di checksum di controllo.  Non è possibile modificarne solo uno.
+* Quando vengono modificati i percorsi della directory del registro di controllo e della directory del registro di checksum di controllo, il controllo di integrità non può essere eseguito sui registri di controllo presenti nella posizione precedente.
+* I percorsi della directory del registro di controllo e della directory del registro di checksum di controllo devono trovarsi sull'unità locale di SnapCenter Server.
++
+Le unità condivise o montate in rete non sono supportate.
+
+* Se nelle impostazioni del server Syslog viene utilizzato il protocollo UDP, gli errori dovuti a porta inattiva o non disponibile non possono essere acquisiti come errore o avviso in SnapCenter.
+* È possibile utilizzare i comandi Set-SmAuditSettings e Get-SmAuditSettings per configurare i log di controllo.
++
+Le informazioni sui parametri che possono essere utilizzati con il cmdlet e le relative descrizioni possono essere ottenute eseguendo Get-Help nome_comando.  In alternativa, puoi anche fare riferimento al https://docs.netapp.com/us-en/snapcenter-cmdlets/index.html["Guida di riferimento ai cmdlet del software SnapCenter"^] .
+
+
+
+.Passi
+. Nella pagina *Impostazioni*, vai a *Impostazioni* > *Impostazioni globali* > *Impostazioni registro di controllo*.
+. Nella sezione Registro di controllo, immettere i dettagli.
+. Immettere la *directory del registro di controllo* e la *directory del registro di checksum di controllo*
++
+.. Inserisci la dimensione massima del file
+.. Inserisci il numero massimo di file di registro
+.. Inserisci la percentuale di utilizzo dello spazio su disco per inviare un avviso
+
+
+. (Facoltativo) Abilita *Registra ora UTC*.
+. (Facoltativo) Abilita *Pianificazione controllo integrità registro di controllo* e fai clic su *Avvia controllo integrità* per il controllo di integrità su richiesta.
++
+È anche possibile eseguire il comando *Start-SmAuditIntegrityCheck* per avviare il controllo di integrità su richiesta.
+
+. (Facoltativo) Abilitare i log di controllo inoltrati al server syslog remoto e immettere i dettagli del server Syslog.
++
+È necessario importare il certificato dal server Syslog nella "radice attendibile" per il protocollo TLS 1.2.
+
++
+.. Inserisci l'host del server Syslog
+.. Inserisci la porta del server Syslog
+.. Inserisci il protocollo del server Syslog
+.. Inserisci il formato RFC
+
+
+. Fare clic su *Salva*.
+. È possibile visualizzare i controlli di integrità e di spazio su disco facendo clic su *Monitor* > *Jobs*.
+

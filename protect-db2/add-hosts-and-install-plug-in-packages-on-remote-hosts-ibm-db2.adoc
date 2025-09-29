@@ -1,0 +1,158 @@
+---
+permalink: protect-db2/add-hosts-and-install-plug-in-packages-on-remote-hosts-ibm-db2.html 
+sidebar: sidebar 
+keywords: credentials 
+summary: È necessario utilizzare la pagina Aggiungi host SnapCenter per aggiungere host e quindi installare i pacchetti plug-in.  I plug-in vengono installati automaticamente sugli host remoti.  È possibile aggiungere un host e installare pacchetti plug-in per un singolo host o per un cluster. 
+---
+= Aggiungere host e installare pacchetti plug-in su host remoti
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È necessario utilizzare la pagina Aggiungi host SnapCenter per aggiungere host e quindi installare i pacchetti plug-in.  I plug-in vengono installati automaticamente sugli host remoti.  È possibile aggiungere un host e installare pacchetti plug-in per un singolo host o per un cluster.
+
+.Prima di iniziare
+* Se il sistema operativo dell'host del server SnapCenter è Windows 2019 e il sistema operativo dell'host del plug-in è Windows 2022, è necessario eseguire le seguenti operazioni:
++
+** Aggiorna a Windows Server 2019 (build del sistema operativo 17763.5936) o versione successiva
+** Aggiorna a Windows Server 2022 (build del sistema operativo 20348.2402) o versione successiva
+
+
+* Devi essere un utente a cui è assegnato un ruolo che dispone delle autorizzazioni di installazione e disinstallazione del plug-in, ad esempio il ruolo di amministratore SnapCenter .
+* Quando si installa un plug-in su un host Windows, se si specifica una credenziale non integrata o se l'utente appartiene a un utente di un gruppo di lavoro locale, è necessario disabilitare UAC sull'host.
+* È necessario assicurarsi che il servizio di accodamento dei messaggi sia in esecuzione.
+* La documentazione di amministrazione contiene informazioni sulla gestione degli host.
+* Se si utilizza un account di servizio gestito di gruppo (gMSA), è necessario configurare gMSA con privilegi amministrativi.
++
+link:../protect-db2/configure-gMSA-on-windows-server-2012-or-later.html["Configurare l'account del servizio gestito del gruppo su Windows Server 2016 o versioni successive per IBM Db2"^]
+
+
+
+.Informazioni su questo compito
+* Non è possibile aggiungere uno SnapCenter Server come host plug-in a un altro SnapCenter Server.
+
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Host*.
+. Verificare che la scheda *Host gestiti* sia selezionata in alto.
+. Fare clic su *Aggiungi*.
+. Nella pagina Host, eseguire le seguenti azioni:
++
+|===
+| Per questo campo... | Fai questo... 
+
+
+ a| 
+Tipo di host
+ a| 
+Seleziona il tipo di host:
+
+** Finestre
+** Linux
++
+
+NOTE: Il plug-in per IBM Db2 è installato sull'host client IBM Db2, che può trovarsi su un sistema Windows o Linux.
+
+
+
+
+
+ a| 
+Nome host
+ a| 
+Immettere il nome host della comunicazione.  Immettere il nome di dominio completo (FQDN) o l'indirizzo IP dell'host.  SnapCenter dipende dalla corretta configurazione del DNS.  Pertanto, la prassi migliore è quella di immettere il nome di dominio completo (FQDN).
+
+
+
+ a| 
+Credenziali
+ a| 
+Seleziona il nome delle credenziali che hai creato oppure creane di nuove.  La credenziale deve disporre di diritti amministrativi sull'host remoto.  Per maggiori dettagli, consultare le informazioni sulla creazione delle credenziali.
+
+Puoi visualizzare i dettagli sulle credenziali posizionando il cursore sul nome della credenziale che hai fornito.
+
+
+NOTE: La modalità di autenticazione delle credenziali è determinata dal tipo di host specificato nella procedura guidata Aggiungi host.
+
+|===
+. Nella sezione Seleziona plug-in da installare, seleziona i plug-in da installare.
++
+Quando si utilizza l'API REST per installare il plug-in per Db2, è necessario passare la versione come 3.0.  Ad esempio, Db2:3.0
+
+. (Facoltativo) Fare clic su *Altre opzioni*.
++
+|===
+| Per questo campo... | Fai questo... 
+
+
+ a| 
+Porta
+ a| 
+Mantenere il numero di porta predefinito oppure specificare il numero di porta.  Il numero di porta predefinito è 8145.  Se SnapCenter Server è stato installato su una porta personalizzata, tale numero di porta verrà visualizzato come porta predefinita.
+
+
+NOTE: Se hai installato manualmente i plug-in e hai specificato una porta personalizzata, devi specificare la stessa porta.  In caso contrario, l'operazione fallisce.
+
+
+
+ a| 
+Percorso di installazione
+ a| 
+Il plug-in per IBM Db2 è installato sull'host client IBM Db2, che può trovarsi su un sistema Windows o Linux.
+
+** Per il pacchetto di plug-in SnapCenter per Windows, il percorso predefinito è C:\Programmi\ NetApp\ SnapCenter.  Facoltativamente, puoi personalizzare il percorso.
+** Per il pacchetto di plug-in SnapCenter per Linux, il percorso predefinito è /opt/ NetApp/snapcenter.  Facoltativamente, puoi personalizzare il percorso.
+
+
+
+
+ a| 
+Salta i controlli pre-installazione
+ a| 
+Selezionare questa casella di controllo se i plug-in sono già stati installati manualmente e non si desidera verificare se l'host soddisfa i requisiti per l'installazione del plug-in.
+
+
+
+ a| 
+Utilizzare l'account di servizio gestito del gruppo (gMSA) per eseguire i servizi plug-in
+ a| 
+Per l'host Windows, selezionare questa casella di controllo se si desidera utilizzare l'account di servizio gestito del gruppo (gMSA) per eseguire i servizi plug-in.
+
+
+NOTE: Fornire il nome gMSA nel seguente formato: domainName\accountName$.
+
+
+NOTE: gMSA verrà utilizzato come account di accesso al servizio solo per il plug-in SnapCenter per il servizio Windows.
+
+|===
+. Fare clic su *Invia*.
++
+Se non è stata selezionata la casella di controllo "Ignora controlli preliminari", l'host viene convalidato per verificare se soddisfa i requisiti per l'installazione del plug-in. Lo spazio su disco, la RAM, la versione di PowerShell, la versione di .NET, la posizione (per i plug-in Windows) e Java 11 (sia per i plug-in Windows che per quelli Linux) vengono convalidati rispetto ai requisiti minimi.  Se i requisiti minimi non vengono soddisfatti, vengono visualizzati i messaggi di errore o di avviso appropriati.
+
++
+Se l'errore è correlato allo spazio su disco o alla RAM, è possibile aggiornare il file web.config che si trova in C:\Programmi\ NetApp\ SnapCenter WebApp per modificare i valori predefiniti.  Se l'errore è correlato ad altri parametri, è necessario risolvere il problema.
+
++
+
+NOTE: In una configurazione HA, se si aggiorna il file web.config, è necessario aggiornare il file su entrambi i nodi.
+
+. Se il tipo di host è Linux, verificare l'impronta digitale, quindi fare clic su *Conferma e invia*.
++
+In una configurazione cluster, è necessario verificare l'impronta digitale di ciascun nodo del cluster.
+
++
+
+NOTE: La verifica dell'impronta digitale è obbligatoria anche se lo stesso host è stato aggiunto in precedenza a SnapCenter e l'impronta digitale è stata confermata.
+
+. Monitorare l'avanzamento dell'installazione.
++
+** Per il plug-in di Windows, i registri di installazione e aggiornamento si trovano in: _C:\Windows\ SnapCenter plugin\Install_<JOBID>\
+** Per il plug-in Linux, i registri di installazione si trovano in: _/var/opt/snapcenter/logs/SnapCenter_Linux_Host_Plug-in_Install_<JOBID>.log e i registri di aggiornamento si trovano in: _/var/opt/snapcenter/logs/SnapCenter_Linux_Host_Plug-in_Upgrade_<JOBID>.log
+
+
+
+
+.Dopo aver finito
+Se si desidera eseguire l'aggiornamento a SnapCenter 6.0 o versione successiva, il plug-in basato su PERL esistente per Db2 verrà disinstallato dal server plug-in remoto.

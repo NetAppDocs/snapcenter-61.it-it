@@ -1,0 +1,24 @@
+---
+permalink: protect-hana/reference_types_of_recovery_operations_supported_for_sap_hana_database.html 
+sidebar: sidebar 
+keywords: recovery operations 
+summary: SnapCenter consente di eseguire diversi tipi di operazioni di ripristino per i database SAP HANA. 
+---
+= Tipi di operazioni di ripristino supportate per i database SAP HANA
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+SnapCenter consente di eseguire diversi tipi di operazioni di ripristino per i database SAP HANA.
+
+* Ripristina il database fino allo stato più recente
+* Ripristina il database fino a un punto specifico nel tempo
++
+È necessario specificare la data e l'ora del ripristino.
+
+* Ripristinare il database fino a un backup di dati specifico
+
+
+SnapCenter offre anche l'opzione Nessun ripristino per i database SAP HANA.

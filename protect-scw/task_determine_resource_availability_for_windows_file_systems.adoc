@@ -1,0 +1,32 @@
+---
+permalink: protect-scw/task_determine_resource_availability_for_windows_file_systems.html 
+sidebar: sidebar 
+keywords: availability 
+summary: 'Le risorse sono i LUN e componenti simili nel file system gestiti dai plug-in installati.  È possibile aggiungere tali risorse a gruppi di risorse in modo da poter eseguire attività di protezione dei dati su più risorse, ma prima è necessario identificare quali risorse sono disponibili.  La scoperta delle risorse disponibili verifica anche che l"installazione del plug-in sia stata completata correttamente.' 
+---
+= Determinare la disponibilità delle risorse per i file system di Windows
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Le risorse sono i LUN e componenti simili nel file system gestiti dai plug-in installati.  È possibile aggiungere tali risorse a gruppi di risorse in modo da poter eseguire attività di protezione dei dati su più risorse, ma prima è necessario identificare quali risorse sono disponibili.  La scoperta delle risorse disponibili verifica anche che l'installazione del plug-in sia stata completata correttamente.
+
+.Prima di iniziare
+* È necessario aver già completato attività quali l'installazione di SnapCenter Server, l'aggiunta di host, la creazione di connessioni alla macchina virtuale di archiviazione (SVM) e l'aggiunta di credenziali.
+* Se i file risiedono su VMware RDM LUN o VMDK, è necessario distribuire il SnapCenter Plug-in for VMware vSphere e registrare il plug-in con SnapCenter. Per ulteriori informazioni, vedere  https://docs.netapp.com/us-en/sc-plugin-vmware-vsphere/["Documentazione SnapCenter Plug-in for VMware vSphere"^] .
+
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in appropriato dall'elenco.
+. Nella pagina Risorse, seleziona *File System* dall'elenco.
+. Selezionare l'host per filtrare l'elenco delle risorse, quindi fare clic su *Aggiorna risorse*.
++
+I file system appena aggiunti, rinominati o eliminati vengono aggiornati nell'inventario di SnapCenter Server.
+
++
+
+IMPORTANT: È necessario aggiornare le risorse se i database vengono rinominati all'esterno di SnapCenter.
+
+

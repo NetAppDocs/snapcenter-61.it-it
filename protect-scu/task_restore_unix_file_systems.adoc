@@ -1,0 +1,67 @@
+---
+permalink: protect-scu/task_restore_unix_file_systems.html 
+sidebar: sidebar 
+keywords: restore, recover, Unix file systems 
+summary: In caso di perdita di dati, è possibile utilizzare SnapCenter per ripristinarli. 
+---
+= Ripristinare i file system Unix
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+In caso di perdita di dati, è possibile utilizzare SnapCenter per ripristinare i file system Unix.
+
+*Informazioni su questo compito*
+
+* È necessario eseguire i seguenti comandi per stabilire la connessione con SnapCenter Server, elencare i backup e recuperarne le informazioni, quindi ripristinare il backup.
++
+Le informazioni riguardanti i parametri che possono essere utilizzati con il comando e le relative descrizioni possono essere ottenute eseguendo Get-Help _command_name_. In alternativa, puoi anche fare riferimento a https://library.netapp.com/ecm/ecm_download_file/ECMLP3337666["Guida di riferimento ai comandi del software SnapCenter"^] .
+
+* Per l'operazione di ripristino di SnapMirror ActiveSync, è necessario selezionare il backup dalla posizione principale.
+
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in appropriato dall'elenco.
+. Nella pagina Risorse, seleziona *Percorso* o *Gruppo di risorse* dall'elenco *Visualizza*.
+. Selezionare il file system dalla vista dettagli o dalla vista dettagli del gruppo di risorse.
++
+Viene visualizzata la pagina della topologia.
+
+. Dalla vista Gestisci copie, seleziona *Backup* dai sistemi di archiviazione primario o secondario (con mirroring o replica).
+. Seleziona il backup dalla tabella, quindi fai clic su *image:../media/restore_icon.gif["icona di ripristino"] *.
+. Nella pagina Ambito di ripristino:
++
+** Per i file system NFS, per impostazione predefinita è selezionato il ripristino *Connetti e copia*.  Puoi anche selezionare *Ripristino volume* o *Ripristino rapido*.
+** Per i file system non NFS, l'ambito di ripristino viene selezionato in base al layout.
++
+A seconda del tipo e del layout del file system, i nuovi file creati dopo il backup potrebbero non essere disponibili dopo il ripristino.
+
+
+
+. Nella pagina PreOps, immettere i comandi di pre-ripristino da eseguire prima di eseguire un processo di ripristino.
+. Nella pagina PostOps, immettere i comandi di post-ripristino da eseguire dopo aver eseguito un processo di ripristino.
++
+
+NOTE: Dovresti controllare se i comandi sono presenti nell'elenco dei comandi disponibile sull'host del plug-in nella posizione _/opt/ NetApp/snapcenter/scc/etc/allowed_commands.config_path.
+
+. Nella pagina Notifica, dall'elenco a discesa *Preferenza e-mail*, seleziona gli scenari in cui desideri inviare le notifiche e-mail.
++
+È necessario specificare anche gli indirizzi email del mittente e del destinatario, nonché l'oggetto dell'email.  Se si desidera allegare il report dell'operazione di ripristino eseguita, è necessario selezionare *Allega report lavoro*.
+
++
+
+NOTE: Per la notifica tramite e-mail, è necessario aver specificato i dettagli del server SMTP utilizzando l'interfaccia grafica utente (GUI) o il comando PowerShell Set-SmSmtpServer.
+
+. Rivedi il riepilogo e poi clicca su *Fine*.
++
+
+IMPORTANT: Se l'operazione di ripristino fallisce, il rollback non è supportato.
+
++
+
+NOTE: In caso di ripristino di un file system residente su un gruppo di volumi, il vecchio contenuto del file system non viene eliminato.  Solo il contenuto del file system clonato verrà copiato nel file system di origine.  Questa opzione è applicabile quando sono presenti più file system nel gruppo di volumi e vengono ripristinati i file system NFS predefiniti.
+
+. Monitorare l'avanzamento dell'operazione cliccando su *Monitoraggio* > *Lavori*.
+

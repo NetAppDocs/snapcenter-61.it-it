@@ -1,0 +1,18 @@
+---
+permalink: protect-sco/restore-workflow.html 
+sidebar: sidebar 
+keywords: restore, workflow 
+summary: 'Il flusso di lavoro di ripristino include la pianificazione, l"esecuzione delle operazioni di ripristino e il monitoraggio delle operazioni.' 
+---
+= Ripristina flusso di lavoro
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Il flusso di lavoro di ripristino include la pianificazione, l'esecuzione delle operazioni di ripristino e il monitoraggio delle operazioni.
+
+Il seguente flusso di lavoro mostra la sequenza in cui è necessario eseguire l'operazione di ripristino:
+
+image::../media/all_plug_ins_restore_workflow.gif[tutti_i_plug-in_ripristinano_il_flusso_di_lavoro]

@@ -1,0 +1,40 @@
+---
+permalink: uninstall/task_remove_a_host.html 
+sidebar: sidebar 
+keywords: uninstall, remove, remove host 
+summary: 'Quando SnapCenter Server rimuove un host, rimuove innanzitutto il backup, i cloni, i processi di clonazione, i gruppi di risorse e le risorse elencate per quell"host nella pagina Risorse SnapCenter , quindi disinstalla i pacchetti plug-in sull"host.' 
+---
+= Rimuovere un host
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Quando SnapCenter Server rimuove un host, rimuove innanzitutto il backup, i cloni, i processi di clonazione, i gruppi di risorse e le risorse elencate per quell'host nella pagina Risorse SnapCenter , quindi disinstalla i pacchetti plug-in sull'host.
+
+.Informazioni su questo compito
+* Se si elimina un host, vengono eliminati anche i backup, i cloni e i gruppi di risorse associati all'host.
+* Quando si rimuovono i gruppi di risorse, vengono rimosse anche tutte le pianificazioni associate.
+* Se l'host ha un gruppo di risorse condiviso con un altro host e si elimina l'host, verrà eliminato anche il gruppo di risorse.
+* Per rimuovere gli host dei plug-in dismessi o non raggiungibili, è necessario utilizzare il cmdlet _Remove-SmHost_.
++
+Le informazioni relative ai parametri che possono essere utilizzati con il cmdlet e le relative descrizioni possono essere ottenute eseguendo _Get-Help command_name_.  In alternativa, puoi anche fare riferimento a https://docs.netapp.com/us-en/snapcenter-cmdlets/index.html["Guida di riferimento ai cmdlet del software SnapCenter"^]
+
+* Il tempo necessario per rimuovere un host dipende dal numero di backup e dalle impostazioni di conservazione.  Ciò avviene perché gli snapshot vengono eliminati da ciascuno dei controller e i metadati vengono ripuliti.
+
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Host*.
+. Nella pagina *Host*, fare clic su *Host gestiti*.
+. Seleziona l'host che vuoi rimuovere, quindi fai clic su *Rimuovi*.
+. Per i cluster Oracle RAC, per rimuovere il SnapCenter software da tutti gli host nel cluster, selezionare *Includi tutti gli host del cluster*.
++
+È anche possibile rimuovere un nodo di un cluster e in questo modo rimuovere tutti i nodi uno alla volta.
+
+. Fare clic su *OK*.
++
+
+NOTE: Quando si disinstallano e si reinstallano i plug-in host su un cluster, le risorse del cluster non vengono rilevate automaticamente.  Selezionare il nome host del cluster, quindi fare clic su *Aggiorna risorse* per rilevare automaticamente le risorse del cluster.
+
+

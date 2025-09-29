@@ -1,0 +1,166 @@
+---
+permalink: protect-hana/task_restore_and_recover_an_auto_discovered_database_backup.html 
+sidebar: sidebar 
+keywords: SnapCenter Plug-in for SAP HANA Database 
+summary: È possibile utilizzare SnapCenter per ripristinare e recuperare dati da uno o più backup. 
+---
+= Ripristina e recupera un backup del database rilevato automaticamente
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile utilizzare SnapCenter per ripristinare e recuperare dati da uno o più backup.
+
+.Prima di iniziare
+* È necessario aver eseguito il backup della risorsa o dei gruppi di risorse.
+* È necessario aver annullato tutte le operazioni di backup in corso per la risorsa o il gruppo di risorse che si desidera ripristinare.
+* Per i comandi pre-ripristino, post-ripristino, montaggio e smontaggio, è necessario verificare se i comandi sono presenti nell'elenco dei comandi disponibile sull'host del plug-in dai seguenti percorsi:
++
+** Posizione predefinita sull'host Windows: _C:\Programmi\ NetApp\ SnapCenter\Snapcenter Plug-in Creator\etc\allowed_commands.config_
+** Posizione predefinita sull'host Linux: _/opt/ NetApp/snapcenter/scc/etc/allowed_commands.config_
+
+
+
+
+
+NOTE: Se i comandi non sono presenti nell'elenco dei comandi, l'operazione fallirà.
+
+.Informazioni su questo compito
+* Le copie di backup basate su file non possono essere ripristinate da SnapCenter.
+* Dopo l'aggiornamento a SnapCenter 4.3, i backup eseguiti in SnapCenter 4.2 possono essere ripristinati ma non recuperati.  Per ripristinare i backup eseguiti in SnapCenter 4.2 è necessario utilizzare HANA Studio o script di ripristino HANA esterni a SnapCenter .
+* Per ONTAP 9.12.1 e versioni precedenti, i cloni creati dagli SnapLock Vault Snapshot come parte del ripristino erediteranno il tempo di scadenza SnapLock Vault. L'amministratore dell'archiviazione deve pulire manualmente i cloni dopo la scadenza SnapLock .
+* Per l'operazione di ripristino di SnapMirror ActiveSync, è necessario selezionare il backup dalla posizione principale.
+
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in appropriato dall'elenco.
+. Nella pagina Risorse, filtra le risorse dall'elenco a discesa *Visualizza* in base al tipo di risorsa.
++
+Le risorse vengono visualizzate insieme al tipo, all'host, ai gruppi di risorse associati, ai criteri e allo stato.
+
++
+
+NOTE: Sebbene un backup possa riguardare un gruppo di risorse, quando si esegue il ripristino è necessario selezionare le singole risorse che si desidera ripristinare.
+
++
+Se la risorsa non è protetta, nella colonna Stato generale viene visualizzato "`Non protetto`".  Ciò può significare che la risorsa non è protetta oppure che è stata sottoposta a backup da un utente diverso.
+
+. Selezionare la risorsa oppure selezionare un gruppo di risorse e quindi selezionare una risorsa in quel gruppo.
++
+Viene visualizzata la pagina della topologia delle risorse.
+
+. Dalla vista Gestisci copie, seleziona *Backup* dai sistemi di archiviazione primari o secondari (con mirroring o in vault).
+. Nella tabella Backup primari, seleziona il backup da cui desideri effettuare il ripristino, quindi fai clic su *image:../media/restore_icon.gif["icona di ripristino"] *.
++
+image::../media/restoring_resource.gif[ripristino delle risorse]
+
+. Nella pagina Ripristina ambito, seleziona *Risorsa completa* per ripristinare i volumi di dati configurati del database SAP HANA.
++
+
+NOTE: È possibile selezionare *Risorsa completa* (con o senza *Ripristino volume*) oppure *Database tenant*.
+
++
+L'operazione di ripristino non è supportata da SnapCenter Server per più tenant quando l'utente seleziona l'opzione *Database tenant* o *Ripristino completo*.  Per eseguire l'operazione di ripristino è necessario utilizzare HANA Studio o lo script Python HANA.
+
++
+.. Selezionare *Ripristina volume* se si desidera ripristinare l'intero volume.
++
+Questa opzione è disponibile per i backup eseguiti in SnapCenter 4.3 in ambienti NFS.
+
++
+Se la risorsa contiene volumi o qtree, gli snapshot acquisiti dopo lo snapshot selezionato per il ripristino su tali volumi o qtree vengono eliminati e non possono essere recuperati.  Inoltre, se sugli stessi volumi o qtree è ospitata un'altra risorsa, anche tale risorsa verrà eliminata.  Questa opzione è applicabile quando per il ripristino è selezionata l'opzione *Completa risorsa* con *Ripristino volume*.
+
+.. Selezionare *Database tenant*.
++
+Questa opzione è disponibile solo per le risorse MDC.
+
++
+Assicurarsi di arrestare il database tenant prima di eseguire l'operazione di ripristino.
+
++
+Se si seleziona l'opzione *Database tenant*, è necessario utilizzare HANA Studio o script di ripristino HANA esterni a SnapCenter per eseguire l'operazione di ripristino.
+
+
+
+. Nella pagina Ambito di ripristino, seleziona una delle seguenti opzioni:
++
+|===
+| Se tu... | Fai questo... 
+
+
+ a| 
+Vuoi recuperare il più vicino possibile all'ora corrente
+ a| 
+Seleziona *Ripristina allo stato più recente*.  Per le risorse di un singolo contenitore, specificare una o più posizioni di backup di log e cataloghi.
+
+Per le risorse del contenitore di database multi-tenant (MDC), specificare una o più posizioni di backup del log e la posizione del catalogo di backup.
+
+Per le risorse MDC, il percorso deve contenere sia i log del database di sistema che quelli del database tenant.
+
+
+
+ a| 
+Vuoi ripristinare il punto temporale specificato
+ a| 
+Seleziona *Recupera fino a un punto nel tempo*.
+
+.. Seleziona il fuso orario.
++
+Il fuso orario del browser è popolato per impostazione predefinita.
+
++
+Il fuso orario selezionato insieme all'ora immessa vengono convertiti in GMT assoluto.
+
+.. Inserisci data e ora.  Ad esempio, l'host HANA Linux si trova a Sunnyvale, CA e l'utente a Raleigh, NC sta recuperando i log in SnapCenter.
++
+La differenza oraria tra queste due località è di 3 ore e, poiché l'utente ha effettuato l'accesso da Raleigh, NC, il fuso orario predefinito del browser che verrà selezionato nella GUI è GMT-04:00.
+
++
+Se l'utente desidera eseguire un ripristino alle 5 del mattino a Sunnyvale, CA, deve impostare il fuso orario del browser sul fuso orario dell'host Linux HANA, ovvero GMT-07:00, e specificare la data e l'ora come 5:00.
+
++
+Per le risorse di un singolo contenitore, specificare una o più posizioni di backup di log e cataloghi.
+
++
+Per le risorse MDC, specificare una o più posizioni di backup del registro e la posizione del catalogo di backup.
+
++
+Per le risorse MDC, il percorso deve contenere sia i log del database di sistema che quelli del database tenant.
+
+
+
+
+
+ a| 
+Vuoi ripristinare un backup di dati specifico
+ a| 
+Selezionare *Ripristina nel backup dei dati specificato*.
+
+
+
+ a| 
+Non voglio recuperare
+ a| 
+Selezionare *Nessun recupero*.  È necessario eseguire manualmente l'operazione di ripristino dallo studio HANA.
+
+|===
++
+È possibile ripristinare solo i backup eseguiti dopo l'aggiornamento a SnapCenter 4.3, a condizione che sia l'host sia il plug-in siano stati aggiornati a SnapCenter 4.3 e che i backup selezionati per il ripristino siano stati eseguiti dopo che la risorsa è stata convertita o rilevata come risorsa rilevata automaticamente.
+
+. Nella pagina Pre ops, immettere i comandi pre restore e unmount da eseguire prima di eseguire un processo di ripristino.
++
+I comandi di smontaggio non sono disponibili per le risorse rilevate automaticamente.
+
+. Nella pagina Post ops, immettere i comandi mount e post restore da eseguire dopo aver eseguito un processo di ripristino.
++
+I comandi di montaggio non sono disponibili per le risorse rilevate automaticamente.
+
+. Nella pagina Notifica, dall'elenco a discesa *Preferenza e-mail*, seleziona gli scenari in cui desideri inviare le e-mail.
++
+È necessario specificare anche gli indirizzi e-mail del mittente e del destinatario, nonché l'oggetto dell'e-mail.  SMTP deve essere configurato anche nella pagina *Impostazioni* > *Impostazioni globali*.
+
+. Rivedi il riepilogo e poi clicca su *Fine*.
+. Monitorare l'avanzamento dell'operazione cliccando su *Monitoraggio* > *Lavori*.
+

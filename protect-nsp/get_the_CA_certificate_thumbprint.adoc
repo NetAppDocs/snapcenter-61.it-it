@@ -1,0 +1,38 @@
+---
+permalink: protect-nsp/get_the_CA_certificate_thumbprint.html 
+sidebar: sidebar 
+keywords: SnapCenter, CA certificate 
+summary: 'Ottieni l"impronta digitale del certificato CA.' 
+---
+= Ottieni l'impronta digitale del certificato CA
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+L'impronta digitale di un certificato è una stringa esadecimale che identifica un certificato.  L'impronta digitale viene calcolata dal contenuto del certificato utilizzando un algoritmo di identificazione digitale.
+
+.Passi
+. Eseguire le seguenti operazioni sulla GUI:
++
+.. Fare doppio clic sul certificato.
+.. Nella finestra di dialogo Certificato, fare clic sulla scheda *Dettagli*.
+.. Scorri l'elenco dei campi e clicca su *Impronta digitale*.
+.. Copia i caratteri esadecimali dalla casella.
+.. Rimuovere gli spazi tra i numeri esadecimali.
++
+Ad esempio, se l'impronta digitale è: "a9 09 50 2d d8 2a e4 14 33 e6 f8 38 86 b0 0d 42 77 a3 2a 7b", dopo aver rimosso gli spazi, sarà: "a909502dd82ae41433e6f83886b00d4277a32a7b".
+
+
+
+. Eseguire le seguenti operazioni da PowerShell:
++
+.. Eseguire il seguente comando per elencare l'identificazione personale del certificato installato e identificare il certificato installato di recente tramite il nome dell'oggetto.
++
+_Get-ChildItem -Percorso Cert:\LocalMachine\My_
+
+.. Copia l'impronta digitale.
+
+
+

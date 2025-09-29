@@ -1,0 +1,152 @@
+---
+permalink: protect-scsql/task_create_resource_groups_and_attach_policies_for_sql_server.html 
+sidebar: sidebar 
+keywords: run as 
+summary: Un gruppo di risorse è un contenitore al quale si aggiungono le risorse di cui si desidera eseguire il backup e che si desidera proteggere insieme.  Un gruppo di risorse consente di eseguire il backup simultaneo di tutti i dati associati a una determinata applicazione.  Per qualsiasi attività di protezione dei dati è necessario un gruppo di risorse.  È inoltre necessario allegare una o più policy al gruppo di risorse per definire il tipo di processo di protezione dei dati che si desidera eseguire. 
+---
+= Creare gruppi di risorse e associare criteri per SQL Server
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Un gruppo di risorse è un contenitore al quale si aggiungono le risorse di cui si desidera eseguire il backup e che si desidera proteggere insieme.  Un gruppo di risorse consente di eseguire il backup simultaneo di tutti i dati associati a una determinata applicazione.  Per qualsiasi attività di protezione dei dati è necessario un gruppo di risorse.  È inoltre necessario allegare una o più policy al gruppo di risorse per definire il tipo di processo di protezione dei dati che si desidera eseguire.
+
+È possibile proteggere le risorse singolarmente senza creare un nuovo gruppo di risorse.  È possibile eseguire backup sulla risorsa protetta.
+
+.Informazioni su questo compito
+* Per ONTAP 9.12.1 e versioni precedenti, i cloni creati dagli snapshot SnapLock Vault come parte del ripristino erediteranno il tempo di scadenza SnapLock Vault. L'amministratore dell'archiviazione deve pulire manualmente i cloni dopo la scadenza SnapLock .
+* L'aggiunta di nuovi database senza SnapMirror ActiveSync a un gruppo di risorse esistente che contiene risorse con SnapMirror ActiveSync non è supportata.
+* L'aggiunta di nuovi database a un gruppo di risorse esistente in modalità failover di SnapMirror ActiveSync non è supportata.  È possibile aggiungere risorse al gruppo di risorse solo nello stato normale o di failback.
+
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in appropriato dall'elenco.
+. Nella pagina Risorse, seleziona *Database* dall'elenco *Visualizza*.
++
+
+NOTE: Se hai aggiunto di recente una risorsa a SnapCenter, fai clic su *Aggiorna risorse* per visualizzare la risorsa appena aggiunta.
+
+. Fare clic su *Nuovo gruppo di risorse*.
+. Nella pagina Nome, eseguire le seguenti azioni:
++
+|===
+| Per questo campo... | Fai questo... 
+
+
+ a| 
+Nome
+ a| 
+Immettere il nome del gruppo di risorse.
+
+
+NOTE: Il nome del gruppo di risorse non deve superare i 250 caratteri.
+
+
+
+ a| 
+Etichette
+ a| 
+Inserisci una o più etichette che ti aiuteranno a cercare in seguito il gruppo di risorse.  Ad esempio, se aggiungi HR come tag a più gruppi di risorse, potrai successivamente trovare tutti i gruppi di risorse associati al tag HR.
+
+
+
+ a| 
+Utilizza il formato nome personalizzato per la copia Snapshot
+ a| 
+Facoltativo: inserisci un nome e un formato personalizzati per lo snapshot.  Ad esempio, customtext_resourcegroup_policy_hostname o resourcegroup_hostname.  Per impostazione predefinita, al nome dello snapshot viene aggiunto un timestamp.
+
+|===
+. Nella pagina Risorse, procedere come segue:
++
+.. Selezionare il nome host, il tipo di risorsa e l'istanza di SQL Server dagli elenchi a discesa per filtrare l'elenco delle risorse.
++
+
+NOTE: Se hai aggiunto risorse di recente, queste appariranno nell'elenco delle Risorse disponibili solo dopo aver aggiornato l'elenco delle risorse.
+
+.. Per spostare le risorse dalla sezione *Risorse disponibili* alla sezione Risorse selezionate, eseguire uno dei seguenti passaggi:
++
+*** Selezionare *Seleziona automaticamente tutte le risorse sullo stesso volume di archiviazione* per spostare tutte le risorse sullo stesso volume nella sezione Risorse selezionate.
+*** Seleziona le risorse dalla sezione *Risorse disponibili* e poi clicca sulla freccia a destra per spostarle nella sezione *Risorse selezionate*.
+
+
+
+
+. Nella pagina Criteri, procedere come segue:
++
+.. Selezionare una o più policy dall'elenco a discesa.
++
+
+NOTE: Puoi anche creare una policy cliccando *image:../media/add_policy_from_resourcegroup.gif["aggiungi gruppo di risorse del modulo di policy"] *.
+
++
+Nella sezione Configura pianificazioni per policy selezionate vengono elencate le policy selezionate.
+
+.. Nella sezione Configura pianificazioni per policy selezionate, fai clic su *image:../media/add_policy_from_resourcegroup.gif["aggiungi gruppo di risorse del modulo di policy"] * nella colonna Configura pianificazioni per il criterio per il quale si desidera configurare la pianificazione.
+.. Nella finestra di dialogo Aggiungi pianificazioni per la policy _nome_policy_, configurare la pianificazione specificando la data di inizio, la data di scadenza e la frequenza, quindi fare clic su *OK*.
++
+È necessario effettuare questa operazione per ogni frequenza indicata nella polizza.  Le pianificazioni configurate sono elencate nella colonna Pianificazioni applicate nella sezione *Configura pianificazioni per policy selezionate*.
+
+.. Selezionare lo scheduler di Microsoft SQL Server.
++
+È inoltre necessario selezionare un'istanza dello scheduler da associare al criterio di pianificazione.
+
++
+Se non si seleziona lo scheduler di Microsoft SQL Server, l'impostazione predefinita è lo scheduler di Microsoft Windows.
+
+
+
++
+Le pianificazioni di backup di terze parti non sono supportate quando si sovrappongono alle pianificazioni di backup SnapCenter .  Non modificare le pianificazioni né rinominare il processo di backup creato nello scheduler di Windows o nell'agente di SQL Server.
+
+. Nella pagina Verifica, procedere come segue:
++
+.. Selezionare il server di verifica dall'elenco a discesa *Server di verifica*.
++
+L'elenco include tutti i server SQL aggiunti in SnapCenter.  È possibile selezionare più server di verifica (host locale o host remoto).
+
++
+
+NOTE: La versione del server di verifica deve corrispondere alla versione e all'edizione del server SQL che ospita il database primario.
+
+.. Fare clic su *Carica localizzatori* per caricare i volumi SnapMirror e SnapVault ed eseguire la verifica sull'archiviazione secondaria.
+.. Seleziona la policy per la quale desideri configurare la pianificazione della verifica, quindi fai clic su *image:../media/add_policy_from_resourcegroup.gif["aggiungi gruppo di risorse del modulo di policy"] *.
+.. Nella finestra di dialogo Aggiungi pianificazioni di verifica policy_name, eseguire le seguenti azioni:
++
+|===
+| Se lo desidera... | Fai questo... 
+
+
+ a| 
+Esegui la verifica dopo il backup
+ a| 
+Selezionare *Esegui verifica dopo il backup*.
+
+
+
+ a| 
+Pianifica una verifica
+ a| 
+Selezionare *Esegui verifica pianificata*.
+
+|===
+.. Fare clic su *OK*.
++
+Le pianificazioni configurate sono elencate nella colonna Pianificazioni applicate.  Puoi rivedere e poi modificare cliccando *image:../media/edit_icon.gif["icona per modificare le pianificazioni configurate"] * o elimina cliccando *image:../media/delete_icon_for_configuringschedule.gif["icona di eliminazione"] *.
+
+
+
+. Nella pagina Notifica, dall'elenco a discesa *Preferenza e-mail*, seleziona gli scenari in cui desideri inviare le e-mail.
++
+È necessario specificare anche gli indirizzi email del mittente e del destinatario, nonché l'oggetto dell'email.  Se si desidera allegare il report dell'operazione eseguita sul gruppo di risorse, selezionare *Allega report lavoro*.
+
++
+
+NOTE: Per la notifica via e-mail, è necessario aver specificato i dettagli del server SMTP tramite l'interfaccia grafica utente (GUI) o il comando PowerShell Set-SmSmtpServer.
+
+. Rivedi il riepilogo e poi clicca su *Fine*.
+
+
+.Informazioni correlate
+link:task_create_backup_policies_for_sql_server_databases.html["Creare criteri di backup per i database di SQL Server"]

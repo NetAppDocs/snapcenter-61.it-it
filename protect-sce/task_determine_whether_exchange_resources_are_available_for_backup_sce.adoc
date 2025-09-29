@@ -1,0 +1,68 @@
+---
+permalink: protect-sce/task_determine_whether_exchange_resources_are_available_for_backup_sce.html 
+sidebar: sidebar 
+keywords: credentials 
+summary: 'Le risorse sono i database, i gruppi di disponibilità del database di Exchange gestiti dai plug-in installati.  È possibile aggiungere tali risorse ai gruppi di risorse in modo da poter eseguire attività di protezione dei dati, ma prima è necessario identificare quali risorse sono disponibili.  La determinazione delle risorse disponibili verifica anche che l"installazione del plug-in sia stata completata correttamente.' 
+---
+= Determina se le risorse di Exchange sono disponibili per il backup
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Le risorse sono i database, i gruppi di disponibilità del database di Exchange gestiti dai plug-in installati.  È possibile aggiungere tali risorse ai gruppi di risorse in modo da poter eseguire attività di protezione dei dati, ma prima è necessario identificare quali risorse sono disponibili.  La determinazione delle risorse disponibili verifica anche che l'installazione del plug-in sia stata completata correttamente.
+
+.Prima di iniziare
+* È necessario aver già completato attività quali l'installazione di SnapCenter Server, l'aggiunta di host, la creazione di connessioni al sistema di archiviazione, l'aggiunta di credenziali e l'installazione del plug-in per Exchange.
+* Per sfruttare le funzionalità del software Single Mailbox Recovery, è necessario aver individuato il database attivo sul server Exchange in cui è installato il software Single Mailbox Recovery.
+* Se i database risiedono su LUN VMware RDM, è necessario distribuire il SnapCenter Plug-in for VMware vSphere e registrare il plug-in con SnapCenter.  IL https://docs.netapp.com/us-en/sc-plugin-vmware-vsphere/scpivs44_get_started_overview.html["Documentazione SnapCenter Plug-in for VMware vSphere"] ha più informazioni.
+
+
+.Informazioni su questo compito
+* Non è possibile eseguire il backup dei database quando l'opzione *Stato generale* nella pagina Dettagli è impostata su Non disponibile per il backup.  L'opzione *Stato generale* è impostata su Non disponibile per il backup quando si verifica una delle seguenti condizioni:
++
+** I database non si trovano su una LUN NetApp .
+** I database non sono in stato normale.
++
+I database non sono in stato normale quando si trovano nello stato di montaggio, smontaggio, risemina o ripristino in sospeso.
+
+
+
+* Se si dispone di un gruppo di disponibilità del database (DAG), è possibile eseguire il backup di tutti i database nel gruppo eseguendo il processo di backup dal DAG.
+
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare *Microsoft Exchange Server* dall'elenco a discesa dei plug-in situato nell'angolo in alto a sinistra della pagina Risorse.
+. Nella pagina Risorse, seleziona *Database*, *Gruppo di disponibilità del database* o *Gruppo di risorse* dall'elenco a discesa *Visualizza*.
++
+Tutti i database e i DAG vengono visualizzati con i rispettivi DAG o nomi host in formato FQDN, in modo da poter distinguere tra più database.
+
++
+Clicimage:../media/filter_icon.gif["icona del filtro"] e seleziona il nome host e il server Exchange per filtrare le risorse.  Puoi quindi fare clicimage:../media/filter_icon.gif["icona del filtro"] per chiudere il riquadro del filtro.
+
+. Fare clic su *Aggiorna risorse*.
++
+Le risorse appena aggiunte, rinominate o eliminate vengono aggiornate nell'inventario di SnapCenter Server.
+
++
+
+IMPORTANT: È necessario aggiornare le risorse se i database vengono rinominati all'esterno di SnapCenter.
+
++
+Le risorse vengono visualizzate insieme a informazioni quali il nome della risorsa, il nome del gruppo di disponibilità del database, il server in cui il database è attualmente attivo, il server con copie, l'ora dell'ultimo backup e lo stato generale.
+
++
+** Se il database si trova su un archivio non NetApp , nella colonna Stato generale viene visualizzato Non disponibile per il backup.
++
+In un DAG, se la copia attiva del database si trova su un archivio non NetApp e se almeno una copia passiva del database si trova su un archivio NetApp , nella colonna *Stato generale* viene visualizzato Non protetto.
+
++
+Non è possibile eseguire operazioni di protezione dei dati su un database che si trova su un tipo di archiviazione non NetApp .
+
+** Se il database si trova su un archivio NetApp e non è protetto, nella colonna *Stato generale* viene visualizzato Non protetto.
+** Se il database si trova su un sistema di archiviazione NetApp ed è protetto, l'interfaccia utente visualizza il messaggio Backup non eseguito nella colonna *Stato generale*.
+** Se il database si trova su un sistema di archiviazione NetApp ed è protetto e se il backup è attivato per il database, l'interfaccia utente visualizza il messaggio Backup riuscito nella colonna *Stato generale*.
+
+
+

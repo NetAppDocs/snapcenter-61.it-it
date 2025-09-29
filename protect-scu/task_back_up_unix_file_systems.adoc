@@ -1,0 +1,83 @@
+---
+permalink: protect-scu/task_back_up_unix_file_systems.html 
+sidebar: sidebar 
+keywords: backup, Unix file system, policy, schedule, resources 
+summary: Se una risorsa non fa parte di alcun gruppo di risorse, è possibile eseguirne il backup dalla pagina Risorse. 
+---
+= Eseguire il backup dei file system Unix
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Se una risorsa non fa parte di alcun gruppo di risorse, è possibile eseguirne il backup dalla pagina Risorse.
+
+.Passi
+. Nel riquadro di navigazione a sinistra, seleziona *Risorse* e il plug-in appropriato dall'elenco.
+. Nella pagina Risorse, seleziona *Percorso* dall'elenco Visualizza.
+. Clicimage:../media/filter_icon.gif["icona del filtro"] , quindi selezionare il nome host e i file system Unix per filtrare le risorse.
+. Selezionare il file system di cui si desidera eseguire il backup.
+. Nella pagina Risorse puoi eseguire i seguenti passaggi:
++
+.. Selezionare la casella di controllo e immettere un formato di nome personalizzato che si desidera utilizzare per il nome dello snapshot.
++
+Per esempio, `customtext_policy_hostname` O `resource_hostname` .  Per impostazione predefinita, al nome dello snapshot viene aggiunto un timestamp.
+
+
+
+. Nella pagina Impostazioni applicazione, procedere come segue:
++
+** Selezionare la freccia Script e immettere i comandi pre e post per le operazioni di quiesce, snapshot e unquiesce.  È anche possibile immettere i comandi pre da eseguire prima di uscire in caso di errore.
+** Selezionare una delle opzioni di coerenza del backup:
++
+*** Selezionare *File System Consistent* se si desidera garantire che i dati memorizzati nella cache del file system vengano svuotati prima di creare il backup e che non venga eseguita alcuna operazione sul file system durante la creazione del backup.
+*** Selezionare *Crash Consistent* se si desidera garantire che i dati memorizzati nella cache dei file system vengano svuotati prima di creare il backup.
+
+
+
+
+. Nella pagina Criteri, procedere come segue:
++
+.. Selezionare una o più policy dall'elenco a discesa.
++
+
+NOTE: Puoi creare una policy cliccandoimage:../media/add_policy_from_resourcegroup.gif["aggiungi simbolo"] .
+
++
+Nella sezione Configura pianificazioni per policy selezionate vengono elencate le policy selezionate.
+
+.. Clicimage:../media/add_policy_from_resourcegroup.gif["aggiungi simbolo"] nella colonna Configura pianificazioni per configurare una pianificazione per la policy desiderata.
+.. Nella finestra Aggiungi pianificazioni per il criterio _nome_criterio_, configura la pianificazione e quindi seleziona `OK` .
++
+_policy_name_ è il nome della policy selezionata.
+
++
+Le pianificazioni configurate sono elencate nella colonna Pianificazioni applicate.
+
+
+
+. Nella pagina Notifica, seleziona gli scenari in cui desideri inviare le email dall'elenco a discesa *Preferenza email*.
++
+È necessario specificare gli indirizzi e-mail del mittente e del destinatario, nonché l'oggetto dell'e-mail.  Se si desidera allegare il report dell'operazione di backup eseguita sulla risorsa, selezionare *Allega report attività*.
+
++
+
+NOTE: Per la notifica via e-mail, è necessario aver specificato i dettagli del server SMTP utilizzando l'interfaccia grafica utente o il comando PowerShell `Set-SmSmtpServer` .
+
+. Rivedi il riepilogo e poi clicca su *Fine*.
++
+Viene visualizzata la pagina della topologia.
+
+. Fare clic su *Esegui backup ora*.
+. Nella pagina Backup, procedere come segue:
++
+.. Se hai applicato più criteri alla risorsa, dall'elenco a discesa Criterio seleziona il criterio che desideri utilizzare per il backup.
++
+Se il criterio selezionato per il backup su richiesta è associato a una pianificazione di backup, i backup su richiesta verranno conservati in base alle impostazioni di conservazione specificate per il tipo di pianificazione.
+
+.. Fare clic su *Backup*.
+
+
+. Monitorare l'avanzamento dell'operazione cliccando su *Monitoraggio* > *Lavori*.
+

@@ -1,0 +1,22 @@
+---
+permalink: protect-scsql/concept_requirements_for_backing_up_sql_resources.html 
+sidebar: sidebar 
+keywords: Requirements 
+summary: Prima di eseguire il backup di una risorsa SQL, è necessario assicurarsi che siano soddisfatti diversi requisiti. 
+---
+= Requisiti per il backup delle risorse SQL
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Prima di eseguire il backup di una risorsa SQL, è necessario assicurarsi che siano soddisfatti diversi requisiti.
+
+* È necessario aver migrato una risorsa da un sistema di archiviazione non NetApp a un sistema di archiviazione NetApp .
+* Devi aver creato una policy di backup.
+* Se si desidera eseguire il backup di una risorsa che ha una relazione SnapMirror con un archivio secondario, il ruolo ONTAP assegnato all'utente dell'archivio deve includere il privilegio "`snapmirror all`".  Tuttavia, se si utilizza il ruolo "`vsadmin`", il privilegio "`snapmirror all`" non è richiesto.
+* L'operazione di backup avviata da un utente di Active Directory (AD) fallisce se le credenziali dell'istanza SQL non sono assegnate all'utente o al gruppo AD.  È necessario assegnare le credenziali dell'istanza SQL all'utente o al gruppo AD dalla pagina *Impostazioni* > *Accesso utente*.
+* È necessario aver creato un gruppo di risorse con un criterio associato.
+* Se un gruppo di risorse ha più database da host diversi, l'operazione di backup su alcuni host potrebbe essere avviata in ritardo a causa di problemi di rete.  È necessario configurare il valore di FMaxRetryForUninitializedHosts in web.config utilizzando il cmdlet PS Set-SmConfigSettings.
+

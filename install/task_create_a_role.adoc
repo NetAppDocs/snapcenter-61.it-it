@@ -1,0 +1,37 @@
+---
+permalink: install/task_create_a_role.html 
+sidebar: sidebar 
+keywords: role, create, permission 
+summary: Oltre a utilizzare i ruoli SnapCenter esistenti, puoi creare ruoli personalizzati e personalizzare le autorizzazioni. 
+---
+= Crea un ruolo
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Oltre a utilizzare i ruoli SnapCenter esistenti, puoi creare ruoli personalizzati e personalizzare le autorizzazioni.
+
+Per creare i propri ruoli, è necessario accedere con il ruolo "SnapCenterAdmin".
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Impostazioni*.
+. Nella pagina Impostazioni, fare clic su *Ruoli*.
+. Clicimage:../media/add_icon_configure_database.gif["aggiungi icona nella schermata di configurazione del database"] .
+. Specificare un nome e una descrizione per il nuovo ruolo.
++
+
+NOTE: Nei nomi utente e nei nomi di gruppo è possibile utilizzare solo i seguenti caratteri speciali: spazio ( ), trattino (-), carattere di sottolineatura (_) e due punti (:).
+
+. Selezionare *Tutti i membri di questo ruolo possono vedere gli oggetti degli altri membri* per consentire agli altri membri del ruolo di vedere risorse quali volumi e host dopo aver aggiornato l'elenco delle risorse.
++
+Se non si desidera che i membri di questo ruolo vedano gli oggetti a cui sono assegnati altri membri, è necessario deselezionare questa opzione.
+
++
+
+NOTE: Quando questa opzione è abilitata, non è necessario assegnare agli utenti l'accesso agli oggetti o alle risorse se gli utenti appartengono allo stesso ruolo dell'utente che ha creato gli oggetti o le risorse.
+
+. Nella pagina Autorizzazioni, seleziona le autorizzazioni che desideri assegnare al ruolo oppure fai clic su *Seleziona tutto* per concedere tutte le autorizzazioni al ruolo.
+. Fare clic su *Invia*.
+

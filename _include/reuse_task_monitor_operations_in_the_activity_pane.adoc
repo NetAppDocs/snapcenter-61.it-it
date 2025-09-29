@@ -1,0 +1,15 @@
+= 
+:allow-uri-read: 
+
+
+Il riquadro Attività visualizza le cinque operazioni eseguite più di recente.  Nel riquadro Attività viene inoltre visualizzato quando è stata avviata l'operazione e il suo stato.
+
+Il riquadro Attività visualizza informazioni relative alle operazioni di backup, ripristino, clonazione e backup pianificato.
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in appropriato dall'elenco.
+. Clicimage:../media/activity_pane_icon.gif["icona del riquadro attività"] nel riquadro Attività per visualizzare le cinque operazioni più recenti.
++
+Quando si fa clic su una delle operazioni, i dettagli dell'operazione vengono elencati nella pagina *Dettagli lavoro*.
+
+

@@ -1,0 +1,203 @@
+---
+permalink: protect-sce/task_restore_exchange_databases.html 
+sidebar: sidebar 
+keywords: SnapCenter plug-in for Exchange Server 
+summary: È possibile utilizzare SnapCenter per ripristinare i database Exchange sottoposti a backup. 
+---
+= Ripristinare i database di Exchange
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile utilizzare SnapCenter per ripristinare i database Exchange sottoposti a backup.
+
+.Prima di iniziare
+* È necessario aver eseguito il backup dei gruppi di risorse, del database o dei gruppi di disponibilità del database (DAG).
+* Quando il database di Exchange viene migrato in un'altra posizione, l'operazione di ripristino non funziona per i vecchi backup.
+* Se si replicano gli snapshot su un mirror o un vault, l'amministratore SnapCenter deve aver assegnato gli SVM sia per i volumi di origine che per quelli di destinazione.
+* In un DAG, se una copia attiva del database si trova su uno storage non NetApp e si desidera eseguire il ripristino dal backup della copia passiva del database che si trova su uno storage NetApp , è necessario rendere la copia passiva (storage NetApp ) come copia attiva, aggiornare le risorse ed eseguire l'operazione di ripristino.
++
+Esegui il `Move-ActiveMailboxDatabase` comando per trasformare la copia passiva del database in una copia attiva del database.
+
++
+IL https://docs.microsoft.com/en-us/powershell/module/exchange/move-activemailboxdatabase?view=exchange-ps["Documentazione Microsoft"^] contiene informazioni su questo comando.
+
+
+
+.Informazioni su questo compito
+* Quando si esegue un'operazione di ripristino su un database, il database viene rimontato sullo stesso host e non viene creato alcun nuovo volume.
+* I backup a livello di DAG devono essere ripristinati dai singoli database.
+* Il ripristino completo del disco non è supportato quando sono presenti file diversi dal file del database di Exchange (.edb).
++
+Il plug-in per Exchange non esegue un ripristino completo su un disco se il disco contiene file di Exchange come quelli utilizzati per la replica.  Quando un ripristino completo potrebbe avere ripercussioni sulla funzionalità di Exchange, il plug-in per Exchange esegue una singola operazione di ripristino del file.
+
+* Il plug-in per Exchange non è in grado di ripristinare le unità crittografate con BitLocker.
+* SCRIPTS_PATH viene definito utilizzando la chiave PredefinedWindowsScriptsDirectory che si trova nel file SMCoreServiceHost.exe.Config dell'host del plug-in.
++
+Se necessario, è possibile modificare questo percorso e riavviare il servizio SMcore.  Per motivi di sicurezza, si consiglia di utilizzare il percorso predefinito.
+
++
+Il valore della chiave può essere visualizzato da Swagger tramite l'API: API /4.7/configsettings
+
++
+È possibile utilizzare l'API GET per visualizzare il valore della chiave.  L'API SET non è supportata.
+
+* Per ONTAP 9.12.1 e versioni precedenti, i cloni creati dagli SnapLock Vault Snapshot come parte del ripristino erediteranno il tempo di scadenza SnapLock Vault. L'amministratore dell'archiviazione deve pulire manualmente i cloni dopo la scadenza SnapLock .
+* Per l'operazione di ripristino di SnapMirror ActiveSync, è necessario selezionare il backup dalla posizione principale.
+
+
+[role="tabbed-block"]
+====
+.Interfaccia utente SnapCenter
+--
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse* nell'angolo in alto a sinistra della pagina Risorse.
+. Selezionare il plug-in Exchange Server dall'elenco a discesa.
+. Nella pagina Risorse, seleziona *Database* dall'elenco Visualizza.
+. Selezionare il database dall'elenco.
+. Dalla vista Gestisci copie, seleziona *Backup* dalla tabella Backup primari, quindi fai clic su *image:../media/restore_icon.gif["icona di ripristino"] *.
+. Nella pagina Opzioni, seleziona una delle seguenti opzioni di backup del registro:
++
+|===
+| Opzione | Descrizione 
+
+
+ a| 
+Tutti i backup del registro
+ a| 
+Selezionare *Tutti i backup del registro* per eseguire un'operazione di ripristino del backup aggiornata al minuto per ripristinare tutti i backup del registro disponibili dopo il backup completo.
+
+
+
+ a| 
+Tramite backup del registro fino a
+ a| 
+Selezionare *Per backup del log fino a* per eseguire un'operazione di ripristino in un punto temporale specifico, che ripristina il database in base ai backup del log fino al log selezionato.
+
+
+NOTE: Il numero di log visualizzati nell'elenco a discesa si basa su UTM.  Ad esempio, se la conservazione del backup completo è 5 e la conservazione UTM è 3, il numero di backup del log disponibili è 5, ma nel menu a discesa saranno elencati solo 3 log per eseguire l'operazione di ripristino.
+
+
+
+ a| 
+Entro una data specifica fino a
+ a| 
+Selezionare *In base a una data specifica fino a* per specificare la data e l'ora fino alle quali i registri delle transazioni vengono applicati al database ripristinato.  Questa operazione di ripristino in un dato momento ripristina le voci del registro delle transazioni registrate fino all'ultimo backup nella data e ora specificate.
+
+
+
+ a| 
+Nessuno
+ a| 
+Selezionare *Nessuno* quando è necessario ripristinare solo il backup completo senza alcun backup del registro.
+
+|===
++
+È possibile eseguire una delle seguenti azioni:
+
++
+** *Recupera e monta il database dopo il ripristino* - Questa opzione è selezionata per impostazione predefinita.
+** *Non verificare l'integrità dei registri delle transazioni nel backup prima del ripristino* - Per impostazione predefinita, SnapCenter verifica l'integrità dei registri delle transazioni in un backup prima di eseguire un'operazione di ripristino.
++
+|===
+
+
+| *Migliore pratica:* non selezionare questa opzione. 
+|===
+
+
+. Nella pagina Script, immettere il percorso e gli argomenti del prescript o del postscript che devono essere eseguiti rispettivamente prima o dopo l'operazione di ripristino.
++
+Gli argomenti predefiniti per il ripristino includono $Database e $ServerInstance.
+
++
+Gli argomenti PostScript da ripristinare includono $Database, $ServerInstance, $BackupName, $LogDirectory e $TargetServerInstance.
+
++
+È possibile eseguire uno script per aggiornare le trap SNMP, automatizzare gli avvisi, inviare registri e così via.
+
++
+
+NOTE: Il percorso prescripts o postscripts non deve includere unità o condivisioni.  Il percorso dovrebbe essere relativo a SCRIPTS_PATH.
+
+. Nella pagina Notifica, dall'elenco a discesa *Preferenza e-mail*, seleziona gli scenari in cui desideri inviare le e-mail.
++
+È necessario specificare anche gli indirizzi email del mittente e del destinatario, nonché l'oggetto dell'email.
+
+. Rivedi il riepilogo e poi clicca su *Fine*.
+. È possibile visualizzare lo stato del processo di ripristino espandendo il pannello Attività nella parte inferiore della pagina.
++
+È necessario monitorare il processo di ripristino utilizzando la pagina *Monitor* > *Jobs*.
+
+
+
+Quando si ripristina un database attivo da un backup, il database passivo potrebbe entrare in stato di sospensione o errore se c'è un ritardo tra la replica e il database attivo.
+
+Il cambiamento di stato può verificarsi quando la catena di log del database attivo si biforca e inizia una nuova diramazione che interrompe la replicazione.  Exchange Server tenta di riparare la replica, ma se non ci riesce, dopo il ripristino è necessario creare un nuovo backup e quindi ripetere il seeding della replica.
+
+--
+.Cmdlet di PowerShell
+--
+.Passi
+. Avviare una sessione di connessione con il server SnapCenter per un utente specificato utilizzando `Open-SmConnection` cmdlet.
++
+[listing]
+----
+Open-smconnection  -SMSbaseurl  https://snapctr.demo.netapp.com:8146/
+----
+. Recupera le informazioni su uno o più backup che desideri ripristinare utilizzando `Get-SmBackup` cmdlet.
++
+Questo esempio visualizza informazioni su tutti i backup disponibili:
+
++
+[listing]
+----
+PS C:\> Get-SmBackup
+
+BackupId                      BackupName                    BackupTime                    BackupType
+--------                      ----------                    ----------                    ----------
+341                           ResourceGroup_36304978_UTM... 12/8/2017 4:13:24 PM          Full Backup
+342                           ResourceGroup_36304978_UTM... 12/8/2017 4:16:23 PM          Full Backup
+355                           ResourceGroup_06140588_UTM... 12/8/2017 6:32:36 PM          Log Backup
+356                           ResourceGroup_06140588_UTM... 12/8/2017 6:36:20 PM          Full Backup
+----
+. Ripristinare i dati dal backup utilizzando `Restore-SmBackup` cmdlet.
++
+Questo esempio ripristina un backup aggiornato:
+
++
+[listing]
+----
+C:\PS> Restore-SmBackup -PluginCode SCE -AppObjectId 'sce-w2k12-exch.sceqa.com\sce-w2k12-exch_DB_2' -BackupId 341 -IsRecoverMount:$true
+----
++
+Questo esempio ripristina un backup puntuale:
+
++
+[listing]
+----
+C:\ PS> Restore-SmBackup -PluginCode SCE -AppObjectId 'sce-w2k12-exch.sceqa.com\sce-w2k12-exch_DB_2' -BackupId 341 -IsRecoverMount:$true -LogRestoreType ByTransactionLogs -LogCount 2
+----
++
+Questo esempio ripristina un backup su un archivio secondario nella storia primaria:
+
++
+[listing]
+----
+C:\ PS> Restore-SmBackup -PluginCode 'SCE' -AppObjectId 'DB2' -BackupId 81 -IsRecoverMount:$true -Confirm:$false
+-archive @{Primary="paw_vs:vol1";Secondary="paw_vs:vol1_mirror"} -logrestoretype All
+----
++
+IL `-archive` Il parametro consente di specificare i volumi primario e secondario che si desidera utilizzare per il ripristino.
+
++
+IL `-IsRecoverMount:$true` Il parametro consente di montare il database dopo il ripristino.
+
+
+
+Le informazioni relative ai parametri che possono essere utilizzati con il cmdlet e le relative descrizioni possono essere ottenute eseguendo _Get-Help command_name_. In alternativa, puoi anche fare riferimento a https://docs.netapp.com/us-en/snapcenter-cmdlets/index.html["Guida di riferimento ai cmdlet del software SnapCenter"^] .
+
+--
+====

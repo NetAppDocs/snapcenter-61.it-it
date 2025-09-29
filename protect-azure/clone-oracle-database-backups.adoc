@@ -1,0 +1,92 @@
+---
+permalink: protect-azure/clone-oracle-database-backups.html 
+sidebar: sidebar 
+keywords: SnapCenter Plug-in for Oracle Database, clone, database, backups. split clone, pluggable database 
+summary: È possibile utilizzare SnapCenter per clonare un backup. 
+---
+= Clona il backup del database Oracle
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile utilizzare SnapCenter per clonare un database Oracle utilizzando il backup del database.  I cloni creati sono cloni spessi e vengono creati sul pool di capacità padre.
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in appropriato dall'elenco.
+. Nella pagina Risorse, seleziona *Database* o *Gruppo di risorse* dall'elenco Visualizza.
+. Selezionare il database.
+. Dalla pagina di visualizzazione Gestisci copie, seleziona il backup dal sistema di archiviazione primario.
+. Seleziona Backup dati, quindi fai clic su *image:../media/clone_icon.gif["icona clone"] *.
+. Nella pagina Nome, seleziona se vuoi clonare un database (CDB o non CDB) o clonare un database collegabile (PDB).
+. Nella pagina Posizioni, specificare i dettagli richiesti.
++
+Se i volumi ANF del database Oracle sono configurati in un pool di capacità QOS manuale, specificare la QOS per i volumi clonati.
+
++
+Se non viene specificato il QOS per i volumi clonati, verrà utilizzato il QOS del volume di origine.  Se viene utilizzato il pool di capacità QOS automatico, il valore QOS specificato verrà ignorato.
+
+. Nella pagina Credenziali, eseguire una delle seguenti operazioni:
++
+.. Per Nome credenziale per utente di sistema, selezionare la credenziale da utilizzare per definire la password dell'utente di sistema del database clone.
+.. Per il nome delle credenziali dell'istanza ASM, selezionare *Nessuno* se l'autenticazione del sistema operativo è abilitata per la connessione all'istanza ASM sull'host clone.
++
+In caso contrario, selezionare le credenziali Oracle ASM configurate con l'utente "sys" o un utente con privilegio "sysasm" applicabile all'host clone.
+
+
+
+. Nella pagina Pre-Ops specificare il percorso e gli argomenti delle prescrizioni e nella sezione Impostazioni parametri database modificare i valori dei parametri del database precompilati utilizzati per inizializzare il database.
+. Nella pagina Post-Ops, *Recupera database* e *Fino all'annullamento* sono selezionati per impostazione predefinita per eseguire il ripristino del database clonato.
++
+.. Se si seleziona *Fino all'annullamento*, SnapCenter esegue il ripristino montando l'ultimo backup del registro contenente la sequenza ininterrotta dei registri di archivio dopo il backup dei dati selezionato per la clonazione.
+.. Se si seleziona *Data e ora*, SnapCenter recupera il database fino a una data e un'ora specificate.
+.. Se si seleziona *Fino a SCN*, SnapCenter recupera il database fino a un SCN specificato.
+.. Se si seleziona *Specifica posizioni di log di archivio esterno*, SnapCenter identifica e monta il numero ottimale di backup di log in base all'SCN specificato o alla data e all'ora selezionate.
+.. Per impostazione predefinita, la casella di controllo *Crea nuovo DBID* è selezionata per generare un numero univoco (DBID) per il database clonato, differenziandolo dal database di origine.
++
+Deselezionare la casella di controllo se si desidera assegnare il DBID del database di origine al database clonato.  In questo scenario, se si desidera registrare il database clonato con il catalogo RMAN esterno in cui è già registrato il database di origine, l'operazione fallisce.
+
+.. Selezionare la casella di controllo *Crea file temporaneo per tablespace temporaneo* se si desidera creare un file temporaneo per lo spazio tabella temporaneo predefinito del database clonato.
+.. In *Immettere le voci SQL da applicare alla creazione del clone*, aggiungere le voci SQL che si desidera applicare alla creazione del clone.
+.. In *Inserisci gli script da eseguire dopo l'operazione di clonazione*, specifica il percorso e gli argomenti del PostScript che desideri eseguire dopo l'operazione di clonazione.
+
+
+. Nella pagina Notifica, dall'elenco a discesa *Preferenza e-mail*, seleziona gli scenari in cui desideri inviare le e-mail.
+. Rivedi il riepilogo e seleziona *Fine*.
+. Monitorare l'avanzamento dell'operazione selezionando *Monitoraggio* > *Lavori*.
+
+
+
+
+== Clonare un database collegabile
+
+È possibile clonare un database collegabile (PDB) su un CDB di destinazione diverso o uguale sullo stesso host o su un host alternativo.  È anche possibile ripristinare il PDB clonato in un SCN o in una data e ora desiderati.
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in appropriato dall'elenco.
+. Nella pagina Risorse, seleziona *Database* o *Gruppo di risorse* dall'elenco Visualizza.
+. Selezionare il database di tipo istanza singola (multitenant).
+. Dalla pagina di visualizzazione Gestisci copie, seleziona il backup dal sistema di archiviazione primario.
+. Seleziona il backup e poi clicca su *image:../media/clone_icon.gif["icona clone"] *.
+. Nella pagina Nome, seleziona *PDB Clone* e specifica gli altri dettagli.
+. Nella pagina Posizioni, specificare i dettagli richiesti.
+. Nella pagina Pre-Ops specificare il percorso e gli argomenti delle prescrizioni e nella sezione Impostazioni parametri database modificare i valori dei parametri del database precompilati utilizzati per inizializzare il database.
+. Nella pagina Post-Ops, *Fino all'annullamento* è selezionato per impostazione predefinita per eseguire il ripristino del database clonato.
++
+.. Se si seleziona *Fino all'annullamento*, SnapCenter esegue il ripristino montando l'ultimo backup del registro contenente la sequenza ininterrotta dei registri di archivio dopo il backup dei dati selezionato per la clonazione.
+.. Se si seleziona *Data e ora*, SnapCenter recupera il database fino a una data e un'ora specificate.
+.. Se si seleziona *Specifica posizioni di log di archivio esterno*, SnapCenter identifica e monta il numero ottimale di backup di log in base all'SCN specificato o alla data e all'ora selezionate.
+.. Per impostazione predefinita, la casella di controllo *Crea nuovo DBID* è selezionata per generare un numero univoco (DBID) per il database clonato, differenziandolo dal database di origine.
++
+Deselezionare la casella di controllo se si desidera assegnare il DBID del database di origine al database clonato.  In questo scenario, se si desidera registrare il database clonato con il catalogo RMAN esterno in cui è già registrato il database di origine, l'operazione fallisce.
+
+.. Selezionare la casella di controllo *Crea file temporaneo per tablespace temporaneo* se si desidera creare un file temporaneo per lo spazio tabella temporaneo predefinito del database clonato.
+.. In *Immettere le voci SQL da applicare alla creazione del clone*, aggiungere le voci SQL che si desidera applicare alla creazione del clone.
+.. In *Inserisci gli script da eseguire dopo l'operazione di clonazione*, specifica il percorso e gli argomenti del PostScript che desideri eseguire dopo l'operazione di clonazione.
+
+
+. Nella pagina Notifica, dall'elenco a discesa *Preferenza e-mail*, seleziona gli scenari in cui desideri inviare le e-mail.
+. Rivedi il riepilogo e seleziona *Fine*.
+. Monitorare l'avanzamento dell'operazione selezionando *Monitoraggio* > *Lavori*.
+

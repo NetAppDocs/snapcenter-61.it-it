@@ -1,0 +1,61 @@
+---
+permalink: admin/task_manage_rbac.html 
+sidebar: sidebar 
+keywords: modify RBAC, role, users, groups 
+summary: SnapCenter consente di modificare ruoli, utenti e gruppi. 
+---
+= Gestisci RBAC
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+SnapCenter consente di modificare ruoli, utenti e gruppi.
+
+
+
+== Modificare un ruolo
+
+È possibile modificare un ruolo SnapCenter per rimuovere utenti o gruppi e modificare le autorizzazioni associate al ruolo.  È particolarmente utile modificare i ruoli quando si desidera modificare o eliminare le autorizzazioni utilizzate da un intero ruolo.
+
+.Prima di iniziare
+Devi aver effettuato l'accesso con il ruolo "SnapCenterAdmin".
+
+
+NOTE: Non è possibile modificare o rimuovere le autorizzazioni per il ruolo SnapCenterAdmin.
+
+*Passi*
+
+. Nel riquadro di navigazione a sinistra, fare clic su *Impostazioni*.
+. Nella pagina Impostazioni, fare clic su *Ruoli*.
+. Nel campo Nome ruolo, fare clic sul ruolo che si desidera modificare.
+. Selezionare *Tutti i membri di questo ruolo possono vedere gli oggetti degli altri membri* per consentire agli altri membri del ruolo di vedere risorse quali volumi e host dopo aver aggiornato l'elenco delle risorse.
++
+Deseleziona questa opzione se non vuoi che i membri di questo ruolo vedano gli oggetti a cui sono assegnati altri membri.
+
++
+
+NOTE: Quando questa opzione è abilitata, non è necessario assegnare agli utenti l'accesso agli oggetti o alle risorse se gli utenti appartengono allo stesso ruolo dell'utente che ha creato gli oggetti o le risorse.
+
+. Nella pagina Dettagli ruolo, modificare le autorizzazioni o annullare l'assegnazione dei membri in base alle esigenze.
+. Fare clic su *Invia*.
+
+
+
+
+== Modifica utenti e gruppi
+
+È possibile modificare gli utenti o i gruppi SnapCenter per modificarne i ruoli e le risorse.
+
+.Prima di iniziare
+Devi aver effettuato l'accesso come amministratore SnapCenter .
+
+*Passi*
+
+. Nel riquadro di navigazione a sinistra, fare clic su *Impostazioni*.
+. Nella pagina Impostazioni, fare clic su *Utenti e accesso*.
+. Dall'elenco Nome utente o gruppo, fare clic sull'utente o sul gruppo che si desidera modificare.
+. Nella pagina dei dettagli dell'utente o del gruppo, modifica ruoli e risorse.
+. Fare clic su *Invia*.
+

@@ -1,0 +1,164 @@
+---
+permalink: admin/concept_manage_the_snapcenter_server_repository.html 
+sidebar: sidebar 
+keywords: SnapCenter Server 
+summary: Le informazioni relative alle varie operazioni eseguite da SnapCenter vengono archiviate nel repository del database di SnapCenter Server.  È necessario creare backup del repository per proteggere SnapCenter Server dalla perdita di dati. 
+---
+= Gestire il repository di SnapCenter Server
+:allow-uri-read: 
+
+
+[role="lead"]
+Le informazioni relative alle varie operazioni eseguite da SnapCenter vengono archiviate nel repository del database di SnapCenter Server.  È necessario creare backup del repository per proteggere SnapCenter Server dalla perdita di dati.
+
+Il repository di SnapCenter Server è talvolta denominato database NSM.
+
+
+
+== Prerequisiti per la protezione del repository SnapCenter
+
+Per proteggere il repository SnapCenter , l'ambiente deve soddisfare determinati prerequisiti.
+
+* Gestione delle connessioni della macchina virtuale di archiviazione (SVM)
++
+Dovresti configurare le credenziali di archiviazione.
+
+* Provisioning degli host
++
+Almeno un disco di archiviazione NetApp deve essere presente sull'host del repository SnapCenter .  Se un disco NetApp non è presente sull'host del repository SnapCenter , è necessario crearne uno.
+
++
+Per informazioni dettagliate sull'aggiunta di host, sulla configurazione delle connessioni SVM e sul provisioning degli host, consultare le istruzioni di installazione.
+
+* Provisioning di iSCSI LUN o VMDK
++
+Per una configurazione ad alta disponibilità (HA), è possibile predisporre un LUN iSCSI o un VMDK in uno dei server SnapCenter .
+
+
+
+
+
+== Eseguire il backup del repository SnapCenter
+
+Il backup del repository di SnapCenter Server aiuta a proteggerlo dalla perdita di dati.  È possibile eseguire il backup del repository eseguendo il cmdlet _Protect-SmRepository_.
+
+*Informazioni su questo compito*
+
+Il cmdlet _Protect-SmRepository_ esegue le seguenti attività:
+
+* Crea un gruppo di risorse e una policy
+* Crea una pianificazione di backup per il repository SnapCenter
+
+
+*Passi*
+
+. Avvia PowerShell.
+. Sull'host del server SnapCenter , stabilire una sessione utilizzando il cmdlet _Open-SmConnection_, quindi immettere le credenziali.
+. Eseguire il backup del repository utilizzando il cmdlet _Protect-SmRepository_ e i parametri richiesti.
+
+
+
+
+== Visualizza i backup del repository SnapCenter
+
+È possibile visualizzare un elenco dei backup del repository del database di SnapCenter Server eseguendo il cmdlet _Get-SmRepositoryBackups_.
+
+I backup del repository vengono creati in base alla pianificazione specificata nel cmdlet _Protect-SmRepository_.
+
+*Passi*
+
+. Avvia PowerShell.
+. Dal prompt dei comandi, immettere il seguente cmdlet e quindi fornire le credenziali per connettersi al server SnapCenter : _Open-SMConnection_
+. Elenca tutti i backup del database SnapCenter disponibili utilizzando il cmdlet _Get-SmRepositoryBackups_.
+
+
+
+
+== Ripristinare il repository del database SnapCenter
+
+È possibile ripristinare il repository SnapCenter eseguendo il cmdlet _Restore-SmRepositoryBackup_.
+
+Quando si ripristina il repository SnapCenter , altre operazioni SnapCenter in esecuzione saranno interessate perché durante l'operazione di ripristino il database del repository non è accessibile.
+
+*Passi*
+
+. Avvia PowerShell.
+. Dal prompt dei comandi, immettere il seguente cmdlet e quindi fornire le credenziali per connettersi al server SnapCenter : _Open-SMConnection_
+. Ripristinare il backup del repository utilizzando il cmdlet _Restore-SmRepositoryBackup_.
++
+Il seguente cmdlet ripristina il repository del database MySQL di SnapCenter dai backup esistenti su iSCSI LUN o VMDK:
+
++
+[listing]
+----
+C:\PS>Restore-SmRepositoryBackup -BackupName MYSQL_DS_SC_Repository_mva-x3550-s09_09-15-2016_10.32.00.4445
+----
++
+Il seguente cmdlet ripristina il database MySQL di SnapCenter quando i file di backup vengono eliminati accidentalmente nella LUN iSCSI.  Per VMDK ripristinare manualmente il backup dagli snapshot ONTAP .
+
++
+[listing]
+----
+C:\PS>Restore-SmRepositoryBackup -BackupName MYSQL_DS_SC_Repository_mva-x3550-s09_09-15-2016_10.32.00.4445 -RestoreFileSystem
+----
+
+
+
+NOTE: Il backup utilizzato per eseguire l'operazione di ripristino del repository non verrà elencato quando i backup del repository verranno recuperati dopo aver eseguito l'operazione di ripristino.
+
+
+
+== Migrare il repository SnapCenter
+
+È possibile migrare il repository del database di SnapCenter Server dalla posizione predefinita a un altro disco.  È possibile migrare il repository quando si desidera spostarlo su un disco con più spazio.
+
+*Passi*
+
+. Arrestare il servizio MYSQL57 in Windows.
+. Individuare la directory dei dati MySQL.
++
+Di solito la directory dei dati si trova in C:\ProgramData\MySQL\MySQL Server 5.7\Data.
+
+. Copiare la directory dei dati MySQL nella nuova posizione, ad esempio E:\Data\nsm.
+. Fare clic con il pulsante destro del mouse sulla nuova directory, quindi selezionare *Proprietà* > *Sicurezza* per aggiungere l'account del server locale del servizio di rete alla nuova directory, quindi assegnare all'account il controllo completo.
+. Rinominare la directory del database originale, ad esempio nsm_copy.
+. Da un prompt dei comandi di Windows, creare un collegamento simbolico alla directory utilizzando il comando _mklink_.
++
+`"mklink /d "C:\ProgramData\MySQL\MySQL Server 5.7\Data\nsm" "E:\Data\nsm" "`
+
+. Avviare il servizio MYSQL57 in Windows.
+. Verificare che la modifica della posizione del database sia avvenuta correttamente accedendo a SnapCenter e controllando le voci del repository oppure accedendo all'utilità MySQL e connettendosi al nuovo repository.
+. Eliminare la directory originale del repository del database rinominata (nsm_copy).
+
+
+
+
+== Reimposta la password del repository SnapCenter
+
+La password del database del repository di MySQL Server viene generata automaticamente durante l'installazione di SnapCenter Server da SnapCenter 4.2.  Questa password generata automaticamente non è mai nota all'utente SnapCenter .  Se si desidera accedere al database del repository, è necessario reimpostare la password.
+
+.Prima di iniziare
+Per reimpostare la password è necessario disporre dei privilegi di amministratore SnapCenter .
+
+*Passi*
+
+. Avvia PowerShell.
+. Dal prompt dei comandi, immettere il comando seguente e quindi fornire le credenziali per connettersi al server SnapCenter : _Open-SMConnection_
+. Reimposta la password del repository: _Set-SmRepositoryPassword_
++
+Il seguente comando reimposta la password del repository:
+
++
+[listing]
+----
+
+Set-SmRepositoryPassword at command pipeline position 1
+Supply values for the following parameters:
+NewPassword: ********
+ConfirmPassword: ********
+Successfully updated the MySQL server password.
+----
+
+
+.Informazioni correlate
+Le informazioni relative ai parametri che possono essere utilizzati con il cmdlet e le relative descrizioni possono essere ottenute eseguendo _Get-Help command_name_. In alternativa, puoi anche fare riferimento a https://docs.netapp.com/us-en/snapcenter-cmdlets/index.html["Guida di riferimento ai cmdlet del software SnapCenter"^] .

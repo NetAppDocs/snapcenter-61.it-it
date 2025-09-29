@@ -1,0 +1,73 @@
+---
+permalink: protect-mysql/restore-and-recover-an-auto-discovered-database-backup.html 
+sidebar: sidebar 
+keywords: SnapCenter Plug-in for mysql 
+summary: È possibile utilizzare SnapCenter per ripristinare e recuperare dati da uno o più backup. 
+---
+= Ripristina e recupera un backup del database rilevato automaticamente
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile utilizzare SnapCenter per ripristinare e recuperare dati da uno o più backup.
+
+.Prima di iniziare
+* È necessario aver eseguito il backup della risorsa o dei gruppi di risorse.
+* È necessario aver annullato tutte le operazioni di backup in corso per la risorsa o il gruppo di risorse che si desidera ripristinare.
+* Per i comandi pre-ripristino, post-ripristino, montaggio e smontaggio, è necessario verificare se i comandi sono presenti nell'elenco dei comandi disponibile sull'host del plug-in dai seguenti percorsi:
++
+** Posizione predefinita sull'host Windows: _C:\Programmi\ NetApp\ SnapCenter\Snapcenter Plug-in Creator\etc\allowed_commands.config_
+** Posizione predefinita sull'host Linux: _/opt/ NetApp/snapcenter/scc/etc/allowed_commands.config_
+
+
+
+
+
+NOTE: Se i comandi non sono presenti nell'elenco dei comandi, l'operazione fallirà.
+
+.Informazioni su questo compito
+* Per le risorse rilevate automaticamente, il ripristino è supportato con SFSR.
+* Il ripristino automatico puntuale e aggiornato al minuto non è supportato.
+* Per ONTAP 9.12.1 e versioni precedenti, i cloni creati dagli snapshot SnapLock Vault come parte del ripristino erediteranno il tempo di scadenza SnapLock Vault. L'amministratore dell'archiviazione deve pulire manualmente i cloni dopo la scadenza SnapLock .
+
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in appropriato dall'elenco.
+. Nella pagina Risorse, filtra le risorse dall'elenco a discesa *Visualizza* in base al tipo di risorsa.
++
+Le risorse vengono visualizzate insieme al tipo, all'host, ai gruppi di risorse associati, ai criteri e allo stato.
+
++
+
+NOTE: Sebbene un backup possa riguardare un gruppo di risorse, quando si esegue il ripristino è necessario selezionare le singole risorse che si desidera ripristinare.
+
++
+Se la risorsa non è protetta, nella colonna Stato generale viene visualizzato "`Non protetto`".  Ciò può significare che la risorsa non è protetta oppure che è stata sottoposta a backup da un utente diverso.
+
+. Selezionare la risorsa oppure selezionare un gruppo di risorse e quindi selezionare una risorsa in quel gruppo.
++
+Viene visualizzata la pagina della topologia delle risorse.
+
+. Dalla vista Gestisci copie, seleziona *Backup* dai sistemi di archiviazione primari o secondari (con mirroring o in vault).
+. Nella tabella Backup primari, seleziona il backup da cui desideri effettuare il ripristino, quindi fai clic su *image:../media/restore_icon.gif["icona di ripristino"] *.
++
+image::../media/restoring_resource.gif[ripristino delle risorse]
+
+. Nella pagina Ripristina ambito, seleziona *Risorsa completa* per ripristinare i volumi di dati configurati del database MySQL.
+. Nella pagina Pre ops, immettere i comandi pre restore e unmount da eseguire prima di eseguire un processo di ripristino.
++
+I comandi di smontaggio non sono disponibili per le risorse rilevate automaticamente.
+
+. Nella pagina Post ops, immettere i comandi mount e post restore da eseguire dopo aver eseguito un processo di ripristino.
++
+I comandi di montaggio non sono disponibili per le risorse rilevate automaticamente.
+
+. Nella pagina Notifica, dall'elenco a discesa *Preferenza e-mail*, seleziona gli scenari in cui desideri inviare le e-mail.
++
+È necessario specificare anche gli indirizzi e-mail del mittente e del destinatario, nonché l'oggetto dell'e-mail.  SMTP deve essere configurato anche nella pagina *Impostazioni* > *Impostazioni globali*.
+
+. Rivedi il riepilogo e poi clicca su *Fine*.
+. Monitorare l'avanzamento dell'operazione cliccando su *Monitoraggio* > *Lavori*.
+

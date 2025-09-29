@@ -1,0 +1,71 @@
+---
+permalink: protect-sco/catalog-backups.html 
+sidebar: sidebar 
+keywords: oracle databases discover 
+summary: Come SnapCenter scopre i database Oracle. 
+---
+= Come catalogare i backup con Oracle Recovery Manager
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile catalogare i backup dei database Oracle utilizzando Oracle Recovery Manager (RMAN) per archiviare le informazioni di backup nel repository Oracle RMAN.
+
+I backup catalogati possono essere utilizzati in seguito per operazioni di ripristino a livello di blocco o di ripristino point-in-time dello spazio tabella.  Quando non hai bisogno di questi backup catalogati, puoi rimuovere le informazioni del catalogo.
+
+Per la catalogazione, il database deve essere montato o in uno stato superiore.  È possibile eseguire la catalogazione su backup di dati, backup di log di archivio e backup completi.  Se la catalogazione è abilitata per un backup di un gruppo di risorse che dispone di più database, la catalogazione viene eseguita per ciascun database.  Per i database Oracle RAC, la catalogazione verrà eseguita sul nodo preferito in cui il database è almeno nello stato montato.
+
+Se si desidera catalogare i backup di un database RAC, assicurarsi che non sia in esecuzione nessun altro processo per quel database.  Se è in esecuzione un altro processo, l'operazione di catalogazione fallisce anziché essere messa in coda.
+
+
+
+== Database di catalogo esterno
+
+Per impostazione predefinita, per la catalogazione viene utilizzato il file di controllo del database di destinazione.  Se si desidera aggiungere un database di catalogo esterno, è possibile configurarlo specificando le credenziali e il nome del substrato di rete trasparente (TNS) del catalogo esterno tramite la procedura guidata Impostazioni database dall'interfaccia utente grafica (GUI) di SnapCenter .  È anche possibile configurare il database del catalogo esterno dalla CLI eseguendo il comando Configure-SmOracleDatabase con le opzioni -OracleRmanCatalogCredentialName e -OracleRmanCatalogTnsName.
+
+
+
+== comando RMAN
+
+Se è stata abilitata l'opzione di catalogazione durante la creazione di un criterio di backup Oracle dalla GUI SnapCenter , i backup vengono catalogati utilizzando Oracle RMAN come parte dell'operazione di backup.  È anche possibile eseguire la catalogazione differita dei backup eseguendo il comando `Catalog-SmBackupWithOracleRMAN` comando.
+
+Dopo aver catalogato i backup, è possibile eseguire il `Get-SmBackupDetails` comando per ottenere le informazioni di backup catalogate, come il tag per i file di dati catalogati, il percorso del catalogo dei file di controllo e le posizioni dei registri di archivio catalogati.
+
+
+
+== Formato di denominazione
+
+Se il nome del gruppo di dischi ASM è maggiore o uguale a 16 caratteri, da SnapCenter 3.0, il formato di denominazione utilizzato per il backup è SC_HASHCODEofDISKGROUP_DBSID_BACKUPID.  Tuttavia, se il nome del gruppo di dischi è inferiore a 16 caratteri, il formato di denominazione utilizzato per il backup è DISKGROUPNAME_DBSID_BACKUPID, che è lo stesso formato utilizzato in SnapCenter 2.0.
+
+HASHCODEofDISKGROUP è un numero generato automaticamente (da 2 a 10 cifre) univoco per ciascun gruppo di dischi ASM.
+
+
+
+== Operazioni di controllo incrociato
+
+È possibile eseguire controlli incrociati per aggiornare le informazioni obsolete del repository RMAN sui backup i cui record del repository non corrispondono al loro stato fisico.  Ad esempio, se un utente rimuove i registri archiviati dal disco con un comando del sistema operativo, il file di controllo indica comunque che i registri sono sul disco, quando in realtà non è così.
+
+L'operazione di controllo incrociato consente di aggiornare il file di controllo con le informazioni.  È possibile abilitare il controllo incrociato eseguendo il comando Set-SmConfigSettings e assegnando il valore TRUE al parametro ENABLE_CROSSCHECK.  Il valore predefinito è impostato su FALSE.
+
+`sccli Set-SmConfigSettings-ConfigSettingsTypePlugin-PluginCodeSCO-ConfigSettings "KEY=ENABLE_CROSSCHECK, VALUE=TRUE"`
+
+
+
+== Rimuovere le informazioni del catalogo
+
+È possibile rimuovere le informazioni del catalogo eseguendo il comando Uncatalog-SmBackupWithOracleRMAN.  Non è possibile rimuovere le informazioni del catalogo utilizzando l'interfaccia utente grafica SnapCenter .  Tuttavia, le informazioni di un backup catalogato vengono rimosse durante l'eliminazione del backup o durante l'eliminazione del gruppo di conservazione e di risorse associato a tale backup catalogato.
+
+
+NOTE: Quando si forza l'eliminazione dell'host SnapCenter , le informazioni dei backup catalogati associati a tale host non vengono rimosse.  È necessario rimuovere le informazioni di tutti i backup catalogati per quell'host prima di forzare l'eliminazione dell'host.
+
+Se la catalogazione e la decatalogazione non riescono perché il tempo dell'operazione ha superato il valore di timeout specificato per il parametro ORACLE_PLUGIN_RMAN_CATALOG_TIMEOUT, è necessario modificare il valore del parametro eseguendo il seguente comando:
+
+`/opt/Netapp/snapcenter/spl/bin/sccli Set-SmConfigSettings-ConfigSettingsType Plugin -PluginCode SCO-ConfigSettings "KEY=ORACLE_PLUGIN_RMAN_CATALOG_TIMEOUT,VALUE=user_defined_value"`
+
+Dopo aver modificato il valore del parametro, riavviare il servizio SnapCenter Plug-in Loader (SPL) eseguendo il seguente comando:
+
+`/opt/NetApp/snapcenter/spl/bin/spl restart`
+
+Le informazioni sui parametri che possono essere utilizzati con il comando e le relative descrizioni possono essere ottenute eseguendo Get-Help nome_comando. In alternativa, è possibile fare riferimento a https://library.netapp.com/ecm/ecm_download_file/ECMLP3337666["Guida di riferimento ai comandi del software SnapCenter"^] .

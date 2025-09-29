@@ -1,0 +1,107 @@
+= Gestisci la password per il keystore del plug-in e l'alias della coppia di chiavi firmata dalla CA in uso
+:allow-uri-read: 
+
+
+È necessario gestire la password del keystore dei plug-in e il relativo certificato, configurare il certificato CA, configurare i certificati radice o intermedi per il trust-store dei plug-in e configurare la coppia di chiavi firmata dalla CA per il trust-store dei plug-in con il servizio plug-in SnapCenter per attivare il certificato digitale installato.
+
+Il plug-in utilizza il file 'keystore.jks', che si trova in _/opt/ NetApp/snapcenter/scc/etc_ sia come archivio attendibile che come archivio chiavi.
+
+
+
+== Gestisci la password per il keystore del plug-in e l'alias della coppia di chiavi firmata dalla CA in uso
+
+.Passi
+. È possibile recuperare la password predefinita del keystore del plug-in dal file delle proprietà dell'agente del plug-in.
++
+È il valore corrispondente alla chiave 'KEYSTORE_PASS'.
+
+. Cambia la password del keystore:
++
+ keytool -storepasswd -keystore keystore.jks
+. Modificare la password per tutti gli alias delle voci di chiave privata nel keystore con la stessa password utilizzata per il keystore:
++
+ keytool -keypasswd -alias "alias_name_in_cert" -keystore keystore.jks
++
+Aggiornare lo stesso per la chiave KEYSTORE_PASS nel file _agent.properties_.
+
+. Riavviare il servizio dopo aver modificato la password.
+
+
+
+NOTE: La password per il keystore del plug-in e per tutte le password alias associate alla chiave privata devono essere le stesse.
+
+
+
+== Configurare i certificati radice o intermedi per collegare trust-store
+
+È necessario configurare i certificati radice o intermedi senza la chiave privata per collegare trust-store.
+
+.Passi
+. Passare alla cartella contenente il keystore del plug-in: /opt/ NetApp/snapcenter/scc/etc.
+. Individuare il file 'keystore.jks'.
+. Elenca i certificati aggiunti nel keystore:
++
+`keytool -list -v -keystore keystore.jks`
+
+. Aggiungi un certificato radice o intermedio:
++
+ keytool -import -trustcacerts -alias myRootCA -file /root/USERTrustRSA_Root.cer -keystore keystore.jks
+. Riavviare il servizio dopo aver configurato i certificati radice o intermedi per collegare trust-store.
+
+
+
+NOTE: Dovresti aggiungere il certificato CA radice e poi i certificati CA intermedi.
+
+
+
+== Configurare la coppia di chiavi firmata dalla CA per collegare l'archivio attendibile
+
+È necessario configurare la coppia di chiavi firmata dalla CA nel trust-store del plug-in.
+
+.Passi
+. Passare alla cartella contenente il keystore del plug-in /opt/ NetApp/snapcenter/scc/etc.
+. Individuare il file 'keystore.jks'.
+. Elenca i certificati aggiunti nel keystore:
++
+`keytool -list -v -keystore keystore.jks`
+
+. Aggiungere il certificato CA con chiave sia privata che pubblica.
++
+`keytool -importkeystore -srckeystore /root/snapcenter.ssl.test.netapp.com.pfx -srcstoretype pkcs12 -destkeystore keystore.jks -deststoretype JKS`
+
+. Elenca i certificati aggiunti nel keystore.
++
+`keytool -list -v -keystore keystore.jks`
+
+. Verificare che il keystore contenga l'alias corrispondente al nuovo certificato CA aggiunto al keystore.
+. Modificare la password della chiave privata aggiunta per il certificato CA con la password del keystore.
++
+La password predefinita del keystore del plug-in è il valore della chiave KEYSTORE_PASS nel file agent.properties.
+
++
+ keytool -keypasswd -alias "alias_name_in_CA_cert" -keystore keystore.jks
+. Se il nome alias nel certificato CA è lungo e contiene spazi o caratteri speciali ("*",","), modificare il nome alias in un nome semplice:
++
+ keytool -changealias -alias "long_alias_name" -destalias "simple_alias" -keystore keystore.jks
+. Configurare il nome alias dal certificato CA nel file agent.properties.
++
+Aggiornare questo valore in base alla chiave SCC_CERTIFICATE_ALIAS.
+
+. Riavviare il servizio dopo aver configurato la coppia di chiavi firmate dalla CA per collegare trust-store.
+
+
+
+
+== Configurare l'elenco di revoche dei certificati (CRL) per i plug-in
+
+.Informazioni su questo compito
+* I plug-in SnapCenter cercheranno i file CRL in una directory preconfigurata.
+* La directory predefinita per i file CRL per i plug-in SnapCenter è ' opt/ NetApp/snapcenter/scc/etc/crl'.
+
+
+.Passi
+. È possibile modificare e aggiornare la directory predefinita nel file agent.properties in base alla chiave CRL_PATH.
++
+È possibile inserire più di un file CRL in questa directory.  I certificati in arrivo saranno verificati rispetto a ciascun CRL.
+
+

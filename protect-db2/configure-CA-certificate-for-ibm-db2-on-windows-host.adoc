@@ -1,0 +1,127 @@
+---
+permalink: protect-db2/configure-CA-certificate-for-ibm-db2-on-windows-host.html 
+sidebar: sidebar 
+keywords: SnapCenter 
+summary: 'Configurare il certificato CA per il servizio SnapCenter IBM Db2 Plug-ins sull"host Windows' 
+---
+= Configurare il certificato CA per il servizio SnapCenter IBM Db2 Plug-ins sull'host Windows
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È necessario gestire la password del keystore dei plug-in e il relativo certificato, configurare il certificato CA, configurare i certificati radice o intermedi per il trust-store dei plug-in e configurare la coppia di chiavi firmata dalla CA per il trust-store dei plug-in con il servizio plug-in SnapCenter per attivare il certificato digitale installato.
+
+Il plug-in utilizza il file _keystore.jks_, che si trova in _C:\Program Files\ NetApp\ SnapCenter\Snapcenter Plug-in Creator\etc_ sia come archivio attendibile che come archivio chiavi.
+
+
+
+== Gestisci la password per il keystore del plug-in e l'alias della coppia di chiavi firmata dalla CA in uso
+
+.Passi
+. È possibile recuperare la password predefinita del keystore del plug-in dal file delle proprietà dell'agente del plug-in.
++
+È il valore corrispondente alla chiave _KEYSTORE_PASS_.
+
+. Cambia la password del keystore:
++
+_keytool -storepasswd -keystore keystore.jks_
+
++
+
+NOTE: Se il comando "keytool" non viene riconosciuto nel prompt dei comandi di Windows, sostituire il comando keytool con il suo percorso completo.
+
++
+_C:\Programmi\Java\<versione_jdk>\bin\keytool.exe" -storepasswd -keystore keystore.jks_
+
+. Modificare la password per tutti gli alias delle voci di chiave privata nel keystore con la stessa password utilizzata per il keystore:
++
+_keytool -keypasswd -alias "alias_name_in_cert" -keystore keystore.jks_
+
++
+Aggiornare lo stesso per la chiave KEYSTORE_PASS nel file _agent.properties_.
+
+. Riavviare il servizio dopo aver modificato la password.
++
+
+NOTE: La password per il keystore del plug-in e per tutte le password alias associate alla chiave privata devono essere le stesse.
+
+
+
+
+
+== Configurare i certificati radice o intermedi per collegare trust-store
+
+È necessario configurare i certificati radice o intermedi senza la chiave privata per collegare trust-store.
+
+.Passi
+. Passare alla cartella contenente il keystore del plug-in _C:\Programmi\ NetApp\ SnapCenter\Snapcenter Plug-in Creator\etc_
+. Individuare il file 'keystore.jks'.
+. Elenca i certificati aggiunti nel keystore:
++
+_keytool -list -v -keystore keystore.jks_
+
+. Aggiungi un certificato radice o intermedio:
++
+_keytool -import -trustcacerts -alias myRootCA -file /root/USERTrustRSA_Root.cer -keystore keystore.jks_
+
+. Riavviare il servizio dopo aver configurato i certificati radice o intermedi per collegare trust-store.
+
+
+
+NOTE: Dovresti aggiungere il certificato CA radice e poi i certificati CA intermedi.
+
+
+
+== Configurare la coppia di chiavi firmata dalla CA per collegare l'archivio attendibile
+
+È necessario configurare la coppia di chiavi firmata dalla CA nel trust-store del plug-in.
+
+.Passi
+. Passare alla cartella contenente il keystore del plug-in _C:\Programmi\ NetApp\ SnapCenter\Snapcenter Plug-in Creator\etc_
+. Individuare il file _keystore.jks_.
+. Elenca i certificati aggiunti nel keystore:
++
+_keytool -list -v -keystore keystore.jks_
+
+. Aggiungere il certificato CA con chiave sia privata che pubblica.
++
+_keytool -importkeystore -srckeystore /root/snapcenter.ssl.test.netapp.com.pfx -srcstoretype pkcs12 -destkeystore keystore.jks -deststoretype JKS_
+
+. Elenca i certificati aggiunti nel keystore.
++
+_keytool -list -v -keystore keystore.jks_
+
+. Verificare che il keystore contenga l'alias corrispondente al nuovo certificato CA aggiunto al keystore.
+. Modificare la password della chiave privata aggiunta per il certificato CA con la password del keystore.
++
+La password predefinita del keystore del plug-in è il valore della chiave KEYSTORE_PASS nel file agent.properties.
+
++
+_keytool -keypasswd -alias "nome_alias_in_CA_cert" -keystore keystore.jks_
+
+. Configurare il nome alias dal certificato CA nel file _agent.properties_.
++
+Aggiornare questo valore in base alla chiave SCC_CERTIFICATE_ALIAS.
+
+. Riavviare il servizio dopo aver configurato la coppia di chiavi firmate dalla CA per collegare trust-store.
+
+
+
+
+== Configurare l'elenco di revoche dei certificati (CRL) per i plug-in SnapCenter
+
+.Informazioni su questo compito
+* Per scaricare l'ultimo file CRL per il certificato CA correlato, vedere https://kb.netapp.com/Advice_and_Troubleshooting/Data_Protection_and_Security/SnapCenter/How_to_update_certificate_revocation_list_file_in_SnapCenter_CA_Certificate["Come aggiornare il file dell'elenco di revoche dei certificati in SnapCenter CA Certificate"] .
+* I plug-in SnapCenter cercheranno i file CRL in una directory preconfigurata.
+* La directory predefinita per i file CRL per i plug-in SnapCenter è _'C:\Program Files\ NetApp\ SnapCenter\Snapcenter Plug-in Creator\ etc\crl'_.
+
+
+.Passi
+. È possibile modificare e aggiornare la directory predefinita nel file _agent.properties_ in base alla chiave CRL_PATH.
+. È possibile inserire più di un file CRL in questa directory.
++
+I certificati in arrivo saranno verificati rispetto a ciascun CRL.
+
+

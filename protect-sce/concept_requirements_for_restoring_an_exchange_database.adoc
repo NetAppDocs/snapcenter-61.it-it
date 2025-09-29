@@ -1,0 +1,27 @@
+---
+permalink: protect-sce/concept_requirements_for_restoring_an_exchange_database.html 
+sidebar: sidebar 
+keywords: restoring an Exchange database 
+summary: Prima di ripristinare un database di Exchange Server da un backup del plug-in SnapCenter per Microsoft Exchange Server, è necessario assicurarsi che siano soddisfatti diversi requisiti. 
+---
+= Requisiti per il ripristino di un database di Exchange
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Prima di ripristinare un database di Exchange Server da un backup del plug-in SnapCenter per Microsoft Exchange Server, è necessario assicurarsi che siano soddisfatti diversi requisiti.
+
+
+NOTE: Per utilizzare completamente la funzionalità di ripristino, è necessario aggiornare sia SnapCenter Server che SnapCenter Plug-in per il database di Exchange alla versione 4.6.
+
+* Prima di poter ripristinare un database, Exchange Server deve essere online e in esecuzione.
+* I database devono essere presenti sul server Exchange.
++
+
+NOTE: Il ripristino dei database eliminati non è supportato.
+
+* Le pianificazioni SnapCenter per il database devono essere sospese.
+* Il server SnapCenter e l'host del plug-in SnapCenter per Microsoft Exchange Server devono essere connessi allo storage primario e secondario che contiene i backup che si desidera ripristinare.
+

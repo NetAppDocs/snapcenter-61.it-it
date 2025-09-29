@@ -1,0 +1,53 @@
+---
+permalink: protect-azure/backup-sql-server-databases.html 
+sidebar: sidebar 
+keywords: SnapCenter Plug-in for SQL Server Database, back up, databases, Azure NetApp Files 
+summary: Eseguire il backup della risorsa dalla pagina Risorse. 
+---
+= Eseguire il backup dei database di SQL Server in esecuzione su Azure NetApp Files
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Se una risorsa non fa ancora parte di alcun gruppo di risorse, è possibile eseguirne il backup dalla pagina Risorse.
+
+.Prima di iniziare
+È necessario creare un bilanciatore del carico se al cluster di failover Windows di Azure non è assegnato un IP del cluster o se non è raggiungibile da SnapCenter.  L'IP del bilanciatore del carico deve essere configurato e raggiungibile dal server SnapCenter .
+
+.Passi
+. Nel riquadro di navigazione a sinistra, seleziona *Risorse*, quindi seleziona il plug-in appropriato dall'elenco.
+. Nella pagina Risorsa, seleziona *Database*, *Istanza* o *Gruppo di disponibilità* dall'elenco a discesa Visualizza.
+. Nella pagina Risorsa, seleziona *Usa formato nome personalizzato per copia Snapshot*, quindi immetti un formato nome personalizzato che desideri utilizzare per il nome Snapshot.
+. Nella pagina Criteri, procedere come segue:
++
+.. Selezionare una o più policy dall'elenco a discesa.
+.. Seleziona *image:../media/add_policy_from_resourcegroup.gif["aggiungi gruppo di risorse del modulo di policy"] * nella colonna Configura pianificazioni per il criterio per il quale si desidera configurare una pianificazione.
+.. Nella finestra di dialogo Aggiungi pianificazioni per il criterio _nome_criterio_, configurare la pianificazione, quindi selezionare *OK*.
++
+_policy_name_ è il nome della policy selezionata.
+
+.. Selezionare *Usa scheduler di Microsoft SQL Server*, quindi selezionare l'istanza dello scheduler dall'elenco a discesa *Istanza dello scheduler* associata al criterio di pianificazione.
+
+
+. Nella pagina Verifica, procedere come segue:
++
+.. Seleziona il server di verifica.
+.. Seleziona la policy per la quale desideri configurare la pianificazione della verifica, quindi fai clic su *image:../media/add_policy_from_resourcegroup.gif["aggiungi gruppo di risorse del modulo di policy"] *.
+.. Selezionare *Esegui verifica dopo backup* oppure *Esegui verifica pianificata*.
+.. Fare clic su OK.
+
+
+. Nella pagina Notifica, dall'elenco a discesa *Preferenza e-mail*, seleziona gli scenari in cui desideri inviare le e-mail.
+. Rivedi il riepilogo e poi clicca su *Fine*.
+. Seleziona *Esegui backup adesso*.
+. Nella pagina Backup, procedere come segue:
++
+.. Se alla risorsa sono associati più criteri, dall'elenco a discesa *Criterio* selezionare il criterio che si desidera utilizzare per il backup.
+.. Selezionare *Verifica dopo il backup*.
+.. Selezionare *Backup*.
+
+
+. Monitorare l'avanzamento dell'operazione cliccando su *Monitoraggio* > *Lavori*.
+

@@ -1,0 +1,112 @@
+---
+permalink: protect-scu/concept_overview_snapcenter_plug_in_for_UNIX_file_systems.html 
+sidebar: sidebar 
+keywords: overview, unix file system, plug-in for unix file system, backup, restore, clone 
+summary: Il plug-in per i file system Unix supporta il backup, il ripristino e la clonazione dei file system Unix. 
+---
+= Cosa puoi fare con il plug-in SnapCenter per i file system Unix
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Una volta installato il plug-in per i file system Unix nel tuo ambiente, puoi utilizzare SnapCenter per eseguire il backup, il ripristino e la clonazione dei file system Unix.  È anche possibile eseguire attività di supporto a tali operazioni.
+
+* Scopri le risorse
+* Eseguire il backup dei file system Unix
+* Pianificare le operazioni di backup
+* Ripristinare i backup del file system
+* Clonazione dei backup del file system
+* Monitorare le operazioni di backup, ripristino e clonazione
+
+
+
+
+== Configurazioni supportate
+
+|===
+| Articolo | Configurazione supportata 
+
+
+ a| 
+Ambienti
+ a| 
+* Server fisico
+* Server virtuale
++
+Datastore vVol sia su NFS che su SAN. Il provisioning del datastore vVol può essere effettuato solo con ONTAP Tools per VMware vSphere.
+
+
+
+
+
+ a| 
+Sistemi operativi
+ a| 
+* Red Hat Enterprise Linux
+* Oracle Linux
+* SUSE Linux Enterprise Server (SLES)
+
+
+
+
+ a| 
+Sistemi di file
+ a| 
+* SAN:
++
+** Sia i file system basati su LVM che quelli non basati su LVM
+** LVM su VMDK ext3, ext4 e xfs
+
+
+* NFS: NFS v3, NFS v4.x
+
+
+
+
+ a| 
+Protocolli
+ a| 
+* FC
+* FCoE
+* iSCSI
+* NFS
+
+
+
+
+ a| 
+Multipercorso
+ a| 
+SÌ
+
+|===
+
+
+== Limitazioni
+
+* Non è supportata la combinazione di RDM e dischi virtuali in un gruppo di volumi.
+* Il ripristino a livello di file non è supportato.
++
+Tuttavia, è possibile eseguire manualmente il ripristino a livello di file clonando il backup e quindi copiando manualmente i file.
+
+* Non è supportato il mix di file system distribuiti su VMDK provenienti sia da datastore NFS che VMFS.
+* NVMe non è supportato.
+* Il provisioning non è supportato.
+
+
+
+
+== Caratteristiche
+
+* Consente al plug-in per Oracle Database di eseguire operazioni di protezione dei dati sui database Oracle gestendo lo stack di archiviazione host sottostante sui sistemi Linux o AIX
+* Supporta i protocolli Network File System (NFS) e Storage Area Network (SAN) su un sistema di archiviazione che esegue ONTAP.
+* Per i sistemi Linux, i database Oracle su VMDK e RDM LUN sono supportati quando si distribuisce il SnapCenter Plug-in for VMware vSphere e si registra il plug-in con SnapCenter.
+* Supporta Mount Guard per AIX su file system SAN e layout LVM.
+* Supporta Enhanced Journaled File System (JFS2) con registrazione in linea sui file system SAN e layout LVM solo per sistemi AIX.
++
+Sono supportati dispositivi SAN nativi, file system e layout LVM creati su dispositivi SAN.
+
+* Automatizza le operazioni di backup, ripristino e clonazione basate sulle applicazioni per i file system UNIX nel tuo ambiente SnapCenter
+

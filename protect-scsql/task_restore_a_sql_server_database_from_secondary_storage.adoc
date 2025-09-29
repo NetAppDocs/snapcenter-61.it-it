@@ -1,0 +1,38 @@
+---
+permalink: protect-scsql/task_restore_a_sql_server_database_from_secondary_storage.html 
+sidebar: sidebar 
+keywords: restore operation 
+summary: 'È possibile ripristinare i database SQL Server sottoposti a backup dai LUN fisici (RDM, iSCSI o FCP) su un sistema di archiviazione secondario.  La funzionalità di ripristino è un processo multifase che copia tutti i dati e le pagine di registro da un backup di SQL Server specificato, residente sul sistema di archiviazione secondario, a un database specificato.' 
+---
+= Ripristinare un database SQL Server da un archivio secondario
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile ripristinare i database SQL Server sottoposti a backup dai LUN fisici (RDM, iSCSI o FCP) su un sistema di archiviazione secondario.  La funzionalità di ripristino è un processo multifase che copia tutti i dati e le pagine di registro da un backup di SQL Server specificato, residente sul sistema di archiviazione secondario, a un database specificato.
+
+.Prima di iniziare
+* È necessario aver replicato gli snapshot dal sistema di archiviazione primario a quello secondario.
+* È necessario assicurarsi che SnapCenter Server e l'host del plug-in siano in grado di connettersi al sistema di archiviazione secondario.
+* La maggior parte dei campi nelle pagine della procedura guidata di ripristino sono spiegati nel processo di ripristino di base.  Le seguenti informazioni descrivono alcuni dei campi per i quali potresti aver bisogno di assistenza.
+
+
+.Informazioni su questo compito
+Per i criteri abilitati per SnapLock , per ONTAP 9.12.1 e versioni precedenti, se si specifica un periodo di blocco degli snapshot, i cloni creati dagli snapshot antimanomissione come parte del ripristino erediteranno il tempo di scadenza SnapLock . L'amministratore dell'archiviazione deve pulire manualmente i cloni dopo la scadenza SnapLock .
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare *Plug-in SnapCenter per SQL Server* dall'elenco.
+. Nella pagina Risorse, seleziona *Database* o *Gruppo di risorse* dall'elenco a discesa *Visualizza*.
+. Selezionare il database o il gruppo di risorse.
++
+Viene visualizzata la pagina della topologia del database o del gruppo di risorse.
+
+. Nella sezione Gestisci copie, seleziona *Backup* dal sistema di archiviazione secondario (con mirroring o vault).
+. Selezionare il backup dall'elenco, quindi fare clic suimage:../media/restore_icon.gif["icona di ripristino"] .
+. Nella pagina Posizione, seleziona il volume di destinazione per il ripristino della risorsa selezionata.
+. Completare la procedura guidata di ripristino, rivedere il riepilogo e quindi fare clic su *Fine*.
+
+
+Se hai ripristinato un database in un percorso diverso condiviso da altri database, dovresti eseguire un backup completo e una verifica del backup per confermare che il database ripristinato non presenti danneggiamenti a livello fisico.

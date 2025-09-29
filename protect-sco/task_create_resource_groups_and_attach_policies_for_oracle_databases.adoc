@@ -1,0 +1,130 @@
+---
+permalink: protect-sco/task_create_resource_groups_and_attach_policies_for_oracle_databases.html 
+sidebar: sidebar 
+keywords: run as, resource groups, policies, Oracle database 
+summary: Un gruppo di risorse è un contenitore in cui aggiungere le risorse di cui si desidera eseguire il backup e la protezione.  Un gruppo di risorse consente di eseguire il backup simultaneo di tutti i dati associati a una determinata applicazione. 
+---
+= Crea gruppi di risorse e allega policy per i database Oracle
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Un gruppo di risorse è un contenitore in cui aggiungere le risorse di cui si desidera eseguire il backup e la protezione.  Un gruppo di risorse consente di eseguire il backup simultaneo di tutti i dati associati a una determinata applicazione.
+
+.Informazioni su questo compito
+* Un database con file in gruppi di dischi ASM deve essere nello stato "MOUNT" o "OPEN" per verificare i propri backup utilizzando l'utilità Oracle DBVERIFY.
++
+Allegare una o più policy al gruppo di risorse per definire il tipo di attività di protezione dei dati che si desidera eseguire.
+
++
+L'immagine seguente illustra la relazione tra risorse, gruppi di risorse e criteri per i database:
+
++
+image::../media/sco_resourcegroup_policy.gif[criterio di gruppo delle risorse]
+
+* Per i criteri abilitati per SnapLock , per ONTAP 9.12.1 e versioni precedenti, se si specifica un periodo di blocco degli snapshot, i cloni creati dagli snapshot antimanomissione come parte del ripristino erediteranno il tempo di scadenza SnapLock . L'amministratore dell'archiviazione deve pulire manualmente i cloni dopo la scadenza SnapLock .
+* L'aggiunta di nuovi database senza SnapMirror ActiveSync a un gruppo di risorse esistente che contiene risorse con SnapMirror ActiveSync non è supportata.
+* L'aggiunta di nuovi database a un gruppo di risorse esistente in modalità failover di SnapMirror ActiveSync non è supportata.  È possibile aggiungere risorse al gruppo di risorse solo nello stato normale o di failback.
+
+
+.Passi
+. Nel riquadro di navigazione a sinistra, seleziona *Risorse* e il plug-in appropriato dall'elenco.
+. Nella pagina Risorse, fare clic su *Nuovo gruppo di risorse*.
+. Nella pagina Nome, eseguire le seguenti azioni:
++
+.. Immettere un nome per il gruppo di risorse nel campo Nome.
++
+
+NOTE: Il nome del gruppo di risorse non deve superare i 250 caratteri.
+
+.. Inserisci una o più etichette nel campo Tag per aiutarti a cercare il gruppo di risorse in un secondo momento.
++
+Ad esempio, se aggiungi HR come tag a più gruppi di risorse, potrai successivamente trovare tutti i gruppi di risorse associati al tag HR.
+
+.. Selezionare questa casella di controllo e immettere un formato di nome personalizzato che si desidera utilizzare per il nome dello snapshot.
++
+Ad esempio, customtext_resource group_policy_hostname o resource group_hostname.  Per impostazione predefinita, al nome dello snapshot viene aggiunto un timestamp.
+
+.. Specificare le destinazioni dei file di registro dell'archivio di cui non si desidera eseguire il backup.
++
+
+NOTE: Dovresti usare esattamente la stessa destinazione impostata in Oracle, incluso il prefisso, se necessario.
+
+
+
+. Nella pagina Risorse, seleziona un nome host del database Oracle dall'elenco a discesa *Host*.
++
+
+NOTE: Le risorse vengono elencate nella sezione Risorse disponibili solo se la risorsa viene rilevata correttamente.  Se hai aggiunto risorse di recente, queste appariranno nell'elenco delle risorse disponibili solo dopo aver aggiornato l'elenco delle risorse.
+
+. Seleziona le risorse dalla sezione Risorse disponibili e spostale nella sezione Risorse selezionate.
++
+
+NOTE: È possibile aggiungere database da host Linux e AIX in un singolo gruppo di risorse.
+
+. Nella pagina Impostazioni applicazione, seleziona l'opzione di backup.
+. Nella pagina Criteri, procedere come segue:
++
+.. Selezionare una o più policy dall'elenco a discesa.
++
+
+NOTE: Puoi anche creare una policy cliccandoimage:../media/add_policy_from_resourcegroup.gif["aggiungi simbolo"] .
+
++
+Nella sezione Configura pianificazioni per policy selezionate vengono elencate le policy selezionate.
+
+.. Clicimage:../media/add_policy_from_resourcegroup.gif["aggiungi simbolo"] nella colonna Configura pianificazioni per il criterio per il quale si desidera configurare una pianificazione.
+.. Nella finestra Aggiungi pianificazioni per il criterio _nome_criterio_, configura la pianificazione, quindi fai clic su *OK*.
++
+Dove _policy_name_ è il nome della policy selezionata.
+
++
+Le pianificazioni configurate sono elencate nella colonna Pianificazioni applicate.
+
+
+
++
+Le pianificazioni di backup di terze parti non sono supportate quando si sovrappongono alle pianificazioni di backup SnapCenter .
+
+. Nella pagina Verifica, procedere come segue:
++
+.. Fare clic su *Carica localizzatori* per caricare i volumi SnapMirror o SnapVault ed eseguire la verifica sull'archiviazione secondaria.
+.. Clicimage:../media/add_policy_from_resourcegroup.gif["aggiungi simbolo"] nella colonna Configura pianificazioni per configurare la pianificazione di verifica per tutti i tipi di pianificazione del criterio.
+.. Nella finestra di dialogo Aggiungi pianificazioni di verifica policy_name, eseguire le seguenti azioni:
++
+|===
+| Se lo desidera... | Fai questo... 
+
+
+ a| 
+Esegui la verifica dopo il backup
+ a| 
+Selezionare *Esegui verifica dopo il backup*.
+
+
+
+ a| 
+Pianifica una verifica
+ a| 
+Selezionare *Esegui verifica pianificata*, quindi selezionare il tipo di pianificazione dall'elenco a discesa.
+
+|===
+.. Seleziona *Verifica su posizione secondaria* per verificare i backup sul sistema di archiviazione secondario.
+.. Fare clic su *OK*.
++
+Le pianificazioni di verifica configurate sono elencate nella colonna Pianificazioni applicate.
+
+
+
+. Nella pagina Notifica, dall'elenco a discesa *Preferenza e-mail*, seleziona gli scenari in cui desideri inviare le e-mail.
++
+È necessario specificare anche gli indirizzi email del mittente e del destinatario, nonché l'oggetto dell'email.  Se si desidera allegare il report dell'operazione eseguita sul gruppo di risorse, selezionare *Allega report lavoro*.
+
++
+
+NOTE: Per la notifica tramite e-mail, è necessario aver specificato i dettagli del server SMTP tramite l'interfaccia grafica utente (GUI) o il comando PowerShell Set-SmSmtpServer.
+
+. Rivedi il riepilogo e poi clicca su *Fine*.
+

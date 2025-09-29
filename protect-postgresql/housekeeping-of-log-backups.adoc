@@ -1,0 +1,16 @@
+---
+permalink: protect-postgresql/housekeeping-of-log-backups.html 
+sidebar: sidebar 
+keywords: SnapCenter Plug-in for PostgreSQL 
+summary: 'SnapCenter gestisce la manutenzione dei backup di log e dati a livello di sistema di archiviazione e file system, nonché all"interno del catalogo di backup di PostgreSQL.' 
+---
+= Come SnapCenter gestisce la manutenzione dei backup dei dati
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+SnapCenter gestisce la manutenzione dei backup dei dati a livello di sistema di archiviazione e di file system.
+
+Gli snapshot sullo storage primario o secondario e le voci corrispondenti nel catalogo PostgreSQL vengono eliminati in base alle impostazioni di conservazione.

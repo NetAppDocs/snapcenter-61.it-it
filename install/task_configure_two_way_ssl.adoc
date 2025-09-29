@@ -1,0 +1,167 @@
+---
+permalink: install/task_configure_two_way_ssl.html 
+sidebar: sidebar 
+keywords: security,two-way ssl,configure two-way ssl, windows host 
+summary: 'È necessario configurare la comunicazione SSL bidirezionale per proteggere la comunicazione reciproca tra SnapCenter Server sull"host Windows e i plug-in.' 
+---
+= Configurare la comunicazione SSL bidirezionale sull'host Windows
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È necessario configurare la comunicazione SSL bidirezionale per proteggere la comunicazione reciproca tra SnapCenter Server sull'host Windows e i plug-in.
+
+.Prima di iniziare
+* Dovresti aver generato il file CSR del certificato CA con la lunghezza minima supportata della chiave pari a 3072.
+* Il certificato CA deve supportare l'autenticazione del server e l'autenticazione del client.
+* Dovresti avere un certificato CA con chiave privata e dettagli dell'impronta digitale.
+* Avresti dovuto abilitare la configurazione SSL unidirezionale.
++
+Per maggiori dettagli, vedere https://docs.netapp.com/us-en/snapcenter/install/reference_generate_CA_certificate_CSR_file.html["Configurare la sezione del certificato CA."]
+
+* È necessario abilitare la comunicazione SSL bidirezionale su tutti gli host del plug-in e sul server SnapCenter .
++
+Non è supportato un ambiente con alcuni host o server non abilitati per la comunicazione SSL bidirezionale.
+
+
+
+.Passi
+. Per associare la porta, eseguire i seguenti passaggi sull'host del server SnapCenter per la porta 8146 (predefinita) del server Web SnapCenter IIS e ancora una volta per la porta 8145 (predefinita) di SMCore utilizzando i comandi di PowerShell.
++
+.. Rimuovere l'associazione della porta del certificato autofirmato SnapCenter esistente utilizzando il seguente comando PowerShell.
++
+`> netsh http delete sslcert ipport=0.0.0.0:<SMCore port/IIS port>`
+
++
+Per esempio,
+
++
+`> netsh http delete sslcert ipport=0.0.0.0:8145`
+
++
+`> netsh http delete sslcert ipport=0.0.0.0:8146`
+
+.. Associare il certificato CA appena ottenuto al server SnapCenter e alla porta SMCore.
++
+`> $cert = “<CA_certificate thumbprint>”`
+
++
+`> $guid = [guid]::NewGuid().ToString("B")`
+
++
+`> netsh http add sslcert ipport=0.0.0.0: <SMCore Port/IIS port> certhash=$cert appid="$guid"` `clientcertnegotiation=enable verifyclientcertrevocation=disable`
+
++
+`> netsh http show sslcert ipport=0.0.0.0:<SMCore Port/IIS port>`
+
++
+Per esempio,
+
++
+`> $cert = “abc123abc123abc123abc123”`
+
++
+`> $guid = [guid]::NewGuid().ToString("B")`
+
++
+`> netsh http add sslcert ipport=0.0.0.0:8146 certhash=$cert appid="$guid"` `clientcertnegotiation=enable verifyclientcertrevocation=disable`
+
++
+`> $guid = [guid]::NewGuid().ToString("B")`
+
++
+`> netsh http add sslcert ipport=0.0.0.0:8145 certhash=$cert appid="$guid"` `clientcertnegotiation=enable verifyclientcertrevocation=disable`
+
++
+`> netsh http show sslcert ipport=0.0.0.0:8146`
+
++
+`> netsh http show sslcert ipport=0.0.0.0:8145`
+
+
+
+. Per accedere all'autorizzazione al certificato CA, aggiungere l'utente predefinito del server Web IIS di SnapCenter "*IIS AppPool\ SnapCenter*" nell'elenco delle autorizzazioni del certificato eseguendo i passaggi seguenti per accedere al certificato CA appena ottenuto.
++
+.. Vai alla console di gestione Microsoft (MMC), quindi fai clic su *File* > *Aggiungi/Rimuovi snap-in*.
+.. Nella finestra Aggiungi o rimuovi snap-in, seleziona *Certificati* e poi fai clic su *Aggiungi*.
+.. Nella finestra snap-in Certificati, selezionare l'opzione *Account computer*, quindi fare clic su *Fine*.
+.. Fare clic su *Console Root* > *Certificati – Computer locale* > *Personale* > *Certificati*.
+.. Selezionare il certificato SnapCenter .
+.. Per avviare la procedura guidata Aggiungi utente/autorizzazione, fare clic con il pulsante destro del mouse sul certificato CA e selezionare *Tutte le attività* > *Gestisci chiavi private*.
+.. Fare clic su *Aggiungi*, nella procedura guidata Seleziona utenti e gruppi modificare la posizione in nome del computer locale (il più in alto nella gerarchia)
+.. Aggiungere l'utente IIS AppPool\ SnapCenter e concedere autorizzazioni di controllo complete.
+
+
+. Per *l'autorizzazione IIS del certificato CA*, aggiungere la nuova voce delle chiavi di registro DWORD in SnapCenter Server dal seguente percorso:
++
+Nell'editor del registro di Windows, passare al percorso indicato di seguito,
+
++
+`HKey_Local_Machine\SYSTEM\CurrentControlSet\Control\SecurityProv
+ ders\SCHANNEL`
+
+. Crea una nuova voce di chiave di registro DWORD nel contesto della configurazione del registro SCHANNEL.
++
+`SendTrustedIssuerList = 0`
+
++
+`ClientAuthTrustMode = 2`
+
+
+
+
+
+== Configurare il plug-in SnapCenter Windows per la comunicazione SSL bidirezionale
+
+È necessario configurare il plug-in SnapCenter per Windows per la comunicazione SSL bidirezionale utilizzando i comandi di PowerShell.
+
+.Prima di iniziare
+Assicurarsi che l'impronta digitale del certificato CA sia disponibile.
+
+.Passi
+. Per associare la porta, eseguire le seguenti azioni sull'host plug-in Windows per la porta SMCore 8145 (predefinita).
++
+.. Rimuovere l'associazione della porta del certificato autofirmato SnapCenter esistente utilizzando il seguente comando PowerShell.
++
+`> netsh http delete sslcert ipport=0.0.0.0:<SMCore port>`
+
++
+Per esempio,
+
++
+`> netsh http delete sslcert ipport=0.0.0.0:8145`
+
+.. Associare il certificato CA appena ottenuto alla porta SMCore.
++
+`> $cert = “<CA_certificate thumbprint>”`
+
++
+`> $guid = [guid]::NewGuid().ToString("B")`
+
++
+`> netsh http add sslcert ipport=0.0.0.0: <SMCore Port> certhash=$cert appid="$guid"`
+`clientcertnegotiation=enable verifyclientcertrevocation=disable`
+
++
+`> netsh http show sslcert ipport=0.0.0.0:<SMCore Port>`
+
++
+Per esempio,
+
++
+`> $cert = “abc123abc123abc123abc123”`
+
++
+`> $guid = [guid]::NewGuid().ToString("B")`
+
++
+`> netsh http add sslcert ipport=0.0.0.0:8145 certhash=$cert appid="$guid"` `clientcertnegotiation=enable verifyclientcertrevocation=disable`
+
++
+`> netsh http show sslcert ipport=0.0.0.0:8145`
+
+
+
+

@@ -1,0 +1,105 @@
+---
+permalink: protect-sco/task_determine_whether_oracle_databases_are_available_for_backup.html 
+sidebar: sidebar 
+keywords: credentials,SnapCenter Plug-in for Oracle Databases, non-database entries, oratab 
+summary: 'Le risorse sono database Oracle sull"host gestiti da SnapCenter.  È possibile aggiungere questi database ai gruppi di risorse per eseguire operazioni di protezione dei dati dopo aver individuato i database disponibili.' 
+---
+= Scopri i database Oracle disponibili per il backup
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Le risorse sono database Oracle sull'host gestiti da SnapCenter.  È possibile aggiungere questi database ai gruppi di risorse per eseguire operazioni di protezione dei dati dopo aver individuato i database disponibili.
+
+.Prima di iniziare
+* È necessario aver completato attività quali l'installazione di SnapCenter Server, l'aggiunta di host, la creazione di connessioni al sistema di archiviazione e l'aggiunta di credenziali.
+* Se i database risiedono su un disco di macchina virtuale (VMDK) o su un mapping di dispositivi raw (RDM), è necessario distribuire il SnapCenter Plug-in for VMware vSphere e registrare il plug-in con SnapCenter.
++
+Per ulteriori informazioni, vedere  https://docs.netapp.com/us-en/sc-plugin-vmware-vsphere/scpivs44_deploy_snapcenter_plug-in_for_vmware_vsphere.html["Distribuisci il SnapCenter Plug-in for VMware vSphere"^] .
+
+* Se i database risiedono su un file system VMDK, è necessario aver effettuato l'accesso a vCenter e aver selezionato *Opzioni VM* > *Avanzate* > *Modifica configurazione* per impostare il valore di _disk.enableUUID_ su true per la VM.
+* È necessario aver esaminato il processo seguito da SnapCenter per individuare diversi tipi e versioni di database Oracle.
+
+
+
+
+== Passaggio 1: impedire a SnapCenter di rilevare voci non di database
+
+È possibile impedire a SnapCenter di rilevare voci non di database aggiunte nel file oratab.
+
+.Passi
+. Dopo aver installato il plug-in per Oracle, l'utente root deve creare il file *sc_oratab.config* nella directory _/var/opt/snapcenter/sco/etc/_.
++
+Concedere l'autorizzazione di scrittura al proprietario e al gruppo del binario Oracle in modo che il file possa essere gestito in futuro.
+
+. L'amministratore del database dovrebbe aggiungere le voci non relative al database nel file *sc_oratab.config*.
++
+Si consiglia di mantenere lo stesso formato definito per le voci non di database nel file _/etc/oratab_ oppure l'utente può semplicemente aggiungere la stringa dell'entità non di database.
+
++
+
+NOTE: La stringa è sensibile alle maiuscole e alle minuscole.  Qualsiasi testo che inizia con # viene considerato un commento.  Il commento può essere aggiunto dopo il nome non appartenente al database.
+
++
+....
+For example:
+--------------------------------------------
+# Sample entries
+# Each line can have only one non-database name
+# These are non-database name
+oratar  # Added by the admin group -1
+#Added by the script team
+NEWSPT
+DBAGNT:/ora01/app/oracle/product/agent:N
+-----------------------------------------------
+....
+. Scopri le risorse.
++
+Le voci non di database aggiunte in *sc_oratab.config* non verranno elencate nella pagina Risorse.
+
+
+
+
+IMPORTANT: Si consiglia sempre di eseguire un backup del file sc_oratab.config prima di aggiornare il plug-in SnapCenter .
+
+
+
+== Fase 2: Scopri le risorse
+
+Dopo aver installato il plug-in, tutti i database presenti su quell'host vengono automaticamente rilevati e visualizzati nella pagina Risorse.
+
+Affinché la scoperta dei database abbia successo, è necessario che i database siano almeno nello stato montato o superiore.  In un ambiente Oracle Real Application Clusters (RAC), l'istanza del database RAC nell'host in cui viene eseguita la scoperta deve essere almeno nello stato montato o superiore affinché la scoperta dell'istanza del database abbia esito positivo.  Solo i database scoperti correttamente possono essere aggiunti ai gruppi di risorse.
+
+Se hai eliminato un database Oracle sull'host, SnapCenter Server non ne sarà a conoscenza e elencherà il database eliminato.  È necessario aggiornare manualmente le risorse per aggiornare l'elenco delle risorse SnapCenter .
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in appropriato dall'elenco.
+. Nella pagina Risorse, seleziona *Database* dall'elenco *Visualizza*.
++
+Clicimage:../media/filter_icon.gif["icona del filtro"] icona filtro], quindi selezionare il nome host e il tipo di database per filtrare le risorse.  È quindi possibile fare clic sull'icona imagfilter_icon.gif[icona filtro]_icon.png[] per chiudere il riquadro filtro.
+
+. Fare clic su *Aggiorna risorse*.
++
+In uno scenario RAC One Node, il database viene rilevato come database RAC sul nodo in cui è attualmente ospitato.
+
+
+
+*Risultati*
+
+I database vengono visualizzati insieme a informazioni quali tipo di database, nome host o cluster, gruppi di risorse e policy associati e stato.
+
+
+IMPORTANT: È necessario aggiornare le risorse se i database vengono rinominati all'esterno di SnapCenter.
+
+* Se il database si trova su un sistema di archiviazione non NetApp , l'interfaccia utente visualizza il messaggio Non disponibile per il backup nella colonna Stato generale.
++
+Non è possibile eseguire operazioni di protezione dei dati sul database che si trova su un sistema di archiviazione non NetApp .
+
+* Se il database si trova su un sistema di archiviazione NetApp e non è protetto, l'interfaccia utente visualizza il messaggio Non protetto nella colonna Stato generale.
+* Se il database si trova su un sistema di archiviazione NetApp ed è protetto, l'interfaccia utente visualizza un messaggio Disponibile per il backup nella colonna Stato generale.
+
+
+
+NOTE: Se hai abilitato l'autenticazione del database Oracle, nella vista delle risorse viene visualizzata un'icona a forma di lucchetto rosso.  È necessario configurare le credenziali del database per poter proteggere il database o aggiungerlo al gruppo di risorse per eseguire operazioni di protezione dei dati.

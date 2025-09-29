@@ -1,0 +1,162 @@
+---
+permalink: protect-nsp/create_policies_for_netapp_supported_plugins_resources.html 
+sidebar: sidebar 
+keywords: create policies, NetApp supported plug-in 
+summary: Prima di utilizzare SnapCenter per eseguire il backup di risorse specifiche dei plug-in supportati NetApp , è necessario creare una policy di backup per la risorsa o il gruppo di risorse di cui si desidera eseguire il backup. 
+---
+= Creare policy per le risorse plug-in supportate NetApp
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Prima di utilizzare SnapCenter per eseguire il backup di risorse specifiche dei plug-in supportati NetApp , è necessario creare una policy di backup per la risorsa o il gruppo di risorse di cui si desidera eseguire il backup.
+
+.Prima di iniziare
+* Avresti dovuto definire la tua strategia di backup.
++
+Per maggiori dettagli, consultare le informazioni sulla definizione di una strategia di protezione dei dati per i plug-in supportati NetApp .
+
+* Avresti dovuto prepararti alla protezione dei dati.
++
+La preparazione per la protezione dei dati include attività quali l'installazione di SnapCenter, l'aggiunta di host, la creazione di connessioni al sistema di archiviazione e l'aggiunta di risorse.
+
+* Le macchine virtuali di archiviazione (SVM) devono essere assegnate all'utente per operazioni di mirroring o vault.
++
+Se si stanno replicando gli snapshot su un mirror o un vault, l'amministratore SnapCenter deve aver assegnato le SVM sia per il volume di origine che per quello di destinazione.
+
+* Avresti dovuto aggiungere manualmente le risorse che desideri proteggere.
+
+
+.Informazioni su questo compito
+* Una policy di backup è un insieme di regole che regolano il modo in cui si gestiscono, si pianificano e si conservano i backup.  Inoltre, è possibile specificare le impostazioni di replica, script e applicazione.
+* Specificare le opzioni in un criterio consente di risparmiare tempo quando si desidera riutilizzare il criterio per un altro gruppo di risorse.
+* SnapLock
++
+** Se è selezionata l'opzione "Conserva le copie di backup per un numero specifico di giorni", il periodo di conservazione SnapLock deve essere inferiore o uguale ai giorni di conservazione indicati.
+** Specificando un periodo di blocco degli snapshot si impedisce l'eliminazione degli snapshot fino alla scadenza del periodo di conservazione. Ciò potrebbe comportare la conservazione di un numero di snapshot maggiore rispetto al conteggio specificato nella policy.
+** Per ONTAP 9.12.1 e versioni precedenti, i cloni creati dagli SnapLock Vault Snapshot come parte del ripristino erediteranno il tempo di scadenza SnapLock Vault. L'amministratore dell'archiviazione deve pulire manualmente i cloni dopo la scadenza SnapLock .
+
+
+
+
+
+NOTE: Le impostazioni primarie SnapLock sono gestite nella policy di backup SnapCenter , mentre le impostazioni secondarie SnapLock sono gestite da ONTAP.
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Impostazioni*.
+. Nella pagina Impostazioni, fare clic su *Criteri*.
+. Fare clic su *Nuovo*.
+. Nella pagina Nome, immettere il nome e i dettagli della policy.
+. Nella pagina Tipo di policy, procedere come segue:
++
+.. Seleziona il tipo di archiviazione.
+.. Nella sezione Impostazioni di backup personalizzate, specificare eventuali impostazioni di backup specifiche che devono essere trasmesse al plug-in in formato chiave-valore.
++
+È possibile fornire più valori-chiave da passare al plug-in.
+
+
+
+. Nella pagina Snapshot e replica, procedere come segue:
++
+.. Specificare il tipo di pianificazione selezionando *Su richiesta*, *Ora*, *Giornaliera*, *Settimanale* o *Mensile*.
++
+
+NOTE: È possibile specificare la pianificazione (data di inizio, data di fine e frequenza) per l'operazione di backup durante la creazione di un gruppo di risorse.  Ciò consente di creare gruppi di risorse che condividono la stessa policy e la stessa frequenza di backup, ma consente di assegnare pianificazioni di backup diverse a ciascuna policy.
+
++
+
+NOTE: Se hai programmato per le 2:00, la pianificazione non verrà attivata durante l'ora legale (DST).
+
+.. Nella sezione Impostazioni snapshot, specificare le impostazioni di conservazione per il tipo di backup e il tipo di pianificazione selezionati nella pagina *Tipo di backup*:
++
+|===
+| Se lo desidera... | Poi... 
+
+
+ a| 
+Conserva un certo numero di snapshot
+ a| 
+Seleziona *Copie da conservare*, quindi specifica il numero di snapshot che desideri conservare.
+
+Se il numero di Snapshot supera il numero specificato, gli Snapshot vengono eliminati partendo dalle copie più vecchie.
+
+
+NOTE: Se si prevede di abilitare la replica SnapVault , è necessario impostare il conteggio di conservazione su 2 o su un valore superiore.  Se si imposta il conteggio di conservazione su 1, l'operazione di conservazione potrebbe non riuscire perché il primo Snapshot è lo Snapshot di riferimento per la relazione SnapVault finché uno Snapshot più recente non viene replicato sulla destinazione.
+
+
+NOTE: Il valore massimo di ritenzione è 1018. I backup non riusciranno se la conservazione è impostata su un valore superiore a quello supportato dalla versione ONTAP sottostante.
+
+
+
+ a| 
+Conserva gli snapshot per un certo numero di giorni
+ a| 
+Selezionare *Conserva copie per*, quindi specificare il numero di giorni per cui si desidera conservare gli snapshot prima di eliminarli.
+
+
+
+ a| 
+Periodo di blocco della copia snapshot
+ a| 
+Selezionare *Periodo di blocco della copia snapshot* e specificare giorni, mesi o anni.
+
+Il periodo di conservazione SnapLock dovrebbe essere inferiore a 100 anni.
+
+|===
+.. Selezionare un'etichetta di criterio.
++
+
+NOTE: È possibile assegnare etichette SnapMirror agli snapshot primari per la replica remota, consentendo agli snapshot primari di trasferire l'operazione di replica degli snapshot da SnapCenter ai sistemi secondari ONTAP . Questa operazione può essere eseguita senza abilitare l'opzione SnapMirror o SnapVault nella pagina dei criteri.
+
+
+
+. Nella sezione Seleziona opzioni di replicazione secondaria, seleziona una o entrambe le seguenti opzioni di replicazione secondaria:
++
+|===
+| Per questo campo... | Fai questo... 
+
+
+ a| 
+*Aggiorna SnapMirror dopo aver creato una copia Snapshot locale*
+ a| 
+Selezionare questo campo per creare copie mirror dei set di backup su un altro volume (replica SnapMirror ).
+
+Se la relazione di protezione in ONTAP è di tipo Mirror e Vault e si seleziona solo questa opzione, lo Snapshot creato sul primario non verrà trasferito alla destinazione, ma verrà elencato nella destinazione.  Se si seleziona questo snapshot dalla destinazione per eseguire un'operazione di ripristino, viene visualizzato il seguente messaggio di errore: La posizione secondaria non è disponibile per il backup con vault/mirroring selezionato.
+
+Durante la replicazione secondaria, il tempo di scadenza SnapLock carica il tempo di scadenza SnapLock primario.
+
+Facendo clic sul pulsante *Aggiorna* nella pagina Topologia, vengono aggiornati i tempi di scadenza SnapLock secondari e primari recuperati da ONTAP.
+
+Vedere link:view_netapp_supported_plugins_resource_backups_and_clones_in_the_topology_page.html["Visualizza i backup e i cloni correlati alle risorse dei plug-in supportati da NetApp nella pagina Topologia"] .
+
+
+
+ a| 
+*Aggiorna SnapVault dopo aver creato una copia Snapshot locale*
+ a| 
+Selezionare questa opzione per eseguire la replica del backup da disco a disco (backup SnapVault ).
+
+Durante la replicazione secondaria, il tempo di scadenza SnapLock carica il tempo di scadenza SnapLock primario.  Facendo clic sul pulsante *Aggiorna* nella pagina Topologia, vengono aggiornati i tempi di scadenza SnapLock secondari e primari recuperati da ONTAP.
+
+Quando SnapLock è configurato solo sul secondario da ONTAP noto come SnapLock Vault, facendo clic sul pulsante *Aggiorna* nella pagina Topologia si aggiorna il periodo di blocco sul secondario recuperato da ONTAP.
+
+Per ulteriori informazioni su SnapLock Vault, vedere Commit degli snapshot in WORM su una destinazione vault.
+
+Vedere link:view_netapp_supported_plugins_resource_backups_and_clones_in_the_topology_page.html["Visualizza i backup e i cloni correlati alle risorse dei plug-in supportati da NetApp nella pagina Topologia"] .
+
+
+
+ a| 
+*Errore nel conteggio dei nuovi tentativi*
+ a| 
+Immettere il numero massimo di tentativi di replica consentiti prima che l'operazione venga interrotta.
+
+|===
++
+
+NOTE: È necessario configurare i criteri di conservazione SnapMirror in ONTAP per l'archiviazione secondaria per evitare di raggiungere il limite massimo di snapshot sull'archiviazione secondaria.
+
+. Rivedi il riepilogo e poi clicca su *Fine*.
+

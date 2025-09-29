@@ -1,0 +1,95 @@
+---
+permalink: admin/concept_manage_backups.html 
+sidebar: sidebar 
+keywords: Manage backups 
+summary: È possibile rinominare ed eliminare i backup.  È anche possibile eliminare più backup contemporaneamente. 
+---
+= Gestire i backup
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile rinominare ed eliminare i backup.  È anche possibile eliminare più backup contemporaneamente.
+
+
+
+== Rinomina i backup
+
+È possibile rinominare i backup se si desidera fornire un nome migliore per migliorarne la ricercabilità.
+
+*Passi*
+
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in appropriato dall'elenco.
+. Nella pagina Risorse seleziona la risorsa o il gruppo di risorse dall'elenco a discesa *Visualizza*.
+. Selezionare la risorsa o il gruppo di risorse dall'elenco.
++
+Viene visualizzata la pagina della topologia della risorsa o del gruppo di risorse.  Se la risorsa o il gruppo di risorse non è configurato per la protezione dei dati, al posto della pagina della topologia viene visualizzata la procedura guidata di protezione.
+
+. Dalla vista Gestisci copie, seleziona *Backup* dai sistemi di archiviazione primari.
++
+Non è possibile rinominare i backup presenti sul sistema di archiviazione secondario.
+
++
+Se hai catalogato i backup dei database Oracle utilizzando Oracle Recovery Manager (RMAN), non puoi rinominare i backup catalogati.
+
+. Selezionare il backup, quindi fare clic suimage:../media/rename_icon.gif["icona di ridenominazione"] .
+. Nel campo *Rinomina backup come*, inserisci un nuovo nome e fai clic su *OK*.
+
+
+
+
+== Elimina i backup
+
+È possibile eliminare i backup se non sono più necessari per altre operazioni di protezione dei dati.
+
+.Prima di iniziare
+Prima di eliminare un backup, è necessario eliminare i cloni associati.
+
+
+NOTE: Se un backup è associato a una risorsa clonata, non è possibile eliminare il backup.
+
+*Passi*
+
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in appropriato dall'elenco.
+. Nella pagina Risorse seleziona la risorsa o il gruppo di risorse dall'elenco a discesa *Visualizza*.
+. Selezionare la risorsa o il gruppo di risorse dall'elenco.
++
+Viene visualizzata la pagina della topologia della risorsa o del gruppo di risorse.
+
+. Dalla vista Gestisci copie, seleziona *Backup* dai sistemi di archiviazione primari.
++
+Non è possibile eliminare i backup presenti sul sistema di archiviazione secondario.
+
+. Selezionare il backup, quindi fare clic suimage:../media/delete_icon.gif["icona di eliminazione"] .
++
+Se si elimina un backup del database SAP HANA, vengono eliminati anche i cataloghi SAP HANA associati al backup.
+
++
+
+NOTE: Se viene eliminato l'ultimo backup rimanente, le voci del catalogo HANA associate non potranno essere eliminate.
+
+. Fare clic su *OK*.
++
+
+NOTE: Se in SnapCenter sono presenti alcuni backup di database obsoleti che non hanno backup corrispondenti sul sistema di archiviazione, è necessario utilizzare il comando remove-smbackup per ripulire queste voci di backup obsolete.  Se i backup obsoleti sono stati catalogati, verranno rimossi dal database del catalogo di ripristino.
+
+
+
+
+
+== Rimuovi protezione
+
+La rimozione della protezione elimina tutti i backup e scollega tutti i criteri.  Prima di rimuovere la protezione, è necessario assicurarsi che i backup non siano montati e che non vi siano cloni associati al backup.
+
+*Passi*
+
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in appropriato dall'elenco.
+. Nella pagina Risorse seleziona la risorsa o il gruppo di risorse dall'elenco a discesa *Visualizza*.
+. Selezionare la risorsa o il gruppo di risorse dall'elenco.
++
+Viene visualizzata la pagina della topologia della risorsa o del gruppo di risorse.
+
+. Selezionare il backup e fare clic su *Rimuovi protezione*.
+

@@ -1,0 +1,39 @@
+---
+permalink: protect-azure/add-hosts-install-plugin-for-sql.html 
+sidebar: sidebar 
+keywords: add host, install, install plug-in, SQL 
+summary: Aggiungere gli host e quindi installare i pacchetti dei plug-in. 
+---
+= Aggiungi host e installa il plug-in SnapCenter per il database SQL Server
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+SnapCenter supporta la protezione dei dati delle istanze SQL sulle condivisioni SMB su Azure NetApp Files.  Sono supportate le configurazioni standalone e del gruppo di disponibilità (AG).
+
+È necessario utilizzare la pagina Aggiungi host SnapCenter per aggiungere host e quindi installare il pacchetto plug-in.  I plug-in vengono installati automaticamente sugli host remoti.
+
+.Prima di iniziare
+* Devi essere un utente a cui è assegnato un ruolo che dispone delle autorizzazioni di installazione e disinstallazione del plug-in, ad esempio il ruolo di amministratore SnapCenter .
+* Quando si installa un plug-in su un host Windows, se si specifica una credenziale non integrata o se l'utente appartiene a un utente di un gruppo di lavoro locale, è necessario disabilitare UAC sull'host.
+
+
+.Passi
+. Nel riquadro di navigazione a sinistra, seleziona *Host*.
+. Verificare che la scheda *Host gestiti* sia selezionata in alto.
+. Selezionare *Aggiungi*.
+. Nella pagina Host procedi come segue:
++
+.. Nel campo Tipo di host, selezionare il tipo di host.
+.. Nel campo Nome host, immettere il nome di dominio completo (FQDN) o l'indirizzo IP dell'host.
+.. Nel campo Credenziali, inserisci le credenziali che hai creato.
+
+
+. Nella sezione *Seleziona i plug-in da installare*, seleziona i plug-in da installare.
+. (Facoltativo) Fare clic su *Altre opzioni* e specificare i dettagli.
+. Seleziona *Invia*.
+. Selezionare *Configura directory registro* e nella pagina Configura directory registro host, immettere il percorso SMB della directory registro host e fare clic su *Salva*.
+. Fare clic su *Invia* e monitorare l'avanzamento dell'installazione.
+

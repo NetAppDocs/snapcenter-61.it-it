@@ -1,0 +1,82 @@
+---
+permalink: protect-scsql/task_determine_whether_resources_are_available_for_backup.html 
+sidebar: sidebar 
+keywords: credentials 
+summary: 'Le risorse sono i database, le istanze delle applicazioni, i gruppi di disponibilità e componenti simili gestiti dai plug-in installati.  È possibile aggiungere tali risorse ai gruppi di risorse in modo da poter eseguire attività di protezione dei dati, ma prima è necessario identificare quali risorse sono disponibili.  La determinazione delle risorse disponibili verifica anche che l"installazione del plug-in sia stata completata correttamente.' 
+---
+= Determinare se le risorse sono disponibili per il backup
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Le risorse sono i database, le istanze delle applicazioni, i gruppi di disponibilità e componenti simili gestiti dai plug-in installati.  È possibile aggiungere tali risorse ai gruppi di risorse in modo da poter eseguire attività di protezione dei dati, ma prima è necessario identificare quali risorse sono disponibili.  La determinazione delle risorse disponibili verifica anche che l'installazione del plug-in sia stata completata correttamente.
+
+.Prima di iniziare
+* È necessario aver già completato attività quali l'installazione di SnapCenter Server, l'aggiunta di host, la creazione di connessioni al sistema di archiviazione e l'aggiunta di credenziali.
+* Per scoprire i database Microsoft SQL, deve essere soddisfatta una delle seguenti condizioni.
++
+** L'utente utilizzato per aggiungere l'host del plug-in a SnapCenter Server deve disporre delle autorizzazioni richieste (sysadmin) su Microsoft SQL Server.
+** Se la condizione di cui sopra non è soddisfatta, in SnapCenter Server è necessario configurare l'utente che dispone delle autorizzazioni richieste (sysadmin) su Microsoft SQL Server.  L'utente deve essere configurato a livello di istanza di Microsoft SQL Server e può essere un utente SQL o Windows.
+
+
+* Per scoprire i database Microsoft SQL in un cluster Windows, è necessario sbloccare la porta TCP/IP dell'istanza del cluster di failover (FCI).
+* Se i database risiedono su VMware RDM LUN o VMDK, è necessario distribuire il SnapCenter Plug-in for VMware vSphere e registrare il plug-in con SnapCenter.
++
+Per maggiori informazioni, vedere https://docs.netapp.com/us-en/sc-plugin-vmware-vsphere/scpivs44_deploy_snapcenter_plug-in_for_vmware_vsphere.html["Distribuisci il SnapCenter Plug-in for VMware vSphere"^]
+
+* Se l'host viene aggiunto con gMSA e se gMSA dispone di privilegi di accesso e di amministratore di sistema, gMSA verrà utilizzato per connettersi all'istanza SQL.
+
+
+.Informazioni su questo compito
+Non è possibile eseguire il backup dei database quando l'opzione *Stato generale* nella pagina Dettagli è impostata su Non disponibile per il backup.  L'opzione *Stato generale* è impostata su Non disponibile per il backup quando si verifica una delle seguenti condizioni:
+
+* I database non si trovano su una LUN NetApp .
+* I database non sono in stato normale.
++
+I database non sono in stato normale quando sono offline, in fase di ripristino, in attesa di recupero, sospetti e così via.
+
+* I database non hanno privilegi sufficienti.
++
+Ad esempio, se un utente ha solo accesso di visualizzazione al database, i file e le proprietà del database non possono essere identificati e quindi non possono essere sottoposti a backup.
+
+
+
+
+NOTE: SnapCenter può eseguire il backup solo del database primario se si dispone di una configurazione di gruppo di disponibilità su SQL Server Standard Edition.
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in appropriato dall'elenco.
+. Nella pagina Risorse seleziona *Database*, *Istanza* o *Gruppo di disponibilità* dall'elenco a discesa *Visualizza*.
++
+Clicimage:../media/filter_icon.gif["icona del filtro"] e seleziona il nome host e l'istanza di SQL Server per filtrare le risorse.  Puoi quindi fare clicimage:../media/filter_icon.gif["icona del filtro"] per chiudere il riquadro del filtro.
+
+. Fare clic su *Aggiorna risorse*.
++
+Le risorse appena aggiunte, rinominate o eliminate vengono aggiornate nell'inventario di SnapCenter Server.
+
++
+
+IMPORTANT: È necessario aggiornare le risorse se i database vengono rinominati all'esterno di SnapCenter.
+
++
+Le risorse vengono visualizzate insieme a informazioni quali tipo di risorsa, nome dell'host o del cluster, gruppi di risorse associati, tipo di backup, policy e stato generale.
+
++
+** Se il database si trova su uno storage non NetApp , `Not available for backup` viene visualizzato nella colonna *Stato generale*.
++
+Non è possibile eseguire operazioni di protezione dei dati su un database che si trova su un archivio non NetApp .
+
+** Se il database si trova su uno storage NetApp e non è protetto, `Not protected` viene visualizzato nella colonna *Stato generale*.
+** Se il database si trova su un sistema di archiviazione NetApp ed è protetto, l'interfaccia utente visualizza `Backup not run` messaggio nella colonna *Stato generale*.
+** Se il database si trova su un sistema di archiviazione NetApp ed è protetto e se il backup viene attivato per il database, l'interfaccia utente visualizza `Backup succeeded` messaggio nella colonna *Stato generale*.
+
+
+
+
+
+NOTE: Se è stata abilitata un'autenticazione SQL durante la configurazione delle credenziali, l'istanza o il database individuato viene visualizzato con un'icona a forma di lucchetto rosso.  Se viene visualizzata l'icona del lucchetto, è necessario specificare le credenziali dell'istanza o del database per aggiungere correttamente l'istanza o il database a un gruppo di risorse.
+
+. Dopo che l'amministratore SnapCenter ha assegnato le risorse a un utente RBAC, l'utente RBAC deve effettuare l'accesso e fare clic su *Aggiorna risorse* per visualizzare lo *Stato generale* più recente delle risorse.
+

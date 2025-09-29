@@ -1,0 +1,30 @@
+---
+permalink: protect-scsql/concept_sql_server_recovery_models_snapcenter_plug_in_for_microsoft_sql_server.html 
+sidebar: sidebar 
+keywords: SnapCenter Plug-in for Microsoft SQL Server 
+summary: 'Per impostazione predefinita, a ciascun tipo di database vengono assegnati modelli di ripristino specifici.  L"amministratore del database SQL Server può riassegnare ciascun database a un modello di recupero diverso.' 
+---
+= Modelli di ripristino di SQL Server supportati da SnapCenter
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Per impostazione predefinita, a ciascun tipo di database vengono assegnati modelli di ripristino specifici.  L'amministratore del database SQL Server può riassegnare ciascun database a un modello di recupero diverso.
+
+SnapCenter supporta tre tipi di modelli di ripristino di SQL Server:
+
+* Modello di recupero semplice
++
+Quando si utilizza il modello di recupero semplice, non è possibile eseguire il backup dei registri delle transazioni.
+
+* Modello di recupero completo
++
+Utilizzando il modello di recupero completo, è possibile ripristinare un database allo stato precedente al momento dell'errore.
+
+* Modello di recupero con registrazione in blocco
++
+Quando si utilizza il modello di recupero con registrazione in blocco, è necessario eseguire nuovamente manualmente l'operazione di registrazione in blocco.  È necessario eseguire l'operazione di registrazione in blocco se il registro delle transazioni contenente il record di commit dell'operazione non è stato sottoposto a backup prima del ripristino.  Se l'operazione di registrazione in blocco inserisce 10 milioni di righe in un database e il database si blocca prima che venga eseguito il backup del registro delle transazioni, il database ripristinato non conterrà le righe inserite dall'operazione di registrazione in blocco.
+
+

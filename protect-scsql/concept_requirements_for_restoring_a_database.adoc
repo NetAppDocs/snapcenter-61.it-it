@@ -1,0 +1,48 @@
+---
+permalink: protect-scsql/concept_requirements_for_restoring_a_database.html 
+sidebar: sidebar 
+keywords: Requirements 
+summary: Prima di ripristinare un database SQL Server da un backup del plug-in SnapCenter per Microsoft SQL Server, è necessario assicurarsi che siano soddisfatti diversi requisiti. 
+---
+= Requisiti per il ripristino di un database
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Prima di ripristinare un database SQL Server da un backup del plug-in SnapCenter per Microsoft SQL Server, è necessario assicurarsi che siano soddisfatti diversi requisiti.
+
+* Prima di poter ripristinare un database, l'istanza di SQL Server di destinazione deve essere online e in esecuzione.
++
+Ciò vale sia per le operazioni di ripristino del database utente sia per quelle di ripristino del database di sistema.
+
+* Le operazioni SnapCenter pianificate per l'esecuzione sui dati di SQL Server che si stanno ripristinando devono essere disabilitate, compresi tutti i processi pianificati sui server di gestione remota o di verifica remota.
+* Se i database di sistema non funzionano, è necessario prima ricostruirli utilizzando un'utilità SQL Server.
+* Se si installa il plug-in, assicurarsi di concedere le autorizzazioni ad altri ruoli per ripristinare i backup del gruppo di disponibilità (AG).
++
+Il ripristino di AG fallisce quando si verifica una delle seguenti condizioni:
+
++
+** Se il plug-in è installato dall'utente RBAC e un amministratore tenta di ripristinare un backup AG
+** Se il plug-in viene installato da un amministratore e un utente RBAC tenta di ripristinare un backup AG
+
+
+* Se si ripristinano backup di directory di log personalizzati su un host alternativo, è necessario che sul server SnapCenter e sull'host del plug-in sia installata la stessa versione SnapCenter .
+* È necessario aver installato l'hotfix Microsoft KB2887595.  Il sito di supporto Microsoft contiene ulteriori informazioni su KB2887595.
++
+https://support.microsoft.com/kb/2887595["Articolo del supporto Microsoft 2887595: Aggiornamento cumulativo per Windows RT 8.1, Windows 8.1 e Windows Server 2012 R2: novembre 2013"]
+
+* È necessario aver eseguito il backup dei gruppi di risorse o del database.
+* Se si replicano gli snapshot su un mirror o un vault, l'amministratore SnapCenter deve aver assegnato le macchine virtuali di archiviazione (SVM) sia per i volumi di origine che per quelli di destinazione.
++
+Per informazioni su come gli amministratori assegnano le risorse agli utenti, consultare le informazioni sull'installazione SnapCenter .
+
+* Tutti i processi di backup e clonazione devono essere interrotti prima di ripristinare il database.
+* L'operazione di ripristino potrebbe scadere se la dimensione del database è espressa in terabyte (TB).
++
+È necessario aumentare il valore del parametro RESTTimeout di SnapCenter Server a 20000000 ms eseguendo il seguente comando: Set-SmConfigSettings -Agent -configSettings @{"RESTTimeout" = "20000000"}.  A seconda delle dimensioni del database, il valore di timeout può essere modificato e il valore massimo che è possibile impostare è 86400000 ms.
+
+
+
+Se si desidera effettuare il ripristino mentre i database sono online, è necessario abilitare l'opzione di ripristino online nella pagina Ripristina.

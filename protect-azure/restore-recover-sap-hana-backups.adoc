@@ -1,0 +1,49 @@
+---
+permalink: protect-azure/restore-recover-sap-hana-backups.html 
+sidebar: sidebar 
+keywords: SnapCenter Plug-in for SAP HANA Database, restore, recover 
+summary: È possibile utilizzare SnapCenter per ripristinare e recuperare dati da uno o più backup. 
+---
+= Ripristinare e recuperare i database SAP HANA
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile ripristinare e recuperare i dati dai backup.
+
+.Informazioni su questo compito
+Per i sistemi HANA rilevati automaticamente, se è selezionata l'opzione *Risorsa completa*, il ripristino viene eseguito utilizzando la tecnologia di ripristino snapshot di file singolo.  Se è selezionata la casella di controllo *Ripristino rapido*, viene utilizzata la tecnologia Volume Revert.
+
+Per le risorse aggiunte manualmente viene sempre utilizzata la tecnologia Volume Revert.
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in appropriato dall'elenco.
+. Nella pagina Risorse, filtra le risorse dall'elenco a discesa *Visualizza* in base al tipo di risorsa.
+. Selezionare la risorsa oppure selezionare un gruppo di risorse e quindi selezionare una risorsa in quel gruppo.
+. Dalla vista Gestisci copie, seleziona *Backup* dai sistemi di archiviazione primari o secondari (con mirroring o in vault).
+. Nella tabella Backup primari, seleziona il backup da cui desideri effettuare il ripristino, quindi fai clic su *image:../media/restore_icon.gif["icona di ripristino"] *.
+. Nella pagina Ambito di ripristino, seleziona *Risorsa completa*.
++
+Vengono ripristinati tutti i volumi di dati configurati del database SAP HANA.
+
+. Per i sistemi HANA rilevati automaticamente, nella pagina Ambito di ripristino, eseguire le seguenti azioni:
++
+.. Seleziona *Recupera allo stato più recente* se desideri effettuare il recupero il più vicino possibile all'ora corrente.
+.. Selezionare *Recupera fino a un punto nel tempo* se si desidera ripristinare fino al punto nel tempo specificato.
+.. Selezionare *Ripristina su backup dati specificato* se si desidera ripristinare su un backup dati specifico.
+.. Seleziona *Nessun ripristino* se non desideri effettuare il ripristino ora.
+.. Specificare le posizioni di backup del registro.
+.. Specificare la posizione del catalogo di backup.
+
+
+. Nella pagina Pre ops, immettere i comandi pre restore e unmount da eseguire prima di eseguire un processo di ripristino.
+. Nella pagina Post ops, immettere i comandi mount e post restore da eseguire dopo aver eseguito un processo di ripristino.
+. Nella pagina Notifica, dall'elenco a discesa *Preferenza e-mail*, seleziona gli scenari in cui desideri inviare le e-mail.
++
+È necessario specificare anche gli indirizzi e-mail del mittente e del destinatario, nonché l'oggetto dell'e-mail.  SMTP deve essere configurato anche nella pagina *Impostazioni* > *Impostazioni globali*.
+
+. Rivedi il riepilogo e poi clicca su *Fine*.
+. Monitorare l'avanzamento dell'operazione cliccando su *Monitoraggio* > *Lavori*.
+

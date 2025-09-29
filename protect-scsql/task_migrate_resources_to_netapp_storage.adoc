@@ -1,0 +1,99 @@
+---
+permalink: protect-scsql/task_migrate_resources_to_netapp_storage.html 
+sidebar: sidebar 
+keywords: migrate resources 
+summary: 'Dopo aver eseguito il provisioning del sistema di storage NetApp tramite il plug-in SnapCenter per Microsoft Windows, è possibile migrare le risorse al sistema di storage NetApp o da una LUN NetApp a un"altra LUN NetApp tramite l"interfaccia utente grafica SnapCenter (GUI) o i cmdlet di PowerShell.' 
+---
+= Migrare le risorse al sistema di archiviazione NetApp
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Dopo aver eseguito il provisioning del sistema di storage NetApp tramite il plug-in SnapCenter per Microsoft Windows, è possibile migrare le risorse al sistema di storage NetApp o da una LUN NetApp a un'altra LUN NetApp tramite l'interfaccia utente grafica (GUI) SnapCenter o i cmdlet di PowerShell.
+
+.Prima di iniziare
+* È necessario aver aggiunto sistemi di archiviazione a SnapCenter Server.
+* È necessario aver aggiornato (rilevato) le risorse di SQL Server.
+
+
+La maggior parte dei campi presenti in queste pagine della procedura guidata sono autoesplicativi.  Le seguenti informazioni descrivono alcuni dei campi per i quali potresti aver bisogno di assistenza.
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in appropriato dall'elenco.
+. Nella pagina Risorse, seleziona *Database* o *Istanza* dall'elenco a discesa *Visualizza*.
+. Selezionare il database o l'istanza dall'elenco e fare clic su *Migra*.
+. Nella pagina Risorse, esegui le seguenti azioni:
++
+|===
+| Per questo campo... | Fai questo... 
+
+
+ a| 
+*Nome del database* (facoltativo)
+ a| 
+Se hai selezionato un'istanza per la migrazione, devi selezionare i database di tale istanza dall'elenco a discesa *Database*.
+
+
+
+ a| 
+*Scegli le destinazioni*
+ a| 
+Selezionare la posizione di destinazione per i file di dati e di registro.
+
+I file di dati e di registro vengono spostati rispettivamente nelle cartelle Dati e Registro nell'unità NetApp selezionata.  Se una cartella nella struttura delle cartelle non è presente, viene creata una cartella e la risorsa viene migrata.
+
+
+
+ a| 
+*Mostra i dettagli del file del database* (facoltativo)
+ a| 
+Selezionare questa opzione quando si desidera migrare più file di un singolo database.
+
+
+NOTE: Questa opzione non viene visualizzata quando si seleziona la risorsa *Istanza*.
+
+
+
+ a| 
+*Opzioni*
+ a| 
+Selezionare *Elimina copia del database migrato nella posizione originale* per eliminare la copia del database dall'origine.
+
+Facoltativo: *ESEGUIRE AGGIORNA STATISTICHE sulle tabelle prima di scollegare il database*.
+
+|===
+. Nella pagina Verifica, esegui le seguenti azioni:
++
+|===
+| Per questo campo... | Fai questo... 
+
+
+ a| 
+*Opzioni di controllo della coerenza del database*
+ a| 
+Selezionare *Esegui prima* per verificare l'integrità del database prima della migrazione.  Selezionare *Esegui dopo* per verificare l'integrità del database dopo la migrazione.
+
+
+
+ a| 
+*Opzioni DBCC CHECKDB*
+ a| 
+** Selezionare l'opzione *PHYSICAL_ONLY* per limitare il controllo di integrità alla struttura fisica del database e per rilevare pagine danneggiate, errori di checksum e guasti hardware comuni che hanno un impatto sul database.
+** Selezionare l'opzione *NO_INFOMSGS* per sopprimere tutti i messaggi informativi.
+** Selezionare l'opzione *ALL_ERRORMSGS* per visualizzare tutti gli errori segnalati per oggetto.
+** Selezionare l'opzione *NOINDEX* se non si desidera controllare gli indici non cluster.
++
+Il database di SQL Server utilizza Microsoft SQL Server Database Consistency Checker (DBCC) per verificare l'integrità logica e fisica degli oggetti nel database.
+
++
+
+NOTE: Potresti voler selezionare questa opzione per ridurre il tempo di esecuzione.
+
+** Selezionare l'opzione **TABLOCK** per limitare i controlli e ottenere blocchi anziché utilizzare uno Snapshot del database interno.
+
+
+|===
+. Rivedi il riepilogo e poi clicca su **Fine**.
+

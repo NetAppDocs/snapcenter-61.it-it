@@ -1,0 +1,60 @@
+---
+permalink: protect-scw/task_import_CA_certificates.html 
+sidebar: sidebar 
+keywords: SnapCenter 
+summary: Importare i certificati CA del server SnapCenter e i plug-in host Windows 
+---
+= Importa certificati CA
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È necessario importare i certificati CA nel server SnapCenter e nei plug-in host Windows utilizzando la console di gestione Microsoft (MMC).
+
+.Passi
+. Vai alla console di gestione Microsoft (MMC), quindi fai clic su *File* > *Aggiungi/Rimuovi snap-in*.
+. Nella finestra Aggiungi o rimuovi snap-in, seleziona *Certificati* e poi fai clic su *Aggiungi*.
+. Nella finestra snap-in Certificati, selezionare l'opzione *Account computer*, quindi fare clic su *Fine*.
+. Fare clic su *Console Root* > *Certificati – Computer locale* > *Autorità di certificazione radice attendibili* > *Certificati*.
+. Fare clic con il pulsante destro del mouse sulla cartella "Autorità di certificazione radice attendibili", quindi selezionare *Tutte le attività* > *Importa* per avviare la procedura guidata di importazione.
+. Completare la procedura guidata come segue:
++
+|===
+| In questa finestra della procedura guidata... | Procedi come segue... 
+
+
+ a| 
+Importa chiave privata
+ a| 
+Selezionare l'opzione *Sì*, importare la chiave privata, quindi fare clic su *Avanti*.
+
+
+
+ a| 
+Formato file di importazione
+ a| 
+Non apportare modifiche; fare clic su *Avanti*.
+
+
+
+ a| 
+Sicurezza
+ a| 
+Specificare la nuova password da utilizzare per il certificato esportato, quindi fare clic su *Avanti*.
+
+
+
+ a| 
+Completamento della procedura guidata di importazione del certificato
+ a| 
+Rivedi il riepilogo, quindi fai clic su *Fine* per avviare l'importazione.
+
+|===
++
+
+NOTE: Il certificato di importazione deve essere incluso nella chiave privata (i formati supportati sono: *.pfx, *.p12 e *.p7b).
+
+. Ripetere il passaggio 5 per la cartella “Personale”.
+

@@ -1,0 +1,61 @@
+---
+permalink: install/task_export_ca_certificates_from_snapcenter_server.html 
+sidebar: sidebar 
+keywords: security,authentication, export CA certificates 
+summary: È necessario esportare i certificati CA dal server SnapCenter agli host del plug-in. 
+---
+= Esportare i certificati dell'autorità di certificazione (CA) da SnapCenter Server
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È necessario esportare i certificati CA dal server SnapCenter agli host plug-in utilizzando la console di gestione Microsoft (MMC).
+
+.Prima di iniziare
+Dovresti aver configurato l'SSL bidirezionale.
+
+*Passi*
+
+. Vai alla console di gestione Microsoft (MMC), quindi fai clic su *File* > *Aggiungi/Rimuovi snap-in*.
+. Nella finestra Aggiungi o rimuovi snap-in, seleziona *Certificati* e poi fai clic su *Aggiungi*.
+. Nella finestra Snap-in Certificati, selezionare l'opzione *Account computer*, quindi fare clic su *Fine*.
+. Fare clic su *Console Root* > *Certificati - Computer locale* > *Personale* > *Certificati*.
+. Fare clic con il pulsante destro del mouse sul certificato CA ottenuto, utilizzato per SnapCenter Server, quindi selezionare *Tutte le attività* > *Esporta* per avviare la procedura guidata di esportazione.
+. Eseguire le seguenti azioni nella procedura guidata.
+
+
+|===
+| Per questa opzione... | Procedi come segue... 
+
+
+ a| 
+Esporta chiave privata
+ a| 
+Selezionare *No, non esportare la chiave privata*, quindi fare clic su *Avanti*.
+
+
+
+ a| 
+Formato file di esportazione
+ a| 
+Fare clic su *Avanti*.
+
+
+
+ a| 
+Nome del file
+ a| 
+Fare clic su *Sfoglia* e specificare il percorso del file in cui salvare il certificato, quindi fare clic su *Avanti*.
+
+
+
+ a| 
+Completamento della procedura guidata di esportazione del certificato
+ a| 
+Rivedi il riepilogo, quindi fai clic su *Fine* per avviare l'esportazione.
+
+|===
+
+NOTE: L'autenticazione basata su certificato non è supportata per le configurazioni SnapCenter HA e per il SnapCenter Plug-in for VMware vSphere.

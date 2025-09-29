@@ -1,0 +1,42 @@
+---
+permalink: protect-sce/task_reseed_a_replica_using_powershell_cmdlets_for_exchange_database.html 
+sidebar: sidebar 
+keywords: SnapCenter plug-in for Exchange Server 
+summary: È possibile utilizzare i cmdlet di PowerShell per ripristinare una replica non integra utilizzando la copia più recente sullo stesso host oppure la copia più recente da un host alternativo. 
+---
+= Ripristinare il seeding di una replica utilizzando i cmdlet di PowerShell per il database di Exchange
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile utilizzare i cmdlet di PowerShell per ripristinare una replica non integra utilizzando la copia più recente sullo stesso host oppure la copia più recente da un host alternativo.
+
+Le informazioni relative ai parametri che possono essere utilizzati con il cmdlet e le relative descrizioni possono essere ottenute eseguendo _Get-Help command_name_. In alternativa, puoi anche fare riferimento a https://docs.netapp.com/us-en/snapcenter-cmdlets/index.html["Guida di riferimento ai cmdlet del software SnapCenter"^] .
+
+.Passi
+. Avviare una sessione di connessione con il server SnapCenter per un utente specificato utilizzando `Open-SmConnection` cmdlet.
++
+[listing]
+----
+Open-smconnection  -SMSbaseurl  https:\\snapctr.demo.netapp.com:8146/
+----
+. Ripristinare il database utilizzando `reseed-SmDagReplicaCopy` cmdlet.
++
+In questo esempio viene effettuata la reinizializzazione della copia non riuscita del database denominata execdb sull'host "mva-rx200.netapp.com" utilizzando l'ultimo backup presente su tale host.
+
++
+[listing]
+----
+reseed-SmDagReplicaCopy -ReplicaHost "mva-rx200.netapp.com" -Database execdb
+----
++
+Questo esempio effettua il seeding della copia non riuscita del database denominata execdb utilizzando l'ultimo backup del database (produzione/copia) su un host alternativo "mva-rx201.netapp.com".
+
++
+[listing]
+----
+reseed-SmDagReplicaCopy -ReplicaHost "mva-rx200.netapp.com" -Database  execdb -BackupHost "mva-rx201.netapp.com"
+----
+

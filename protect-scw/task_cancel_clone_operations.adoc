@@ -1,0 +1,49 @@
+---
+permalink: protect-scw/task_cancel_clone_operations.html 
+sidebar: sidebar 
+keywords: cancel clone 
+summary: È possibile annullare i lavori di clonazione in coda. 
+---
+= Annulla le operazioni di clonazione
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile annullare le operazioni di clonazione in coda.
+
+Per annullare le operazioni di clonazione, è necessario aver effettuato l'accesso come amministratore SnapCenter o come proprietario del processo.
+
+.Informazioni su questo compito
+* È possibile annullare un'operazione di clonazione in coda dalla pagina *Monitor* o dal riquadro *Attività*.
+* Non è possibile annullare un'operazione di clonazione in esecuzione.
+* È possibile utilizzare l'interfaccia utente grafica SnapCenter , i cmdlet di PowerShell o i comandi CLI per annullare le operazioni di clonazione in coda.
+* Se hai selezionato *Tutti i membri di questo ruolo possono vedere e operare sugli oggetti degli altri membri* nella pagina Utenti\Gruppi durante la creazione di un ruolo, puoi annullare le operazioni di clonazione in coda degli altri membri mentre utilizzi quel ruolo.
+
+
+.Fare un passo
+Eseguire una delle seguenti azioni:
+
+|===
+| Dal... | Azione 
+
+
+ a| 
+Pagina di monitoraggio
+ a| 
+. Nel riquadro di navigazione a sinistra, fare clic su *Monitor* > *Lavori*.
+. Selezionare l'operazione e fare clic su *Annulla lavoro*.
+
+
+
+
+ a| 
+Riquadro attività
+ a| 
+. Dopo aver avviato l'operazione di clonazione, fare clic suimage:../media/activity_pane_icon.gif["icona del riquadro attività"] nel riquadro Attività per visualizzare le cinque operazioni più recenti.
+. Selezionare l'operazione.
+. Nella pagina *Dettagli lavoro*, fare clic su *Annulla lavoro*.
+
+
+|===

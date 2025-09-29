@@ -1,0 +1,181 @@
+---
+permalink: protect-scw/task_create_backup_policies_for_windows_file_systems.html 
+sidebar: sidebar 
+keywords: backup policy 
+summary: È possibile creare un nuovo criterio di backup per le risorse prima di utilizzare SnapCenter per eseguire il backup dei file system di Windows oppure è possibile creare un nuovo criterio di backup al momento della creazione di un gruppo di risorse o quando si esegue il backup di una risorsa. 
+---
+= Creare criteri di backup per i file system di Windows
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile creare un nuovo criterio di backup per le risorse prima di utilizzare SnapCenter per eseguire il backup dei file system di Windows oppure è possibile creare un nuovo criterio di backup al momento della creazione di un gruppo di risorse o quando si esegue il backup di una risorsa.
+
+.Prima di iniziare
+* Devi aver definito la tua strategia di backup.link:task_define_a_backup_strategy_for_windows_file_systems.html["Saperne di più"^]
+* È necessario essere preparati alla protezione dei dati.
++
+Per preparare la protezione dei dati, è necessario completare attività quali l'installazione di SnapCenter, l'aggiunta di host, l'individuazione delle risorse e la creazione di connessioni alla macchina virtuale di archiviazione (SVM).
+
+* Se si replicano gli snapshot su un mirror o su un archivio secondario vault, l'amministratore SnapCenter deve aver assegnato le SVM sia per il volume di origine che per quello di destinazione.
+* Se si desidera eseguire gli script di PowerShell in prescript e postscript, è necessario impostare il valore del parametro usePowershellProcessforScripts su true nel file web.config.
++
+Il valore predefinito è falso
+
+* Esaminare i prerequisiti e le limitazioni specifici SnapMirror ActiveSync. Per informazioni, fare riferimento https://docs.netapp.com/us-en/ontap/smbc/considerations-limits.html#volumes["Limiti degli oggetti per la sincronizzazione attiva SnapMirror"] .
+
+
+.Informazioni su questo compito
+* SCRIPTS_PATH viene definito utilizzando la chiave PredefinedWindowsScriptsDirectory che si trova nel file SMCoreServiceHost.exe.Config dell'host del plug-in.
++
+Se necessario, è possibile modificare questo percorso e riavviare il servizio SMcore.  Per motivi di sicurezza, si consiglia di utilizzare il percorso predefinito.
+
++
+Il valore della chiave può essere visualizzato da Swagger tramite l'API: API /4.7/configsettings
+
++
+È possibile utilizzare l'API GET per visualizzare il valore della chiave.  L'API SET non è supportata.
+
+* SnapLock
++
+** Se è selezionata l'opzione "Conserva le copie di backup per un numero specifico di giorni", il periodo di conservazione SnapLock deve essere inferiore o uguale ai giorni di conservazione indicati.
+** Specificando un periodo di blocco degli snapshot si impedisce l'eliminazione degli snapshot fino alla scadenza del periodo di conservazione. Ciò potrebbe comportare la conservazione di un numero di snapshot maggiore rispetto al conteggio specificato nella policy.
+** Per ONTAP 9.12.1 e versioni precedenti, i cloni creati dagli SnapLock Vault Snapshot come parte del ripristino erediteranno il tempo di scadenza SnapLock Vault. L'amministratore dell'archiviazione deve pulire manualmente i cloni dopo la scadenza SnapLock .
+
+
+
+
+.Passi
+. Nel riquadro di navigazione a sinistra, seleziona *Impostazioni*.
+. Nella pagina Impostazioni, seleziona *Criteri*.
+. Seleziona *Nuovo*.
+. Nella pagina Nome, immettere il nome e i dettagli della policy.
+. Nella pagina Backup e replica, eseguire le seguenti attività:
++
+.. Selezionare un'impostazione di backup.
++
+|===
+| Opzione | Descrizione 
+
+
+ a| 
+Backup coerente con il file system
+ a| 
+Selezionare questa opzione se si desidera che SnapCenter metta in pausa l'unità disco su cui risiede il file system prima dell'inizio dell'operazione di backup e poi riprenda l'unità disco al termine dell'operazione di backup.
+
+
+
+ a| 
+Backup coerente con l'arresto anomalo del file system
+ a| 
+Selezionare questa opzione se non si desidera che SnapCenter metta in pausa l'unità disco su cui risiede il file system.
+
+|===
+.. Selezionare una frequenza di pianificazione (detta anche tipo di policy).
++
+La policy specifica solo la frequenza del backup.  La pianificazione specifica della protezione per il backup è definita nel gruppo di risorse.  Pertanto, due o più gruppi di risorse possono condividere la stessa policy e la stessa frequenza di backup, ma avere pianificazioni di backup diverse.
+
++
+
+NOTE: Se hai programmato per le 2:00, la pianificazione non verrà attivata durante l'ora legale (DST).
+
+.. Seleziona un'etichetta di criterio.
++
+A seconda dell'etichetta Snapshot selezionata, ONTAP applica il criterio di conservazione Snapshot secondario corrispondente all'etichetta.
+
++
+
+NOTE: Se hai selezionato *Aggiorna SnapMirror dopo aver creato una copia Snapshot locale*, puoi facoltativamente specificare l'etichetta del criterio secondario.  Tuttavia, se hai selezionato *Aggiorna SnapVault dopo aver creato una copia Snapshot locale*, dovresti specificare l'etichetta del criterio secondario.
+
+
+
+. Nella sezione Seleziona opzioni di replicazione secondaria, seleziona una o entrambe le seguenti opzioni di replicazione secondaria:
++
+|===
+| Per questo campo... | Fai questo... 
+
+
+ a| 
+Aggiorna SnapMirror dopo aver creato una copia Snapshot locale
+ a| 
+Selezionare questa opzione per creare copie mirror dei set di backup su un altro volume (SnapMirror).
+
+Questa opzione dovrebbe essere abilitata per la sincronizzazione attiva di SnapSnapMirror.
+
+Durante la replicazione secondaria, il tempo di scadenza SnapLock carica il tempo di scadenza SnapLock primario.  Facendo clic sul pulsante *Aggiorna* nella pagina Topologia, vengono aggiornati i tempi di scadenza SnapLock secondari e primari recuperati da ONTAP.
+
+Vedere link:../protect-scw/task_view_related_backups_and_clones_in_the_topology_page.html["Visualizza i backup e i cloni correlati nella pagina Topologia"] .
+
+
+
+ a| 
+Aggiorna SnapVault dopo aver creato una copia Snapshot
+ a| 
+Selezionare questa opzione per eseguire la replica del backup da disco a disco.
+
+Durante la replicazione secondaria, il tempo di scadenza SnapLock carica il tempo di scadenza SnapLock primario.  Facendo clic sul pulsante Aggiorna nella pagina Topologia, vengono aggiornati i tempi di scadenza SnapLock secondari e primari recuperati da ONTAP.
+
+Quando SnapLock è configurato solo sul secondario da ONTAP noto come SnapLock Vault, facendo clic sul pulsante Aggiorna nella pagina Topologia si aggiorna il periodo di blocco sul secondario recuperato da ONTAP.
+
+Per maggiori informazioni su SnapLock Vault vedere https://docs.netapp.com/us-en/ontap/snaplock/commit-snapshot-copies-worm-concept.html["Eseguire il commit delle copie Snapshot su WORM in una destinazione vault"]
+
+
+
+ a| 
+Errore nel conteggio dei tentativi
+ a| 
+Immettere il numero di tentativi di replica che devono essere eseguiti prima che il processo si interrompa.
+
+|===
++
+
+NOTE: È necessario configurare i criteri di conservazione SnapMirror in ONTAP per l'archiviazione secondaria per evitare di raggiungere il limite massimo di snapshot sull'archiviazione secondaria.
+
+. Nella pagina Impostazioni di conservazione, specificare le impostazioni di conservazione per i backup su richiesta e per ogni frequenza di pianificazione selezionata.
++
+|===
+| Opzione | Descrizione 
+
+
+ a| 
+Numero totale di copie Snapshot da conservare
+ a| 
+Selezionare questa opzione se si desidera specificare il numero di snapshot che SnapCenter memorizza prima di eliminarli automaticamente.
+
+
+
+ a| 
+Conserva le copie Snapshot per
+ a| 
+Selezionare questa opzione se si desidera specificare il numero di giorni in cui SnapCenter conserva una copia di backup prima di eliminarla.
+
+
+
+ a| 
+Periodo di blocco della copia snapshot
+ a| 
+Selezionare il periodo di blocco degli snapshot e specificare la durata in giorni, mesi o anni.
+
+Il periodo di conservazione SnapLock dovrebbe essere inferiore a 100 anni.
+
+|===
++
+
+IMPORTANT: Dovresti impostare il conteggio di conservazione su 2 o superiore.  Il valore minimo per il conteggio di conservazione è 2.
+
++
+
+NOTE: Il valore massimo di ritenzione è 1018. I backup non riusciranno se la conservazione è impostata su un valore superiore a quello supportato dalla versione ONTAP .
+
+. Nella pagina Script, immettere il percorso del prescript o del postscript che si desidera che SnapCenter Server esegua rispettivamente prima o dopo l'operazione di backup e un limite di tempo che SnapCenter attende per l'esecuzione dello script prima del timeout.
++
+Ad esempio, è possibile eseguire uno script per aggiornare le trap SNMP, automatizzare gli avvisi e inviare i registri.
+
++
+
+NOTE: Il percorso prescripts o postscripts non deve includere unità o condivisioni.  Il percorso dovrebbe essere relativo a SCRIPTS_PATH.
+
+. Rivedi il riepilogo e poi clicca su *Fine*.
+

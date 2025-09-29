@@ -1,0 +1,142 @@
+---
+permalink: protect-scsql/reference_storage_types_supported_by_snapcenter_plug_ins_for_microsoft_windows_and_for_microsoft_sql_server.html 
+sidebar: sidebar 
+keywords: SnapCenter Plug-in for Microsoft SQL Server 
+summary: 'SnapCenter supporta un"ampia gamma di tipi di archiviazione sia su macchine fisiche che su macchine virtuali.  Prima di installare il pacchetto per l"host, è necessario verificare se il supporto è disponibile per il tipo di storage in uso.' 
+---
+= Tipi di archiviazione supportati dal plug-in SnapCenter per Microsoft SQL Server
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+SnapCenter supporta un'ampia gamma di tipi di archiviazione sia su macchine fisiche che su macchine virtuali.  Prima di installare il pacchetto per l'host, è necessario verificare se il supporto è disponibile per il tipo di storage in uso.
+
+Il supporto per il provisioning e la protezione dei dati SnapCenter è disponibile su Windows Server.  Per le informazioni più recenti sulle versioni supportate, vederehttps://imt.netapp.com/matrix/imt.jsp?components=121074;&solution=1257&isHWU&src=IMT["Strumento matrice di interoperabilità NetApp"^] .
+
+|===
+| Macchina | Tipo di archiviazione | Fornitura tramite | Note di supporto 
+
+
+ a| 
+Server fisico
+ a| 
+LUN connesse a FC
+ a| 
+Interfaccia utente grafica (GUI) SnapCenter o cmdlet di PowerShell
+ a| 
+
+
+
+ a| 
+Server fisico
+ a| 
+LUN connesse tramite iSCSI
+ a| 
+Cmdlet GUI di SnapCenter o PowerShell
+ a| 
+
+
+
+ a| 
+Server fisico
+ a| 
+Condivisioni SMB3 (CIFS) residenti su una macchina virtuale di archiviazione (SVM)
+ a| 
+Cmdlet GUI di SnapCenter o PowerShell
+ a| 
+Supporto solo per il provisioning.
+
+
+
+ a| 
+VMware VM
+ a| 
+LUN RDM connesse tramite un HBA FC o iSCSI
+ a| 
+Cmdlet di PowerShell
+ a| 
+
+
+
+ a| 
+VMware VM
+ a| 
+LUN iSCSI collegate direttamente al sistema guest dall'iniziatore iSCSI
+ a| 
+Cmdlet GUI di SnapCenter o PowerShell
+ a| 
+
+
+
+ a| 
+VMware VM
+ a| 
+Sistemi di file di macchine virtuali (VMFS) o datastore NFS
+ a| 
+VMware vSphere
+ a| 
+
+
+
+ a| 
+VMware VM
+ a| 
+Un sistema guest connesso a condivisioni SMB3 residenti su una SVM
+ a| 
+Cmdlet GUI di SnapCenter o PowerShell
+ a| 
+Supporto solo per il provisioning.
+
+
+
+ a| 
+VMware VM
+ a| 
+Datastore vVol sia su NFS che su SAN
+ a| 
+Strumenti ONTAP per VMware vSphere
+ a| 
+
+
+
+ a| 
+Macchina virtuale Hyper-V
+ a| 
+LUN FC virtuali (vFC) connesse tramite uno switch Fibre Channel virtuale
+ a| 
+Cmdlet GUI di SnapCenter o PowerShell
+ a| 
+È necessario utilizzare Hyper-V Manager per eseguire il provisioning di LUN Virtual FC (vFC) connesse tramite uno switch Fibre Channel virtuale.
+
+
+NOTE: I dischi pass-through Hyper-V e il backup dei database su VHD(x) forniti su storage NetApp non sono supportati.
+
+
+
+ a| 
+Macchina virtuale Hyper-V
+ a| 
+LUN iSCSI collegate direttamente al sistema guest dall'iniziatore iSCSI
+ a| 
+Cmdlet GUI di SnapCenter o PowerShell
+ a| 
+
+NOTE: I dischi pass-through Hyper-V e il backup dei database su VHD(x) forniti su storage NetApp non sono supportati.
+
+
+
+ a| 
+Macchina virtuale Hyper-V
+ a| 
+Un sistema guest connesso a condivisioni SMB3 residenti su una SVM
+ a| 
+Cmdlet GUI di SnapCenter o PowerShell
+ a| 
+Supporto solo per il provisioning.
+
+
+NOTE: I dischi pass-through Hyper-V e il backup dei database su VHD(x) forniti su storage NetApp non sono supportati.
+
+|===

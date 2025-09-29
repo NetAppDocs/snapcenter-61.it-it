@@ -1,0 +1,122 @@
+---
+permalink: protect-sco/task_back_up_oracle_resources.html 
+sidebar: sidebar 
+keywords: backup, Oracle database, policy, schedule, verification, resources 
+summary: Se una risorsa non fa parte di alcun gruppo di risorse, è possibile eseguirne il backup dalla pagina Risorse. 
+---
+= Eseguire il backup delle risorse Oracle
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Se una risorsa non fa parte di alcun gruppo di risorse, è possibile eseguirne il backup dalla pagina Risorse.
+
+.Passi
+. Nel riquadro di navigazione a sinistra, seleziona *Risorse* e il plug-in appropriato dall'elenco.
+. Nella pagina Risorse, seleziona *Database* dall'elenco Visualizza.
+. Clicimage:../media/filter_icon.gif["icona del filtro"] , quindi selezionare il nome host e il tipo di database per filtrare le risorse.
++
+Puoi quindi fare clicimage:../media/filter_icon.gif["icona del filtro"] per chiudere il riquadro del filtro.
+
+. Selezionare il database di cui si desidera eseguire il backup.
++
+Viene visualizzata la pagina Database-Protect.
+
+. Nella pagina Risorse, procedere come segue:
++
+.. Selezionare la casella di controllo e immettere un formato di nome personalizzato che si desidera utilizzare per il nome dello snapshot.
++
+Per esempio, `customtext_policy_hostname` O `resource_hostname` .  Per impostazione predefinita, al nome dello snapshot viene aggiunto un timestamp.
+
+.. Specificare le destinazioni dei file di registro dell'archivio di cui non si desidera eseguire il backup.
+
+
+. Nella pagina Criteri, procedere come segue:
++
+.. Selezionare una o più policy dall'elenco a discesa.
++
+Puoi creare una policy cliccandoimage:../media/add_policy_from_resourcegroup.gif["aggiungi simbolo"] .
+
++
+Nella sezione Configura pianificazioni per policy selezionate vengono elencate le policy selezionate.
+
+.. Clicimage:../media/add_policy_from_resourcegroup.gif["aggiungi simbolo"] nella colonna Configura pianificazioni per configurare una pianificazione per la policy desiderata.
+.. Nella finestra Aggiungi pianificazioni per il criterio _nome_criterio_, configura la pianificazione e quindi seleziona `OK` .
++
+_policy_name_ è il nome della policy selezionata.
+
++
+Le pianificazioni configurate sono elencate nella colonna Pianificazioni applicate.
+
+
+
+. Nella pagina Verifica, procedere come segue:
++
+.. Fare clic su *Carica localizzatori* per caricare i volumi SnapMirror o SnapVault per verificare l'archiviazione secondaria.
+.. Clicimage:../media/add_policy_from_resourcegroup.gif["aggiungi simbolo"] nella colonna Configura pianificazioni per configurare la pianificazione di verifica per tutti i tipi di pianificazione del criterio.  + Nella finestra di dialogo Aggiungi pianificazioni di verifica _nome_policy_, è possibile eseguire i seguenti passaggi:
+.. Selezionare *Esegui verifica dopo il backup*.
+.. Selezionare *Esegui verifica pianificata* e selezionare il tipo di pianificazione dall'elenco a discesa.
++
+
+NOTE: In una configurazione Flex ASM, non è possibile eseguire operazioni di verifica sui nodi Leaf se la cardinalità è inferiore al numero di nodi nel cluster RAC.
+
+.. Seleziona *Verifica su posizione secondaria* per verificare i backup su un archivio secondario.
+.. Fare clic su *OK*.
++
+Le pianificazioni di verifica configurate sono elencate nella colonna Pianificazioni applicate.
+
+
+
+. Nella pagina Notifica, seleziona gli scenari in cui desideri inviare le email dall'elenco a discesa *Preferenza email*.
++
+È necessario specificare gli indirizzi e-mail del mittente e del destinatario, nonché l'oggetto dell'e-mail.  Se si desidera allegare il report dell'operazione di backup eseguita sulla risorsa, selezionare *Allega report attività*.
+
++
+
+NOTE: Per la notifica via e-mail, è necessario aver specificato i dettagli del server SMTP utilizzando l'interfaccia grafica utente o il comando PowerShell `Set-SmSmtpServer` .
+
+. Rivedi il riepilogo e poi clicca su *Fine*.
++
+Viene visualizzata la pagina della topologia del database.
+
+. Fare clic su *Esegui backup ora*.
+. Nella pagina Backup, procedere come segue:
++
+.. Se hai applicato più criteri alla risorsa, dall'elenco a discesa Criterio seleziona il criterio che desideri utilizzare per il backup.
++
+Se il criterio selezionato per il backup su richiesta è associato a una pianificazione di backup, i backup su richiesta verranno conservati in base alle impostazioni di conservazione specificate per il tipo di pianificazione.
+
+.. Fare clic su *Backup*.
+
+
+. Monitorare l'avanzamento dell'operazione cliccando su *Monitoraggio* > *Lavori*.
+
+
+.Dopo aver finito
+* Nella configurazione AIX, è possibile utilizzare `lkdev` comando per bloccare e il `rendev` comando per rinominare i dischi su cui risiedeva il database sottoposto a backup.
++
+Il blocco o la ridenominazione dei dispositivi non influirà sull'operazione di ripristino quando si esegue il ripristino utilizzando tale backup.
+
+* Se l'operazione di backup non riesce perché il tempo di esecuzione della query del database ha superato il valore di timeout, è necessario modificare il valore dei parametri ORACLE_SQL_QUERY_TIMEOUT e ORACLE_PLUGIN_SQL_QUERY_TIMEOUT eseguendo il comando `Set-SmConfigSettings` cmdlet:
++
+Dopo aver modificato il valore dei parametri, riavviare il servizio SnapCenter Plug-in Loader (SPL) eseguendo il seguente comando `/opt/NetApp/snapcenter/spl/bin/spl restart`
+
+* Se il file non è accessibile e il punto di montaggio non è disponibile durante il processo di verifica, l'operazione potrebbe non riuscire con il codice di errore DBV-00100 nel file specificato.  È necessario modificare i valori dei parametri VERIFICATION_DELAY e VERIFICATION_RETRY_COUNT in sco.properties.
++
+Dopo aver modificato il valore dei parametri, riavviare il servizio SnapCenter Plug-in Loader (SPL) eseguendo il seguente comando `/opt/NetApp/snapcenter/spl/bin/spl restart`
+
+* Nelle configurazioni MetroCluster , SnapCenter potrebbe non essere in grado di rilevare una relazione di protezione dopo un failover.
+* Se si esegue il backup dei dati dell'applicazione su VMDK e la dimensione dell'heap Java per il SnapCenter Plug-in for VMware vSphere non è sufficientemente grande, il backup potrebbe non riuscire.
++
+Per aumentare la dimensione dell'heap Java, individuare il file di script _/opt/netapp/init_scripts/scvservice_.  In quella sceneggiatura, il `do_start method` Il comando avvia il servizio plug-in SnapCenter VMware.  Aggiorna quel comando come segue: `Java -jar -Xmx8192M -Xms4096M` .
+
+
+
+.Trova maggiori informazioni
+* https://kb.netapp.com/Advice_and_Troubleshooting/Data_Protection_and_Security/SnapCenter/Unable_to_detect_SnapMirror_or_SnapVault_relationship_after_MetroCluster_failover["Impossibile rilevare la relazione SnapMirror o SnapVault dopo il failover MetroCluster"^]
+* https://kb.netapp.com/Advice_and_Troubleshooting/Data_Protection_and_Security/SnapCenter/Oracle_RAC_One_Node_database_is_skipped_for_performing_SnapCenter_operations["Il database Oracle RAC One Node viene ignorato per l'esecuzione delle operazioni SnapCenter"^]
+* https://kb.netapp.com/Advice_and_Troubleshooting/Data_Protection_and_Security/SnapCenter/Failed_to_change_the_state_of_an_Oracle_12c_ASM_database_from_shutdown_to_mount["Impossibile modificare lo stato di un database Oracle 12c ASM"^]
+* https://kb.netapp.com/Advice_and_Troubleshooting/Data_Protection_and_Security/SnapCenter/What_are_the_customizable_parameters_for_backup_restore_and_clone_operations_on_AIX_systems["Parametri personalizzabili per le operazioni di backup, ripristino e clonazione sui sistemi AIX"^](Richiede l'accesso)
+

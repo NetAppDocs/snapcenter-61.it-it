@@ -1,0 +1,47 @@
+---
+permalink: protect-mysql/storage-types-supported-by-snapcenter-plug-in-for-mysql.html 
+sidebar: sidebar 
+keywords: storage types, 
+summary: 'SnapCenter supporta un"ampia gamma di tipi di archiviazione sia su macchine fisiche che su macchine virtuali (VM).  Prima di installare il plug-in SnapCenter per MySQL, è necessario verificare il supporto per il tipo di archiviazione in uso.' 
+---
+= Tipi di archiviazione supportati dal plug-in SnapCenter per MySQL
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+SnapCenter supporta un'ampia gamma di tipi di archiviazione sia su macchine fisiche che su macchine virtuali (VM).  Prima di installare il plug-in SnapCenter per MySQL, è necessario verificare il supporto per il tipo di archiviazione in uso.
+
+|===
+| Macchina | Tipo di archiviazione 
+
+
+ a| 
+Server fisico
+ a| 
+* LUN connesse a FC
+* LUN connesse tramite iSCSI
+* Volumi connessi tramite NFS
+
+
+
+
+ a| 
+VMware ESXi
+ a| 
+* LUN RDM connesse tramite FC o iSCSI ESXi HBA. La scansione degli adattatori bus host (HBA) potrebbe richiedere molto tempo perché SnapCenter esegue la scansione di tutti gli adattatori bus host presenti nell'host.
++
+È possibile modificare il file *LinuxConfig.pm* che si trova in _/opt/ NetApp/snapcenter/spl/plugins/scu/scucore/modules/SCU/Config_ per impostare il valore del parametro *SCSI_HOSTS_OPTIMIZED_RESCAN* su 1 per rieseguire la scansione solo degli HBA elencati in HBA_DRIVER_NAMES.
+
+* LUN iSCSI collegate direttamente al sistema guest dall'iniziatore iSCSI
+* VMDK su datastore NFS
+* VMDK creati su VMFS
+* Volumi NFS connessi direttamente al sistema guest
+* Datastore vVol sia su NFS che su SAN
++
+Il provisioning del datastore vVol può essere effettuato solo con ONTAP Tools per VMware vSphere.
+
+
+
+|===

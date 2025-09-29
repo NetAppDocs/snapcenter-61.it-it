@@ -1,0 +1,143 @@
+---
+permalink: tech-refresh/task_tech_refresh_storage_system.html 
+sidebar: sidebar 
+keywords: tech refresh, storage system, 
+summary: 'Eseguire l"aggiornamento tecnico del sistema di archiviazione spostando i dati dal vecchio al nuovo storage, montando il nuovo storage sui rispettivi host e quindi attivando i database.' 
+---
+= Aggiornamento tecnologico del sistema di archiviazione
+:allow-uri-read: 
+
+
+[role="lead"]
+Quando lo storage viene aggiornato tecnologicamente, i dati vengono migrati su un nuovo storage e gli host dell'applicazione vengono montati con il nuovo storage.  Il flusso di lavoro di backup SnapCenter identifica il nuovo archivio e crea lo snapshot se il nuovo archivio è registrato in SnapCenter.
+
+È possibile eseguire il ripristino, il montaggio e la clonazione sui nuovi backup creati dopo l'aggiornamento dell'archiviazione.  Tuttavia, queste operazioni non riusciranno se eseguite sui backup creati prima dell'aggiornamento dell'archiviazione, perché i backup contengono i vecchi dettagli di archiviazione.  Dovresti eseguire l'API o il cmdlet di aggiornamento della tecnologia di archiviazione per aggiornare i vecchi backup in SnapCenter con i nuovi dettagli di archiviazione.
+
+L'aggiornamento tecnologico è supportato per i seguenti plug-in SnapCenter :
+
+* Plug-in SnapCenter per Microsoft SQL Server
+* Plug-in SnapCenter per Windows
+* Plug-in SnapCenter per Oracle Database
+* Plug-in SnapCenter per database SAP HANA
+* Plug-in SnapCenter per Microsoft Exchange Server
+
+
+I casi d'uso supportati sono:
+
+* Aggiornamento dello storage primario
++
+L'aggiornamento della tecnologia di archiviazione è supportato per sostituire l'archiviazione primaria con una nuova.  Non è possibile convertire l'archiviazione secondaria esistente in un'archiviazione primaria.
+
+* Aggiornamento dell'archiviazione secondaria
+
+
+
+
+== Aggiorna i backup dello storage primario
+
+Quando la tecnologia di archiviazione viene aggiornata, è necessario eseguire l'API o il cmdlet di aggiornamento della tecnologia di archiviazione per aggiornare i vecchi backup in SnapCenter con i nuovi dettagli di archiviazione.
+
+.Prima di iniziare
+Poiché questo flusso di lavoro modifica i dati nel repository SnapCenter , si consiglia di eseguire il backup del repository SnapCenter .  In caso di problemi con i dati, è possibile ripristinare il repository SnapCenter allo stato precedente utilizzando il backup.
+
+Per ulteriori informazioni, consulta  https://docs.netapp.com/us-en/snapcenter/admin/concept_manage_the_snapcenter_server_repository.html#back-up-the-snapcenter-repository["Eseguire il backup del repository SnapCenter"] .
+
+.Passi
+. Migrare i dati dal vecchio storage al nuovo storage.
++
+Per informazioni su come effettuare la migrazione, fare riferimento a:
+
++
+** https://kb.netapp.com/mgmt/SnapCenter/How_to_perform_Storage_tech_refresh["Come migrare i dati su un nuovo storage"]
+** https://kb.netapp.com/onprem/ontap/dp/SnapMirror/How_can_I_copy_a_volume_and_preserve_all_of_the_Snapshot_copies["Come posso copiare un volume e conservare tutte le copie Snapshot?"]
+
+
+. Mettere l'host in modalità di manutenzione.
+. Montare il nuovo storage nei rispettivi host e richiamare i database.
++
+Il nuovo storage deve essere connesso all'host nello stesso modo di prima.  Ad esempio, se è stato connesso come SAN, deve essere connesso come SAN.
+
++
+Il nuovo storage deve essere montato sulla stessa unità o percorso del vecchio storage.
+
+. Verificare che tutte le risorse siano attive e funzionanti.
+. Aggiungere il nuovo spazio di archiviazione in SnapCenter.
++
+Assicurati di avere un nome SVM univoco in tutti i cluster in SnapCenter.  Se si utilizza lo stesso nome SVM nel nuovo archivio e se tutti i volumi dell'SVM possono essere migrati prima di eseguire l'aggiornamento dell'archivio, si consiglia di eliminare l'SVM nel vecchio cluster e di riscoprire il vecchio cluster in SnapCenter , il che rimuoverà l'SVM dalla cache.
+
+. Mettere l'host in modalità di produzione.
+. In SnapCenter, creare un backup delle risorse il cui storage viene migrato.  È necessario un nuovo backup affinché SnapCenter identifichi l'ultimo spazio di archiviazione e verrà utilizzato per aggiornare i metadati dei vecchi backup esistenti.
++
+
+NOTE: Ogni volta che un nuovo LUN viene collegato all'host, avrà un nuovo numero di serie.  Durante l'individuazione del file system di Windows, SnapCenter tratterà ogni numero di serie univoco come una nuova risorsa.  Durante l'aggiornamento della tecnologia di archiviazione, quando il LUN del nuovo archivio viene collegato all'host con la stessa lettera di unità o percorso, la scoperta del file system di Windows in SnapCenter contrassegnerà la risorsa esistente come eliminata anche se è montata con la stessa lettera di unità o percorso e visualizzerà il nuovo LUN come nuova risorsa.  Poiché la risorsa è contrassegnata come eliminata, non verrà presa in considerazione per l'aggiornamento della tecnologia di archiviazione in SnapCenter e tutti i backup della vecchia risorsa andranno persi.  Ogni volta che si verifica un aggiornamento dell'archiviazione, per le risorse del file system di Windows, l'individuazione delle risorse non deve essere eseguita prima di eseguire l'API o il cmdlet di aggiornamento dell'archiviazione.
+
+. Eseguire l'API di aggiornamento dello storage: `/<snapcenter_version>/techrefresh/primarystorage` oppure il cmdlet: _Invoke-SmTechRefreshPrimaryStorage_.
++
+
+NOTE: Se la risorsa è configurata con un criterio di replicazione abilitato, l'ultimo backup dopo l'aggiornamento dell'archiviazione dovrebbe contenere i dettagli dell'archiviazione secondaria.
+
++
+.. Se si utilizza la configurazione SQL Failover Cluster Instances (FCI), i backup vengono mantenuti a livello di cluster.  È necessario fornire il nome del cluster come input per l'aggiornamento della tecnologia di archiviazione.
+.. Se si utilizza la configurazione SQL Availability Group (AG), i backup vengono mantenuti a livello di nodo.  Dovresti fornire il nome del nodo come input per l'aggiornamento della tecnologia di archiviazione.
+.. Se si utilizza la configurazione Oracle Real Application Clusters (RAC), è possibile eseguire l'aggiornamento della tecnologia di archiviazione su qualsiasi nodo.
++
+Per impostazione predefinita, l'attributo _IsDryRun_ è impostato su True.  Identificherà le risorse per cui viene aggiornato lo storage.  È possibile visualizzare la risorsa e i dettagli di archiviazione modificati eseguendo l'API: '<snapcenter_version>/jobs/{jobid}' o il cmdlet _Get-SmJobSummaryReport_.
+
+
+
+. Dopo aver verificato i dettagli di archiviazione, impostare l'attributo _IsDryRun_ su False ed eseguire l'API di aggiornamento dell'archiviazione: `/<snapcenter_version>/techrefresh/primarystorage` oppure il cmdlet: _Invoke-SmTechRefreshPrimaryStorage_.
++
+In questo modo verranno aggiornati i dettagli di archiviazione nei backup più vecchi.
+
++
+È possibile eseguire l'API o il cmdlet sullo stesso host più volte; i dettagli di archiviazione nei backup precedenti verranno aggiornati solo se l'archiviazione viene aggiornata.
+
++
+
+NOTE: La gerarchia dei cloni non può essere migrata in ONTAP.  Se lo storage in fase di migrazione contiene metadati di clonazione in SnapCenter, la risorsa clonata verrà contrassegnata come risorsa indipendente.  I cloni dei metadati dei cloni verranno rimossi in modo ricorsivo.
+
+. (Facoltativo) Se tutti gli snapshot non vengono spostati dal vecchio storage primario al nuovo storage primario, eseguire la seguente API: `/<snapcenter_version>/hosts/primarybackupsexistencecheck` oppure il cmdlet _Invoke-SmPrimaryBackupsExistenceCheck_.
++
+Verrà eseguito il controllo dell'esistenza dello snapshot sul nuovo archivio primario e i rispettivi backup verranno contrassegnati come non disponibili per alcuna operazione in SnapCenter.
+
+
+
+
+
+== Aggiorna i backup dello storage secondario
+
+Quando la tecnologia di archiviazione viene aggiornata, è necessario eseguire l'API o il cmdlet di aggiornamento della tecnologia di archiviazione per aggiornare i vecchi backup in SnapCenter con i nuovi dettagli di archiviazione.
+
+.Prima di iniziare
+Poiché questo flusso di lavoro modifica i dati nel repository SnapCenter , si consiglia di eseguire il backup del repository SnapCenter .  In caso di problemi con i dati, è possibile ripristinare il repository SnapCenter allo stato precedente utilizzando il backup.
+
+Per ulteriori informazioni, consulta  https://docs.netapp.com/us-en/snapcenter/admin/concept_manage_the_snapcenter_server_repository.html#back-up-the-snapcenter-repository["Eseguire il backup del repository SnapCenter"] .
+
+.Passi
+. Migrare i dati dal vecchio storage al nuovo storage.
++
+Per informazioni su come effettuare la migrazione, fare riferimento a:
+
++
+** https://kb.netapp.com/mgmt/SnapCenter/How_to_perform_Storage_tech_refresh["Come migrare i dati su un nuovo storage"]
+** https://kb.netapp.com/onprem/ontap/dp/SnapMirror/How_can_I_copy_a_volume_and_preserve_all_of_the_Snapshot_copies["Come posso copiare un volume e conservare tutte le copie Snapshot?"]
+
+
+. Stabilisci la relazione SnapMirror tra l'archiviazione primaria e la nuova archiviazione secondaria e assicurati che lo stato della relazione sia corretto.
+. In SnapCenter, creare un backup delle risorse il cui storage viene migrato.
++
+È necessario un nuovo backup affinché SnapCenter identifichi l'ultimo spazio di archiviazione e verrà utilizzato per aggiornare i metadati dei vecchi backup esistenti.
+
++
+
+IMPORTANT: Dovresti attendere il completamento di questa operazione.  Se si procede al passaggio successivo prima del completamento, SnapCenter perderà completamente i vecchi metadati dello snapshot secondario.
+
+. Dopo aver creato correttamente il backup di tutte le risorse in un host, eseguire l'API di aggiornamento dell'archiviazione secondaria: `/<snapcenter_version>/techrefresh/secondarystorage` oppure il cmdlet: _Invoke-SmTechRefreshSecondaryStorage_.
++
+In questo modo verranno aggiornati i dettagli dell'archiviazione secondaria dei backup più vecchi nell'host specificato.
+
++
+Se si desidera eseguire questa operazione a livello di risorsa, fare clic su *Aggiorna* per ogni risorsa per aggiornare i metadati dell'archiviazione secondaria.
+
+. Dopo aver aggiornato correttamente i backup più vecchi, è possibile interrompere la vecchia relazione di archiviazione secondaria con quella primaria.
+

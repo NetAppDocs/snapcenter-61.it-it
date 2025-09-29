@@ -1,0 +1,33 @@
+---
+permalink: protect-scsql/concept_backup_naming_conventions_for_plugin_for_sql.html 
+sidebar: sidebar 
+keywords: Backup naming conventions 
+summary: È possibile utilizzare la convenzione di denominazione predefinita di Snapshot oppure una convenzione di denominazione personalizzata.  La convenzione di denominazione predefinita per i backup aggiunge un timestamp ai nomi degli snapshot che consente di identificare quando sono state create le copie. 
+---
+= Convenzioni di denominazione del backup per il plug-in per SQL Server
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile utilizzare la convenzione di denominazione predefinita di Snapshot oppure una convenzione di denominazione personalizzata.  La convenzione di denominazione predefinita per i backup aggiunge un timestamp ai nomi degli snapshot che consente di identificare quando sono state create le copie.
+
+Lo Snapshot utilizza la seguente convenzione di denominazione predefinita:
+
+`resourcegroupname_hostname_timestamp`
+
+Dovresti assegnare nomi logici ai gruppi di risorse di backup, come nell'esempio seguente:
+
+[listing]
+----
+dts1_mach1x88_03-12-2015_23.17.26
+----
+In questo esempio, gli elementi della sintassi hanno i seguenti significati:
+
+* _dts1_ è il nome del gruppo di risorse.
+* _mach1x88_ è il nome host.
+* _03-12-2015_23.17.26_ è la data e l'ora.
+
+
+In alternativa, è possibile specificare il formato del nome dello snapshot durante la protezione delle risorse o dei gruppi di risorse selezionando *Usa formato nome personalizzato per la copia dello snapshot*.  Ad esempio, customtext_resourcegroup_policy_hostname o resourcegroup_hostname.  Per impostazione predefinita, il suffisso timestamp viene aggiunto al nome dello Snapshot.

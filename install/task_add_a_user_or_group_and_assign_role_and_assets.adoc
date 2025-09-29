@@ -1,0 +1,167 @@
+---
+permalink: install/task_add_a_user_or_group_and_assign_role_and_assets.html 
+sidebar: sidebar 
+keywords: RBAC, add user, add group, assign role, assign assets 
+summary: Per configurare il controllo degli accessi basato sui ruoli per gli utenti SnapCenter , è possibile aggiungere utenti o gruppi e assegnare ruoli.  Il ruolo determina le opzioni a cui possono accedere gli utenti SnapCenter . 
+---
+= Aggiungi un utente o un gruppo e assegna ruoli e risorse
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Per configurare il controllo degli accessi basato sui ruoli per gli utenti SnapCenter , è possibile aggiungere utenti o gruppi e assegnare ruoli.  Il ruolo determina le opzioni a cui possono accedere gli utenti SnapCenter .
+
+.Prima di iniziare
+* Devi aver effettuato l'accesso con il ruolo "SnapCenterAdmin".
+* È necessario aver creato gli account utente o di gruppo in Active Directory nel sistema operativo o nel database.  Non è possibile utilizzare SnapCenter per creare questi account.
++
+
+NOTE: Nei nomi utente e nei nomi di gruppo è possibile includere solo i seguenti caratteri speciali: spazio ( ), trattino (-), carattere di sottolineatura (_) e due punti (:).
+
+* SnapCenter include diversi ruoli predefiniti.
++
+È possibile assegnare questi ruoli all'utente oppure crearne di nuovi.
+
+* Gli utenti AD e i gruppi AD aggiunti a SnapCenter RBAC devono disporre dell'autorizzazione READ sul contenitore Users e sul contenitore Computer in Active Directory.
+* Dopo aver assegnato un ruolo a un utente o a un gruppo che contiene le autorizzazioni appropriate, è necessario assegnare all'utente l'accesso alle risorse SnapCenter , come host e connessioni di archiviazione.
++
+Ciò consente agli utenti di eseguire le azioni per le quali dispongono delle autorizzazioni sulle risorse loro assegnate.
+
+* A un certo punto dovresti assegnare un ruolo all'utente o al gruppo per sfruttare i permessi e l'efficienza di RBAC.
+* Durante la creazione dell'utente o del gruppo, è possibile assegnare risorse quali host, gruppi di risorse, policy, connessione di archiviazione, plug-in e credenziali all'utente.
+* Le risorse minime che dovresti assegnare a un utente per eseguire determinate operazioni sono le seguenti:
++
+|===
+| Operazione | Assegnazione dei beni 
+
+
+ a| 
+Proteggere le risorse
+ a| 
+ospite, politica
+
+
+
+ a| 
+Backup
+ a| 
+host, gruppo di risorse, policy
+
+
+
+ a| 
+Ripristinare
+ a| 
+host, gruppo di risorse
+
+
+
+ a| 
+Clone
+ a| 
+host, gruppo di risorse, policy
+
+
+
+ a| 
+Ciclo di vita del clone
+ a| 
+ospite
+
+
+
+ a| 
+Crea un gruppo di risorse
+ a| 
+ospite
+
+|===
+* Quando un nuovo nodo viene aggiunto a un cluster Windows o a una risorsa DAG (Exchange Server Database Availability Group) e se questo nuovo nodo viene assegnato a un utente, è necessario riassegnare la risorsa all'utente o al gruppo per includere il nuovo nodo nell'utente o nel gruppo.
++
+È necessario riassegnare l'utente o il gruppo RBAC al cluster o al DAG per includere il nuovo nodo nell'utente o nel gruppo RBAC.  Ad esempio, si dispone di un cluster a due nodi e al cluster è stato assegnato un utente o un gruppo RBAC.  Quando si aggiunge un altro nodo al cluster, è necessario riassegnare l'utente o il gruppo RBAC al cluster per includere il nuovo nodo per l'utente o il gruppo RBAC.
+
+* Se si prevede di replicare gli snapshot, è necessario assegnare la connessione di archiviazione per il volume di origine e di destinazione all'utente che esegue l'operazione.
++
+È necessario aggiungere risorse prima di assegnare l'accesso agli utenti.
+
+
+
+
+IMPORTANT: Se si utilizzano le funzioni SnapCenter Plug-in for VMware vSphere per proteggere VM, VMDK o datastore, è necessario utilizzare l'interfaccia utente grafica di VMware vSphere per aggiungere un utente vCenter a un ruolo SnapCenter Plug-in for VMware vSphere .  Per informazioni sui ruoli VMware vSphere, vedere https://docs.netapp.com/us-en/sc-plugin-vmware-vsphere/scpivs44_predefined_roles_packaged_with_snapcenter.html["Ruoli predefiniti forniti con il SnapCenter Plug-in for VMware vSphere"^] .
+
+*Passi*
+
+. Nel riquadro di navigazione a sinistra, fare clic su *Impostazioni*.
+. Nella pagina Impostazioni, fare clic su *Utenti e accesso* > *image:../media/add_icon_configure_database.gif["aggiungi icona nella schermata di configurazione del database"] *.
+. Nella pagina Aggiungi utenti/gruppi da Active Directory o gruppo di lavoro:
++
+|===
+| Per questo campo... | Fai questo... 
+
+
+ a| 
+Tipo di accesso
+ a| 
+Seleziona Dominio o gruppo di lavoro
+
+Per il tipo di autenticazione Dominio, è necessario specificare il nome di dominio dell'utente o del gruppo a cui si desidera aggiungere l'utente a un ruolo.
+
+Per impostazione predefinita, è precompilato con il nome di dominio dell'utente registrato.
+
+
+NOTE: È necessario registrare il dominio non attendibile nella pagina *Impostazioni* > *Impostazioni globali* > *Impostazioni dominio*.
+
+
+
+ a| 
+Tipo
+ a| 
+Seleziona Utente o Gruppo
+
+
+NOTE: SnapCenter supporta solo il gruppo di sicurezza e non il gruppo di distribuzione.
+
+
+
+ a| 
+Nome utente
+ a| 
+.. Digitare il nome utente parziale, quindi fare clic su *Aggiungi*.
++
+
+NOTE: Il nome utente è sensibile alle maiuscole e alle minuscole.
+
+.. Selezionare il nome utente dall'elenco di ricerca.
+
+
+
+NOTE: Quando aggiungi utenti da un dominio diverso o da un dominio non attendibile, dovresti digitare il nome utente per intero perché non esiste un elenco di ricerca per gli utenti di domini diversi.
+
+Ripetere questo passaggio per aggiungere altri utenti o gruppi al ruolo selezionato.
+
+
+
+ a| 
+Ruoli
+ a| 
+Seleziona il ruolo a cui vuoi aggiungere l'utente.
+
+|===
+. Fare clic su *Assegna*, quindi nella pagina Assegna risorse:
++
+.. Selezionare il tipo di risorsa dall'elenco a discesa *Risorsa*.
+.. Nella tabella Asset, seleziona l'asset.
++
+Le risorse vengono elencate solo se l'utente le ha aggiunte a SnapCenter.
+
+.. Ripetere questa procedura per tutte le risorse richieste.
+.. Fare clic su *Salva*.
+
+
+. Fare clic su *Invia*.
++
+Dopo aver aggiunto utenti o gruppi e assegnato i ruoli, aggiorna l'elenco delle risorse.
+
+

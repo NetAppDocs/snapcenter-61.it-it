@@ -1,0 +1,28 @@
+---
+section: get-started
+title: Iniziare
+entries:
+- title: Scopri di più sul SnapCenter software
+  entries:
+  - title: Panoramica
+    url: "/get-started/concept_snapcenter_overview.html"
+  - title: Sicurezza e autenticazione
+    url: "/get-started/reference_data_security.html"
+  - title: Controllo degli accessi basato sui ruoli
+    url: "/get-started/rbac-snapcenter.html"
+  - title: Ripristino dopo un disastro
+    url: "/get-started/concept_disaster_recovery.html"
+  - title: Licenza
+    url: "/get-started/concept_snapcenter_licenses.html"
+  - title: Sincronizzazione attiva SnapMirror
+    url: "/get-started/snapmirror-active-sync-snapcenter.html"
+  - title: Concetti chiave della protezione dei dati
+    url: "/get-started/concept_resources_resource_groups_and_policies.html"
+  - title: Sistemi di archiviazione e applicazioni supportati
+    url: "/get-started/reference_supported_storage_systems_and_applications.html"
+  - title: Metodi di autenticazione
+    url: "/get-started/concept_authentication_methods_for_your_credentials.html"
+- title: Operazioni SnapCenter supportate per sistemi ASA r2
+  url: "/get-started/learn-about-snapcenter-support-for-asa-r2-systems.html"
+- title: Avvio rapido
+  url: "/get-started/quick-start-snapcenter.html"

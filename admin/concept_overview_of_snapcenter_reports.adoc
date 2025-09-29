@@ -1,0 +1,142 @@
+---
+permalink: admin/concept_overview_of_snapcenter_reports.html 
+sidebar: sidebar 
+keywords: SnapCenter reports 
+summary: SnapCenter offre una varietà di opzioni di reporting che consentono di monitorare e gestire lo stato del sistema e il successo delle operazioni. 
+---
+= Panoramica delle funzionalità di reporting SnapCenter
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+SnapCenter offre una varietà di opzioni di reporting che consentono di monitorare e gestire lo stato del sistema e il successo delle operazioni.
+
+|===
+| Tipo di rapporto | Descrizione 
+
+
+ a| 
+Rapporto di backup
+ a| 
+Il report di backup fornisce dati complessivi sulle tendenze di backup per l'ambiente SnapCenter , sulla percentuale di successo dei backup e alcune informazioni su ciascun backup eseguito durante il periodo di tempo specificato.  Se un backup viene eliminato, il report non visualizza alcuna informazione sullo stato del backup eliminato.  Il rapporto dettagliato sul backup fornisce informazioni dettagliate su un processo di backup specificato ed elenca le risorse il cui backup è stato eseguito correttamente e quelle il cui backup non è riuscito.
+
+
+
+ a| 
+Rapporto di clonazione
+ a| 
+Il report di clonazione fornisce dati generali sulle tendenze di clonazione per l'ambiente SnapCenter , il tasso di successo della clonazione e alcune informazioni su ciascun processo di clonazione eseguito durante il periodo di tempo specificato.  Se un clone viene eliminato, il report non visualizza alcuna informazione sullo stato del clone eliminato.  Il report dettagliato del clone fornisce informazioni dettagliate sul clone specificato, sull'host del clone e sullo stato dell'attività del processo di clone.  Se un'attività fallisce, il report dettagliato sulla clonazione visualizza informazioni sull'errore.
+
+
+
+ a| 
+Ripristina rapporto
+ a| 
+Il rapporto di ripristino fornisce informazioni generali sui processi di ripristino.  Il rapporto dettagliato sul ripristino fornisce informazioni dettagliate su un processo di ripristino specificato, tra cui il nome host, il nome del backup, l'inizio e la durata del processo e lo stato delle singole attività del processo.  Se un'attività non riesce, il rapporto dettagliato sul ripristino visualizza informazioni sull'errore.
+
+
+
+ a| 
+Rapporto di protezione
+ a| 
+Questi report forniscono dettagli sulla protezione per le risorse gestite da tutte le istanze del plug-in SnapCenter .  Questo report fornisce dettagli sulla protezione per le risorse gestite da tutte le istanze del plug-in.  È possibile visualizzare una panoramica, i dettagli delle risorse non protette, le risorse di cui non è stato eseguito il backup al momento della generazione del report, le risorse di un gruppo di risorse per cui le operazioni di backup non sono riuscite e lo stato SnapVault .
+
+
+
+ a| 
+Rapporto programmato
+ a| 
+Questi report sono programmati per essere eseguiti periodicamente, ad esempio quotidianamente, settimanalmente o mensilmente.  I report vengono generati automaticamente nella data e nell'ora specificate e inviati alle persone interessate tramite e-mail.  È possibile abilitare, disabilitare, modificare o eliminare le pianificazioni.  La pianificazione abilitata può essere eseguita su richiesta cliccando sul pulsante *Esegui ora*.  L'amministratore può eseguire qualsiasi pianificazione, ma il report generato conterrà dati basati sull'autorizzazione fornita dall'utente che ha creato la pianificazione.
+
+Qualsiasi altro utente diverso dall'amministratore potrà visualizzare o modificare la pianificazione in base alla propria autorizzazione. Se nella pagina Aggiungi ruolo è selezionata l'opzione Tutti i membri di questo ruolo possono vedere gli oggetti degli altri membri, gli altri membri del ruolo potranno visualizzare e modificare.
+
+|===
+
+
+== Rapporti di accesso
+
+Puoi utilizzare la dashboard SnapCenter per ottenere una rapida panoramica dello stato di salute del tuo sistema.  Dalla Dashboard è possibile approfondire i dettagli.  In alternativa, è possibile accedere direttamente ai report dettagliati.
+
+È possibile accedere ai report tramite uno dei seguenti metodi:
+
+* Nel riquadro di navigazione a sinistra, fare clic su *Dashboard*, quindi sul grafico a torta *Riepilogo ultima protezione* per visualizzare maggiori dettagli nella pagina Report.
+* Nel riquadro di navigazione a sinistra, fare clic su *Report*.
+
+
+
+
+== Filtra il tuo report
+
+Potresti voler filtrare i dati del tuo report in base a una serie di parametri, a seconda del livello di dettaglio e dell'intervallo di tempo delle informazioni richieste.
+
+*Passi*
+
+. Nel riquadro di navigazione a sinistra, fare clic su *Report*.
+. Se la vista Parametri non è visualizzata, fare clic sull'icona *Attiva/disattiva area parametri* nella barra degli strumenti del report.
+. Specificare l'intervallo di tempo per il quale si desidera eseguire il report.  + Se si omette la data di fine, si recuperano tutte le informazioni disponibili.
+. Filtra le informazioni del tuo report in base a uno qualsiasi dei seguenti criteri:
++
+** Gruppo di risorse
+** Ospite
+** Politica
+** Risorsa
+** Stato
+** Nome del plug-in
+
+
+. Fare clic su *Applica*.
+
+
+
+
+== Esportare o stampare report
+
+L'esportazione dei report SnapCenter consente di visualizzare il report in vari formati alternativi.  È anche possibile stampare i report.
+
+*Passi*
+
+. Nel riquadro di navigazione a sinistra, fare clic su *Report*.
+. Dalla barra degli strumenti dei report, eseguire una delle seguenti operazioni:
++
+** Fare clic sull'icona *Attiva/disattiva anteprima di stampa* per visualizzare l'anteprima di un report stampabile.
+** Selezionare un formato dall'elenco a discesa dell'icona *Esporta* per esportare un report in un formato alternativo.
+
+
+. Per stampare un report, fare clic sull'icona *Stampa*.
+. Per visualizzare il riepilogo di un report specifico, scorrere fino alla sezione appropriata del report.
+
+
+
+
+== Imposta il server SMTP per le notifiche e-mail
+
+È possibile specificare il server SMTP da utilizzare per inviare report sui processi di protezione dei dati a se stessi o ad altri.  Puoi anche inviare un'e-mail di prova per verificare la configurazione.  Le impostazioni vengono applicate globalmente a qualsiasi processo SnapCenter per il quale si configura la notifica e-mail.
+
+Questa opzione configura il server SMTP per l'invio di tutti i report sui processi di protezione dei dati.  Tuttavia, se si desidera ricevere regolarmente gli aggiornamenti dei processi di protezione dei dati SnapCenter per una determinata risorsa, in modo da poter monitorare lo stato di tali aggiornamenti, è possibile configurare l'opzione per inviare tramite e-mail i report SnapCenter quando si crea un gruppo di risorse.
+
+*Passi*
+
+. Nel riquadro di navigazione a sinistra, fare clic su *Impostazioni*.
+. Nella pagina Impostazioni, fare clic su *Impostazioni globali*.
+. Inserisci il server SMTP e fai clic su *Salva*.
+. Per inviare un'e-mail di prova, inserisci l'indirizzo e-mail da e a cui vuoi inviare l'e-mail, inserisci l'oggetto e fai clic su *Invia*.
+
+
+
+
+== Configurare l'opzione per inviare i report via e-mail
+
+Se desideri ricevere regolarmente aggiornamenti sui processi di protezione dei dati SnapCenter , a te stesso o ad altri, in modo da poter monitorare lo stato di tali aggiornamenti, puoi configurare l'opzione per inviare tramite e-mail i report SnapCenter quando crei un gruppo di risorse.
+
+.Prima di iniziare
+Devi aver configurato il tuo server SMTP nella pagina Impostazioni globali in Impostazioni.
+
+*Passi*
+
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in appropriato dall'elenco.
+. Seleziona il tipo di risorsa che desideri visualizzare e fai clic su *Nuovo gruppo di risorse*, oppure seleziona un gruppo di risorse esistente e fai clic su *Modifica* per configurare i report via e-mail per un gruppo di risorse esistente.
+. Nel pannello Notifiche della procedura guidata Nuovo gruppo di risorse, seleziona dal menu a discesa se desideri ricevere i report sempre, in caso di errore, in caso di errore o avviso.
+. Inserisci l'indirizzo da cui viene inviata l'e-mail, l'indirizzo a cui viene inviata l'e-mail e l'oggetto dell'e-mail.
+

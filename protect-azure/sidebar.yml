@@ -1,0 +1,68 @@
+---
+section: protect-azure
+title: Proteggere le applicazioni in esecuzione su Azure NetApp Files
+entries:
+- title: Proteggere le applicazioni in esecuzione su Azure NetApp Files
+  url: "/protect-azure/protect-applications-azure-netapp-files.html"
+- title: Installa SnapCenter e crea le credenziali
+  entries:
+  - title: Installa SnapCenter sulla macchina virtuale di Azure
+    url: "/protect-azure/install-snapcenter-azure-virtual-machine.html"
+  - title: Creare le credenziali di Azure in SnapCenter
+    url: "/protect-azure/create-azure-credential.html"
+  - title: Configurare l'account di archiviazione di Azure
+    url: "/protect-azure/configure-azure-storage-account.html"
+  - title: Crea le credenziali per aggiungere l'host del plug-in
+    url: "/protect-azure/create-credential-add-plugin-host.html"
+- title: Proteggere i database SAP HANA
+  entries:
+  - title: Aggiungi host e installa il plug-in SnapCenter per il database SAP HANA
+    url: "/protect-azure/add-hosts-install-plugin-for-sap-hana.html"
+  - title: Aggiungi il database SAP HANA
+    url: "/protect-azure/add-sap-hana-database.html"
+  - title: Creare policy di backup per i database SAP HANA
+    url: "/protect-azure/create-backup-policies-sap-hana.html"
+  - title: Crea gruppi di risorse e collega policy di backup SAP HANA
+    url: "/protect-azure/create-resource-groups-attach-sap-hana-backup-policies.html"
+  - title: Eseguire il backup dei database SAP HANA in esecuzione su Azure NetApp
+      Files
+    url: "/protect-azure/backup-sap-hana-databases.html"
+  - title: Eseguire il backup dei gruppi di risorse SAP HANA
+    url: "/protect-azure/backup-sap-hana-resource-groups.html"
+  - title: Ripristinare e recuperare i database SAP HANA
+    url: "/protect-azure/restore-recover-sap-hana-backups.html"
+  - title: Clona il backup del database SAP HANA
+    url: "/protect-azure/clone-sap-hana-database-backups.html"
+- title: Proteggere i database di Microsoft SQL Server
+  entries:
+  - title: Aggiungi host e installa il plug-in SnapCenter per il database SQL Server
+    url: "/protect-azure/add-hosts-install-plugin-for-sql.html"
+  - title: Creare criteri di backup per i database di SQL Server
+    url: "/protect-azure/create-backup-policies-sql.html"
+  - title: Crea gruppi di risorse e collega criteri di backup SQL
+    url: "/protect-azure/create-resource-groups-attach-sql-backup-policies.html"
+  - title: Eseguire il backup dei database di SQL Server in esecuzione su Azure NetApp
+      Files
+    url: "/protect-azure/backup-sql-server-databases.html"
+  - title: Eseguire il backup dei gruppi di risorse di SQL Server
+    url: "/protect-azure/backup-sql-resource-groups.html"
+  - title: Ripristinare e recuperare i database di SQL Server
+    url: "/protect-azure/restore-recover-sql-backups.html"
+  - title: Clona il backup del database SQL Server
+    url: "/protect-azure/clone-sql-database-backups.html"
+- title: Proteggere i database Oracle
+  entries:
+  - title: Aggiungi host e installa il plug-in SnapCenter per il database Oracle
+    url: "/protect-azure/add-hosts-install-plugin-for-oracle.html"
+  - title: Creare policy di backup per i database Oracle
+    url: "/protect-azure/create-backup-policies-oracle.html"
+  - title: Crea gruppi di risorse e collega policy di backup Oracle
+    url: "/protect-azure/create-resource-groups-attach-oracle-backup-policies.html"
+  - title: Eseguire il backup dei database Oracle in esecuzione su Azure NetApp Files
+    url: "/protect-azure/backup-oracle-databases.html"
+  - title: Eseguire il backup dei gruppi di risorse Oracle
+    url: "/protect-azure/backup-oracle-resource-groups.html"
+  - title: Ripristinare e recuperare i database Oracle
+    url: "/protect-azure/restore-recover-oracle-backups.html"
+  - title: Clona il backup del database Oracle
+    url: "/protect-azure/clone-oracle-database-backups.html"

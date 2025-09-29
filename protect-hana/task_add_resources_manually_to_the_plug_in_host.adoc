@@ -1,0 +1,112 @@
+---
+permalink: protect-hana/task_add_resources_manually_to_the_plug_in_host.html 
+sidebar: sidebar 
+keywords: SnapCenter Plug-in for SAP HANA Database 
+summary: La scoperta automatica non è supportata per alcune istanze HANA.  È necessario aggiungere queste risorse manualmente. 
+---
+= Aggiungere manualmente le risorse all'host del plug-in
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+La scoperta automatica non è supportata per alcune istanze HANA.  È necessario aggiungere queste risorse manualmente.
+
+.Prima di iniziare
+* È necessario aver completato attività quali l'installazione di SnapCenter Server, l'aggiunta di host, la configurazione delle connessioni al sistema di archiviazione e l'aggiunta della chiave di archiviazione utente HDB.
+* Per la replica del sistema SAP HANA, si consiglia di aggiungere tutte le risorse di tale sistema HANA in un gruppo di risorse ed eseguire un backup del gruppo di risorse.  Ciò garantisce un backup senza interruzioni durante la modalità takeover-failback.
+
+
+link:task_create_resource_groups_and_attach_policies.html["Crea gruppi di risorse e allega criteri"] .
+
+.Informazioni su questo compito
+Il rilevamento automatico non è supportato per le seguenti configurazioni:
+
+* Layout RDM e VMDK
++
+
+NOTE: Nel caso in cui vengano scoperte le risorse di cui sopra, le operazioni di protezione dei dati non saranno supportate su tali risorse.
+
+* Configurazione multi-host HANA
+* Più istanze sullo stesso host
+* Replicazione del sistema HANA con scalabilità multilivello
+* Ambiente di replica a cascata in modalità di replicazione del sistema
+
+
+.Passi
+. Nel riquadro di navigazione a sinistra, seleziona il plug-in SnapCenter per il database SAP HANA dall'elenco a discesa, quindi fai clic su *Risorse*.
+. Nella pagina Risorse, fare clic su *Aggiungi database SAP HANA*.
+. Nella pagina Fornisci dettagli risorsa, esegui le seguenti azioni:
++
+|===
+| Per questo campo... | Fai questo... 
+
+
+ a| 
+Tipo di risorsa
+ a| 
+Inserisci il tipo di risorsa.  I tipi di risorsa sono Contenitore singolo, Contenitore di database multitenant (MDC) e Volume non dati.
+
+
+
+ a| 
+Nome del sistema HANA
+ a| 
+Immettere il nome descrittivo del sistema SAP HANA.  Questa opzione è disponibile solo se sono stati selezionati i tipi di risorsa Contenitore singolo o MDC.
+
+
+
+ a| 
+SID
+ a| 
+Inserire l'ID del sistema (SID).  Il sistema SAP HANA installato è identificato da un singolo SID.
+
+
+
+ a| 
+Host plug-in
+ a| 
+Selezionare l'host del plug-in.
+
+
+
+ a| 
+Chiavi di archiviazione utente protette HDB
+ a| 
+Inserisci la chiave per connetterti al sistema SAP HANA.
+
+La chiave contiene le informazioni di accesso per connettersi al database.
+
+Per la replica del sistema SAP HANA, la chiave utente secondaria non viene convalidata.  Verrà utilizzato durante l'acquisizione.
+
+
+
+ a| 
+Utente del sistema operativo HDBSQL
+ a| 
+Immettere il nome utente per il quale è configurata la chiave HDB Secure User Store.  Per Windows, è obbligatorio che l'utente del sistema operativo HDBSQL sia l'utente SYSTEM.  Pertanto, è necessario configurare la chiave HDB Secure User Store per l'utente SYSTEM.
+
+|===
+. Nella pagina Fornisci impronta di archiviazione, seleziona un sistema di archiviazione e scegli uno o più volumi, LUN e qtree, quindi fai clic su *Salva*.
++
+Facoltativo: puoi cliccare su *image:../media/add_policy_from_resourcegroup.gif["aggiungi gruppo di risorse del modulo di policy"] * icona per aggiungere più volumi, LUN e qtree da altri sistemi di archiviazione.
+
+. Rivedi il riepilogo e poi clicca su *Fine*.
++
+I database vengono visualizzati insieme a informazioni quali SID, host del plug-in, gruppi di risorse e policy associati e stato generale
+
+
+
+Se si desidera consentire agli utenti di accedere alle risorse, è necessario assegnare le risorse agli utenti.  Ciò consente agli utenti di eseguire le azioni per le quali dispongono delle autorizzazioni sulle risorse loro assegnate.
+
+link:https://docs.netapp.com/us-en/snapcenter/install/task_add_a_user_or_group_and_assign_role_and_assets.html["Aggiungi un utente o un gruppo e assegna ruoli e risorse"]
+
+Dopo aver aggiunto i database, è possibile modificare i dettagli del database SAP HANA.
+
+Non è possibile modificare quanto segue se sono presenti backup associati alla risorsa SAP HANA:
+
+* Contenitori di database multi-tenant (MDC): SID o host client (plug-in) HDBSQL
+* Contenitore singolo: host client (plug-in) SID o HDBSQL
+* Volume non dati: nome della risorsa, SID associato o host del plug-in
+

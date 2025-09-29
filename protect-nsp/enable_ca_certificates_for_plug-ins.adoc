@@ -1,0 +1,42 @@
+---
+permalink: protect-nsp/enable_ca_certificates_for_plug-ins.html 
+sidebar: sidebar 
+keywords: SnapCenter, ca certificates 
+summary: È necessario configurare i certificati CA e distribuirli nel server SnapCenter e negli host dei plug-in corrispondenti. 
+---
+= Abilita i certificati CA per i plug-in
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È necessario configurare i certificati CA e distribuirli nel server SnapCenter e negli host dei plug-in corrispondenti.  Dovresti abilitare la convalida del certificato CA per i plug-in.
+
+.Prima di iniziare
+* È possibile abilitare o disabilitare i certificati CA utilizzando il cmdlet run _Set-SmCertificateSettings_.
+* È possibile visualizzare lo stato del certificato per i plug-in utilizzando _Get-SmCertificateSettings_.
+
+
+Le informazioni relative ai parametri che possono essere utilizzati con il cmdlet e le relative descrizioni possono essere ottenute eseguendo _Get-Help command_name_. In alternativa, puoi anche fare riferimento a https://docs.netapp.com/us-en/snapcenter-cmdlets/index.html["Guida di riferimento ai cmdlet del software SnapCenter"^] .
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Host*.
+. Nella pagina Host, fare clic su *Host gestiti*.
+. Selezionare uno o più host di plug-in.
+. Fare clic su *Altre opzioni*.
+. Selezionare *Abilita convalida certificato*.
+
+
+.Dopo aver finito
+Nella scheda Host gestiti viene visualizzato un lucchetto e il colore del lucchetto indica lo stato della connessione tra SnapCenter Server e l'host del plug-in.
+
+* *image:../media/enable_ca_issues_icon.png["Il certificato CA non è abilitato né assegnato all'icona host del plug-in"] * indica che il certificato CA non è abilitato né assegnato all'host del plug-in.
+* *image:../media/enable_ca_good_icon.png["Icona del certificato CA convalidato correttamente"] * indica che il certificato CA è stato convalidato correttamente.
+* *image:../media/enable_ca_failed_icon.png["Icona del certificato CA non convalidato"] * indica che il certificato CA non è stato convalidato.
+* *image:../media/enable_ca_undefined_icon.png["le informazioni di connessione non possono essere recuperate icona"] * indica che non è stato possibile recuperare le informazioni di connessione.
++
+
+NOTE: Quando lo stato è giallo o verde, le operazioni di protezione dei dati sono state completate correttamente.
+
+

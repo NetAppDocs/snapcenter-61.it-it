@@ -1,0 +1,9 @@
+= 
+:allow-uri-read: 
+
+
+È possibile verificare le copie di backup sul volume di archiviazione primario o sul volume di archiviazione secondario SnapMirror o SnapVault .  La verifica tramite un volume di archiviazione secondario riduce il carico sul volume di archiviazione primario.
+
+Quando si verifica un backup presente sul volume di archiviazione primario o secondario, tutti gli snapshot primari e secondari vengono contrassegnati come verificati.
+
+Per verificare le copie di backup sui volumi di archiviazione secondari SnapMirror e SnapVault è necessaria la licenza SnapRestore .

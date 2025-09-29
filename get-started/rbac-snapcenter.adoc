@@ -1,0 +1,932 @@
+---
+permalink: get-started/rbac-snapcenter.html 
+sidebar: sidebar 
+keywords: RBAC, roles, permissions, application-level RBAC, ONTAP permissions, default snapcenter roles, ONTAP permissions, SnapCenter Admin role 
+summary: 'Il controllo degli accessi basato sui ruoli (RBAC) SnapCenter e le autorizzazioni ONTAP consentono agli amministratori SnapCenter di creare ruoli e impostare autorizzazioni di accesso.  Questo accesso gestito centralmente consente agli amministratori delle applicazioni di lavorare in modo sicuro all"interno di ambienti delegati.' 
+---
+= Controllo degli accessi basato sui ruoli in SnapCenter
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Il controllo degli accessi basato sui ruoli (RBAC) SnapCenter e le autorizzazioni ONTAP consentono agli amministratori SnapCenter di delegare il controllo delle risorse SnapCenter a diversi utenti o gruppi di utenti.  Questo accesso gestito centralmente consente agli amministratori delle applicazioni di lavorare in modo sicuro all'interno di ambienti delegati.
+
+È possibile creare e modificare i ruoli e aggiungere l'accesso alle risorse agli utenti in qualsiasi momento.  Tuttavia, quando si configura SnapCenter per la prima volta, è necessario almeno aggiungere utenti o gruppi di Active Directory ai ruoli e quindi aggiungere l'accesso alle risorse a tali utenti o gruppi.
+
+
+NOTE: Non è possibile utilizzare SnapCenter per creare account utente o di gruppo.  Dovresti creare account utente o di gruppo in Active Directory del sistema operativo o del database.
+
+
+
+== Tipi di RBAC in SnapCenter
+
+SnapCenter utilizza i seguenti tipi di controllo degli accessi basato sui ruoli:
+
+* SnapCenter RBAC
+* RBAC a livello di applicazione
+* Plug-in SnapCenter per VMware vSphere RBAC
+* Autorizzazioni ONTAP
+
+
+
+
+=== SnapCenter RBAC
+
+SnapCenter ha ruoli predefiniti ed è possibile assegnare utenti o gruppi di utenti a tali ruoli.  I ruoli predefiniti sono:
+
+* Ruolo di amministratore SnapCenter
+* Ruolo di amministratore di backup e clonazione delle app
+* Ruolo di visualizzatore di backup e clonazione
+* Ruolo di amministratore dell'infrastruttura
+
+
+Quando assegni un ruolo a un utente, nella pagina Lavori saranno visibili solo i lavori pertinenti a quell'utente, a meno che non gli sia stato assegnato il ruolo SnapCenterAdmin.
+
+Puoi anche creare nuovi ruoli e gestire autorizzazioni e utenti.  È possibile assegnare autorizzazioni a utenti o gruppi per accedere agli oggetti SnapCenter , quali host, connessioni di archiviazione e gruppi di risorse.
+
+È possibile assegnare autorizzazioni RBAC a utenti e gruppi all'interno della stessa foresta e a utenti appartenenti a foreste diverse.  Non è possibile assegnare autorizzazioni RBAC agli utenti appartenenti a gruppi nidificati in più foreste.
+
+
+NOTE: Se si crea un ruolo personalizzato, questo deve contenere tutte le autorizzazioni del ruolo SnapCenterAdmin.  Se si copiano solo alcune autorizzazioni, ad esempio Aggiunta host o Rimozione host, non sarà possibile eseguire tali operazioni.
+
+Gli utenti sono tenuti a fornire l'autenticazione durante l'accesso, tramite l'interfaccia utente grafica (GUI) o utilizzando i cmdlet di PowerShell.  Se gli utenti sono membri di più di un ruolo, dopo aver immesso le credenziali di accesso, verrà chiesto loro di specificare il ruolo che desiderano utilizzare.  Gli utenti devono inoltre fornire l'autenticazione per eseguire le API.
+
+
+
+=== RBAC a livello di applicazione
+
+SnapCenter utilizza le credenziali per verificare che gli utenti SnapCenter autorizzati dispongano anche delle autorizzazioni a livello di applicazione.
+
+Ad esempio, se si desidera eseguire operazioni di protezione dei dati in un ambiente SQL Server, è necessario impostare le credenziali con le credenziali Windows o SQL appropriate.  Il server SnapCenter autentica le credenziali impostate utilizzando entrambi i metodi. Se si desidera eseguire operazioni di protezione dei dati in un ambiente file system Windows su un archivio ONTAP , il ruolo di amministratore SnapCenter deve disporre di privilegi di amministratore sull'host Windows.
+
+Allo stesso modo, se si desidera eseguire operazioni di protezione dei dati su un database Oracle e se l'autenticazione del sistema operativo (SO) è disabilitata nell'host del database, è necessario impostare le credenziali con il database Oracle o con le credenziali Oracle ASM. Il server SnapCenter autentica le credenziali impostate utilizzando uno di questi metodi, a seconda dell'operazione.
+
+
+
+=== SnapCenter Plug-in for VMware vSphere RBAC
+
+Se si utilizza il plug-in SnapCenter VMware per la protezione dei dati coerente con la VM, vCenter Server fornisce un livello aggiuntivo di RBAC.  Il plug-in SnapCenter VMware supporta sia vCenter Server RBAC sia ONTAP RBAC. https://docs.netapp.com/us-en/sc-plugin-vmware-vsphere/scpivs44_types_of_rbac_for_snapcenter_users.html["Saperne di più"^]
+
+|===
+
+
+| *Procedura consigliata:* NetApp consiglia di creare un ruolo ONTAP per il SnapCenter Plug-in for VMware vSphere e di assegnargli tutti i privilegi richiesti. 
+|===
+
+
+=== Autorizzazioni ONTAP
+
+È necessario creare un account vsadmin con le autorizzazioni necessarie per accedere al sistema di archiviazione.link:../install/task_add_a_user_or_group_and_assign_role_and_assets.html["Saperne di più"]
+
+
+
+== Autorizzazioni assegnate ai ruoli predefiniti SnapCenter
+
+Quando si aggiunge un utente a un ruolo, è necessario assegnare l'autorizzazione StorageConnection per abilitare la comunicazione con la macchina virtuale di archiviazione (SVM) oppure assegnare una SVM all'utente per abilitare l'autorizzazione a utilizzare la SVM.  L'autorizzazione Connessione di archiviazione consente agli utenti di creare connessioni SVM.
+
+Ad esempio, un utente con il ruolo di amministratore SnapCenter può creare connessioni SVM e assegnarle a un utente con il ruolo di amministratore di backup e clonazione delle app, che per impostazione predefinita non ha l'autorizzazione per creare o modificare connessioni SVM.  Senza una connessione SVM, gli utenti non possono completare alcuna operazione di backup, clonazione o ripristino.
+
+
+
+=== Ruolo di amministratore SnapCenter
+
+Il ruolo di amministratore SnapCenter ha tutte le autorizzazioni abilitate.  Non è possibile modificare le autorizzazioni per questo ruolo.  È possibile aggiungere utenti e gruppi al ruolo oppure rimuoverli.
+
+
+
+=== Ruolo di amministratore di backup e clonazione delle app
+
+Il ruolo di amministratore di backup e clonazione delle app dispone delle autorizzazioni necessarie per eseguire azioni amministrative per i backup delle applicazioni e le attività correlate alla clonazione.  Questo ruolo non dispone delle autorizzazioni per la gestione dell'host, il provisioning, la gestione della connessione di archiviazione o l'installazione remota.
+
+|===
+| Permessi | Abilitato | Creare | Leggere | Aggiornamento | Eliminare 
+
+
+ a| 
+Gruppo di risorse
+ a| 
+Non applicabile
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+
+
+
+ a| 
+Politica
+ a| 
+Non applicabile
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+
+
+
+ a| 
+Backup
+ a| 
+Non applicabile
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+
+
+
+ a| 
+Ospite
+ a| 
+Non applicabile
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+
+
+
+ a| 
+Connessione di archiviazione
+ a| 
+Non applicabile
+ a| 
+NO
+ a| 
+SÌ
+ a| 
+NO
+ a| 
+NO
+
+
+
+ a| 
+Clone
+ a| 
+Non applicabile
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+
+
+
+ a| 
+Disposizione
+ a| 
+Non applicabile
+ a| 
+NO
+ a| 
+SÌ
+ a| 
+NO
+ a| 
+NO
+
+
+
+ a| 
+Pannello di controllo
+ a| 
+SÌ
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+
+
+
+ a| 
+Rapporti
+ a| 
+SÌ
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+
+
+
+ a| 
+Ripristinare
+ a| 
+SÌ
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+
+
+
+ a| 
+Risorsa
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+
+
+
+ a| 
+Installazione/disinstallazione del plug-in
+ a| 
+NO
+ a| 
+Non applicabile
+ a| 
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+
+
+
+ a| 
+Migrazione
+ a| 
+NO
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+
+
+
+ a| 
+Montare
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+
+
+
+ a| 
+Smonta
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+
+
+
+ a| 
+Ripristino del volume completo
+ a| 
+NO
+ a| 
+NO
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+
+
+
+ a| 
+Protezione secondaria
+ a| 
+NO
+ a| 
+NO
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+
+
+
+ a| 
+Monitoraggio del lavoro
+ a| 
+SÌ
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+
+|===
+
+
+=== Ruolo di visualizzatore di backup e clonazione
+
+Il ruolo di Visualizzatore backup e clonazione ha una visualizzazione di sola lettura di tutte le autorizzazioni. Questo ruolo dispone anche di autorizzazioni abilitate per la scoperta, la creazione di report e l'accesso alla Dashboard.
+
+|===
+| Permessi | Abilitato | Creare | Leggere | Aggiornamento | Eliminare 
+
+
+ a| 
+Gruppo di risorse
+ a| 
+Non applicabile
+ a| 
+NO
+ a| 
+SÌ
+ a| 
+NO
+ a| 
+NO
+
+
+
+ a| 
+Politica
+ a| 
+Non applicabile
+ a| 
+NO
+ a| 
+SÌ
+ a| 
+NO
+ a| 
+NO
+
+
+
+ a| 
+Backup
+ a| 
+Non applicabile
+ a| 
+NO
+ a| 
+SÌ
+ a| 
+NO
+ a| 
+NO
+
+
+
+ a| 
+Ospite
+ a| 
+Non applicabile
+ a| 
+NO
+ a| 
+SÌ
+ a| 
+NO
+ a| 
+NO
+
+
+
+ a| 
+Connessione di archiviazione
+ a| 
+Non applicabile
+ a| 
+NO
+ a| 
+SÌ
+ a| 
+NO
+ a| 
+NO
+
+
+
+ a| 
+Clone
+ a| 
+Non applicabile
+ a| 
+NO
+ a| 
+SÌ
+ a| 
+NO
+ a| 
+NO
+
+
+
+ a| 
+Disposizione
+ a| 
+Non applicabile
+ a| 
+NO
+ a| 
+SÌ
+ a| 
+NO
+ a| 
+NO
+
+
+
+ a| 
+Pannello di controllo
+ a| 
+SÌ
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+
+
+
+ a| 
+Rapporti
+ a| 
+SÌ
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+
+
+
+ a| 
+Ripristinare
+ a| 
+NO
+ a| 
+NO
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+
+
+
+ a| 
+Risorsa
+ a| 
+NO
+ a| 
+NO
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+NO
+
+
+
+ a| 
+Installazione/disinstallazione del plug-in
+ a| 
+NO
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+
+
+
+ a| 
+Migrazione
+ a| 
+NO
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+
+
+
+ a| 
+Montare
+ a| 
+SÌ
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+
+
+
+ a| 
+Smonta
+ a| 
+SÌ
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+
+
+
+ a| 
+Ripristino del volume completo
+ a| 
+NO
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+
+
+
+ a| 
+Protezione secondaria
+ a| 
+NO
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+
+
+
+ a| 
+Monitoraggio del lavoro
+ a| 
+SÌ
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+
+|===
+
+
+=== Ruolo di amministratore dell'infrastruttura
+
+Il ruolo di amministratore dell'infrastruttura dispone di autorizzazioni abilitate per la gestione dell'host, la gestione dell'archiviazione, il provisioning, i gruppi di risorse, i report di installazione remota e l'accesso alla dashboard.
+
+|===
+| Permessi | Abilitato | Creare | Leggere | Aggiornamento | Eliminare 
+
+
+ a| 
+Gruppo di risorse
+ a| 
+Non applicabile
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+
+
+
+ a| 
+Politica
+ a| 
+Non applicabile
+ a| 
+NO
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+
+
+
+ a| 
+Backup
+ a| 
+Non applicabile
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+
+
+
+ a| 
+Ospite
+ a| 
+Non applicabile
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+
+
+
+ a| 
+Connessione di archiviazione
+ a| 
+Non applicabile
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+
+
+
+ a| 
+Clone
+ a| 
+Non applicabile
+ a| 
+NO
+ a| 
+SÌ
+ a| 
+NO
+ a| 
+NO
+
+
+
+ a| 
+Disposizione
+ a| 
+Non applicabile
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+
+
+
+ a| 
+Pannello di controllo
+ a| 
+SÌ
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+
+
+
+ a| 
+Rapporti
+ a| 
+SÌ
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+
+
+
+ a| 
+Ripristinare
+ a| 
+SÌ
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+
+
+
+ a| 
+Risorsa
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+
+
+
+ a| 
+Installazione/disinstallazione del plug-in
+ a| 
+SÌ
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+
+
+
+ a| 
+Migrazione
+ a| 
+NO
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+
+
+
+ a| 
+Montare
+ a| 
+NO
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+
+
+
+ a| 
+Smonta
+ a| 
+NO
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+
+
+
+ a| 
+Ripristino del volume completo
+ a| 
+NO
+ a| 
+NO
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+
+
+
+ a| 
+Protezione secondaria
+ a| 
+NO
+ a| 
+NO
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+
+
+
+ a| 
+Monitoraggio del lavoro
+ a| 
+SÌ
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+ a| 
+Non applicabile
+
+|===

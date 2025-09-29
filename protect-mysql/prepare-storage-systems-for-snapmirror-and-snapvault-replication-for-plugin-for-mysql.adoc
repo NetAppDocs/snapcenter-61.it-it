@@ -1,0 +1,26 @@
+---
+permalink: protect-mysql/prepare-storage-systems-for-snapmirror-and-snapvault-replication-for-plugin-for-mysql.html 
+sidebar: sidebar 
+keywords: snapmirror, snapvault, storage system, replication 
+summary: È possibile utilizzare un plug-in SnapCenter con le tecnologie ONTAP SnapMirror e SnapVault 
+---
+= Preparare i sistemi di archiviazione per la replica SnapMirror e SnapVault per MySQL
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile utilizzare un plug-in SnapCenter con la tecnologia ONTAP SnapMirror per creare copie mirror di set di backup su un altro volume e con la tecnologia ONTAP SnapVault per eseguire la replicazione del backup da disco a disco per la conformità agli standard e altri scopi correlati alla governance.  Prima di eseguire queste attività, è necessario configurare una relazione di protezione dei dati tra i volumi di origine e di destinazione e inizializzare la relazione.
+
+SnapCenter esegue gli aggiornamenti a SnapMirror e SnapVault dopo aver completato l'operazione Snapshot. Gli aggiornamenti SnapMirror e SnapVault vengono eseguiti come parte del processo SnapCenter ; non creare una pianificazione ONTAP separata.
+
+
+NOTE: Se si SnapCenter da un prodotto NetApp SnapManager e si è soddisfatti delle relazioni di protezione dei dati configurate, è possibile saltare questa sezione.
+
+Una relazione di protezione dei dati replica i dati dall'archivio primario (il volume di origine) all'archivio secondario (il volume di destinazione).  Quando si inizializza la relazione, ONTAP trasferisce i blocchi di dati a cui si fa riferimento sul volume di origine al volume di destinazione.
+
+
+NOTE: SnapCenter non supporta relazioni a cascata tra volumi SnapMirror e SnapVault (*Primario* > *Mirror* > *Vault*).  Dovresti usare relazioni fanout.
+
+SnapCenter supporta la gestione delle relazioni SnapMirror flessibili in base alla versione.  Per i dettagli sulle relazioni SnapMirror flessibili in base alla versione e su come impostarle, vedere http://docs.netapp.com/ontap-9/index.jsp?topic=%2Fcom.netapp.doc.ic-base%2Fresources%2Fhome.html["Documentazione ONTAP"^] .

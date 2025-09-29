@@ -1,0 +1,56 @@
+---
+permalink: protect-sce/task_reseed_a_passive_exchange_node_replica.html 
+sidebar: sidebar 
+keywords:  
+summary: 'Se è necessario effettuare il reseeding di una copia replica, ad esempio quando una copia è danneggiata, è possibile effettuare il reseeding all"ultimo backup utilizzando la funzionalità di reseeding in SnapCenter.' 
+---
+= Reinizializzare una replica di un nodo Exchange passivo
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Se è necessario effettuare il reseeding di una copia replica, ad esempio quando una copia è danneggiata, è possibile effettuare il reseeding all'ultimo backup utilizzando la funzionalità di reseeding in SnapCenter.
+
+.Prima di iniziare
+È necessario aver creato un backup del database di cui si desidera effettuare il reinizializzazione.
+
++ Per evitare ritardi tra i nodi, è possibile creare un nuovo backup prima di eseguire un'operazione di reseeding oppure scegliere l'host con il backup più recente.
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare *Plug-in di Microsoft Exchange Server* dall'elenco.
+. Nella pagina Risorse, seleziona l'opzione appropriata dall'elenco Visualizza:
++
+|===
+| Opzione | Descrizione 
+
+
+ a| 
+Per effettuare il reseeding di un singolo database
+ a| 
+Selezionare *Database* dall'elenco Visualizza.
+
+
+
+ a| 
+Per effettuare il reseeding dei database in un DAG
+ a| 
+Selezionare *Gruppo di disponibilità del database* dall'elenco Visualizza.
+
+|===
+. Seleziona la risorsa che vuoi riseminare.
+. Nella pagina Gestisci copie, fare clic su *Reseed*.
+. Dall'elenco delle copie di database non integre nella procedura guidata Reseed, seleziona quella di cui vuoi effettuare il reseeding, quindi fai clic su *Avanti*.
+. Nella finestra Host, seleziona l'host con il backup da cui vuoi effettuare il reseeding, quindi fai clic su *Avanti*.
+. Nella pagina Notifica, dall'elenco a discesa *Preferenza e-mail*, seleziona gli scenari in cui desideri inviare le e-mail.
++
+È necessario specificare anche gli indirizzi email del mittente e del destinatario, nonché l'oggetto dell'email.
+
+. Rivedi il riepilogo e poi clicca su *Fine*.
+. È possibile visualizzare lo stato del lavoro espandendo il pannello Attività nella parte inferiore della pagina.
++
+
+NOTE: L'operazione di reseeding non è supportata se la copia passiva del database risiede su uno storage non NetApp .
+
+

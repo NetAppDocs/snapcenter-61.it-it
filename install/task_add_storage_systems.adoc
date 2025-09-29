@@ -1,0 +1,140 @@
+---
+permalink: install/task_add_storage_systems.html 
+sidebar: sidebar 
+keywords: add, storage system, SVM, ASA r2 systems 
+summary: 'È necessario configurare il sistema di archiviazione che consente a SnapCenter di accedere all"archiviazione ONTAP per eseguire operazioni di protezione e provisioning dei dati.  È possibile aggiungere una SVM autonoma oppure un cluster composto da più SVM.' 
+---
+= Aggiungere sistemi di archiviazione
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È necessario configurare il sistema di archiviazione che consente a SnapCenter di accedere all'archiviazione ONTAP , ai sistemi ASA r2 o Amazon FSx for NetApp ONTAP per eseguire operazioni di protezione dei dati e provisioning.
+
+È possibile aggiungere una SVM autonoma oppure un cluster composto da più SVM.  Se si utilizza Amazon FSx for NetApp ONTAP, è possibile aggiungere un LIF di amministrazione FSx composto da più SVM utilizzando l'account fsxadmin oppure aggiungere un SVM FSx in SnapCenter.
+
+.Prima di iniziare
+* Per creare connessioni di archiviazione è necessario disporre delle autorizzazioni necessarie nel ruolo di amministratore dell'infrastruttura.
+* È necessario assicurarsi che non siano in corso installazioni di plug-in.
++
+Le installazioni di plug-in host non devono essere in corso durante l'aggiunta di una connessione al sistema di storage, poiché la cache host potrebbe non essere aggiornata e lo stato dei database potrebbe essere visualizzato nell'interfaccia utente grafica SnapCenter come "`Non disponibile per il backup`" o "`Non su storage NetApp ".
+
+* I nomi dei sistemi di archiviazione devono essere univoci.
++
+SnapCenter non supporta più sistemi di archiviazione con lo stesso nome su cluster diversi.  Ogni sistema di archiviazione supportato da SnapCenter deve avere un nome univoco e un indirizzo IP LIF dati univoco.
+
+
+
+*Informazioni su questo compito*
+
+* Quando si configurano i sistemi di archiviazione, è anche possibile abilitare le funzionalità Event Management System (EMS) e AutoSupport .  Lo strumento AutoSupport raccoglie dati sullo stato del sistema e li invia automaticamente al supporto tecnico NetApp , consentendogli di risolvere i problemi del sistema.
++
+Se si abilitano queste funzionalità, SnapCenter invia informazioni AutoSupport al sistema di archiviazione e messaggi EMS al syslog del sistema di archiviazione quando una risorsa è protetta, un'operazione di ripristino o clonazione viene completata correttamente o un'operazione non riesce.
+
+* Se si prevede di replicare gli snapshot su una destinazione SnapMirror o SnapVault , è necessario configurare le connessioni del sistema di archiviazione per l'SVM o il cluster di destinazione, nonché per l'SVM o il cluster di origine.
+
+
+
+NOTE: Se si modifica la password del sistema di archiviazione, i processi pianificati, i backup su richiesta e le operazioni di ripristino potrebbero non riuscire.  Dopo aver modificato la password del sistema di archiviazione, è possibile aggiornarla facendo clic su *Modifica* nella scheda Archiviazione.
+
+*Passi*
+
+. Nel riquadro di navigazione a sinistra, fare clic su *Sistemi di archiviazione*.
+. Nella pagina Sistemi di archiviazione, fare clic su *Nuovo*.
+. Nella pagina Aggiungi sistema di archiviazione, fornire le seguenti informazioni:
++
+|===
+| Per questo campo... | Fai questo... 
+
+
+ a| 
+Sistema di archiviazione
+ a| 
+Immettere il nome del sistema di archiviazione o l'indirizzo IP.
+
+
+NOTE: I nomi dei sistemi di archiviazione, escluso il nome di dominio, devono contenere al massimo 15 caratteri e devono essere risolvibili.  Per creare connessioni al sistema di archiviazione con nomi composti da più di 15 caratteri, è possibile utilizzare il cmdlet Add-SmStorageConnectionPowerShell.
+
+
+NOTE: Per i sistemi di storage con configurazione MetroCluster (MCC), si consiglia di registrare sia i cluster locali che quelli peer per operazioni non disruptive.
+
+SnapCenter non supporta più SVM con lo stesso nome su cluster diversi.  Ogni SVM supportato da SnapCenter deve avere un nome univoco.
+
+
+NOTE: Dopo aver aggiunto la connessione di archiviazione a SnapCenter, non dovresti rinominare l'SVM o il Cluster utilizzando ONTAP.
+
+
+NOTE: Se SVM viene aggiunto con un nome breve o FQDN, deve essere risolvibile sia da SnapCenter che dall'host del plug-in.
+
+
+
+ a| 
+Nome utente/Password
+ a| 
+Immettere le credenziali dell'utente di archiviazione che dispone dei privilegi richiesti per accedere al sistema di archiviazione.
+
+
+
+ a| 
+Impostazioni del sistema di gestione degli eventi (EMS) e AutoSupport
+ a| 
+Se si desidera inviare messaggi EMS al syslog del sistema di archiviazione o se si desidera che i messaggi AutoSupport vengano inviati al sistema di archiviazione per la protezione applicata, le operazioni di ripristino completate o le operazioni non riuscite, selezionare la casella di controllo appropriata.
+
+Quando si seleziona la casella di controllo *Invia notifica AutoSupport per operazioni non riuscite al sistema di archiviazione*, viene selezionata anche la casella di controllo *Registra eventi del server SnapCenter su syslog* perché è necessaria la messaggistica EMS per abilitare le notifiche AutoSupport .
+
+|===
+. Fare clic su *Altre opzioni* se si desidera modificare i valori predefiniti assegnati a piattaforma, protocollo, porta e timeout.
++
+.. In Piattaforma, seleziona una delle opzioni dall'elenco a discesa.
++
+Se l'SVM è il sistema di archiviazione secondario in una relazione di backup, selezionare la casella di controllo *Secondario*.  Quando si seleziona l'opzione *Secondaria*, SnapCenter non esegue immediatamente un controllo della licenza.
+
++
+Se hai aggiunto SVM in SnapCenter , l'utente dovrà selezionare manualmente il tipo di piattaforma dal menu a discesa.
+
+.. In Protocollo, seleziona il protocollo configurato durante la configurazione di SVM o Cluster, in genere HTTPS.
+.. Immettere la porta accettata dal sistema di archiviazione.
++
+In genere funziona la porta predefinita 443.
+
+.. Inserire il tempo in secondi che deve trascorrere prima che i tentativi di comunicazione vengano interrotti.
++
+Il valore predefinito è 60 secondi.
+
+.. Se l'SVM dispone di più interfacce di gestione, selezionare la casella di controllo *IP preferito*, quindi immettere l'indirizzo IP preferito per le connessioni SVM.
+.. Fare clic su *Salva*.
+
+
+. Fare clic su *Invia*.
+
+
+*Risultato*
+
+Nella pagina Sistemi di archiviazione, dal menu a discesa *Tipo*, eseguire una delle seguenti azioni:
+
+* Selezionare * ONTAP SVM* se si desidera visualizzare tutti gli SVM aggiunti.
++
+Se hai aggiunto SVM FSx, questi vengono elencati qui.
+
+* Selezionare *Cluster ONTAP * se si desidera visualizzare tutti i cluster aggiunti.
++
+Se hai aggiunto cluster FSx utilizzando fsxadmin, i cluster FSx sono elencati qui.
+
++
+Facendo clic sul nome del cluster, tutte le SVM che ne fanno parte vengono visualizzate nella sezione Macchine virtuali di archiviazione.
+
++
+Se si aggiunge un nuovo SVM al cluster ONTAP tramite l'interfaccia utente grafica ONTAP , fare clic su *Riscopri* per visualizzare il nuovo SVM aggiunto.
+
+
+
+*Dopo aver finito*
+
+Un amministratore del cluster deve abilitare AutoSupport su ciascun nodo del sistema di archiviazione per inviare notifiche e-mail da tutti i sistemi di archiviazione a cui SnapCenter ha accesso, eseguendo il seguente comando dalla riga di comando del sistema di archiviazione:
+
+`autosupport trigger modify -node nodename -autosupport-message client.app.info -to enable -noteto enable`
+
+
+NOTE: L'amministratore della macchina virtuale di archiviazione (SVM) non ha accesso ad AutoSupport.

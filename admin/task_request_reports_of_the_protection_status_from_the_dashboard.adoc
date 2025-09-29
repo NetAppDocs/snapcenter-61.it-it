@@ -1,0 +1,35 @@
+---
+permalink: admin/task_request_reports_of_the_protection_status_from_the_dashboard.html 
+sidebar: sidebar 
+keywords: dashboard 
+summary: È possibile richiedere i dettagli sulla protezione per le risorse gestite da plug-in specifici tramite la Dashboard. 
+---
+= Richiedi report sullo stato della protezione dalla dashboard
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile richiedere i dettagli sulla protezione per le risorse gestite da plug-in specifici tramite la Dashboard.  Per il riepilogo della protezione dei dati vengono presi in considerazione solo i backup dei dati.
+
+*Passi*
+
+. Nel riquadro di navigazione a sinistra, fare clic su *Dashboard*.
+. Individua il riquadro Riepilogo protezione più recente nella Dashboard e utilizza il menu a discesa per selezionare un plug-in.
++
+La Dashboard visualizza un grafico a ciambella per le risorse sottoposte a backup nell'archiviazione primaria e, se applicabile al plug-in, un grafico a ciambella per le risorse sottoposte a backup nell'archiviazione secondaria.
+
++
+
+NOTE: I report sulla protezione dei dati sono disponibili solo per specifici tipi di plug-in.  La specifica di *Tutti i plug-in* non è supportata.
+
+. Fare clic sulla fetta di ciambella che rappresenta lo stato per il quale si desidera un report.
++
+Quando fai clic sul grafico a ciambella, verrai reindirizzato dalla pagina Dashboard ai Report e quindi alla pagina Plug-in.  Il report visualizza solo lo stato del plug-in selezionato.  Puoi consultare il report o scaricarlo sul tuo sistema locale.
+
++
+
+NOTE: Il reindirizzamento alla pagina Report per il grafico a ciambella SnapMirror e il backup SAP HANA basato su file non è supportato.
+
+

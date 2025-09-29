@@ -1,0 +1,67 @@
+---
+permalink: protect-mysql/view-mysql-database-backups-and-clones-in-the-topology-page.html 
+sidebar: sidebar 
+keywords: SnapCenter Plug-in for mysql 
+summary: Quando ci si prepara a eseguire il backup o la clonazione di una risorsa, potrebbe essere utile visualizzare una rappresentazione grafica di tutti i backup e i cloni sullo storage primario e secondario. 
+---
+= Visualizza i backup e i cloni di MySQL nella pagina Topologia
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Quando ci si prepara a eseguire il backup o la clonazione di una risorsa, potrebbe essere utile visualizzare una rappresentazione grafica di tutti i backup e i cloni sullo storage primario e secondario.
+
+.Informazioni su questo compito
+È possibile esaminare le seguenti icone nella vista Gestisci copie per determinare se i backup e i cloni sono disponibili nell'archivio primario o secondario (copie mirror o copie Vault).
+
+* image:../media/topology_primary_storage.gif["icona di archiviazione primaria"]visualizza il numero di backup e cloni disponibili sullo storage primario.
+* image:../media/topology_mirror_secondary_storage.gif["Icona Mirror di archiviazione secondaria"]visualizza il numero di backup e cloni di cui è stato eseguito il mirroring sullo storage secondario mediante la tecnologia SnapMirror .
+* image:../media/topology_vault_secondary_storage.gif["icona del caveau secondario"]visualizza il numero di backup e cloni replicati sullo storage secondario mediante la tecnologia SnapVault .
++
+
+NOTE: Il numero di backup visualizzato include i backup eliminati dall'archivio secondario.  Ad esempio, se hai creato 6 backup utilizzando un criterio per conservarne solo 4, il numero di backup visualizzato è 6.
+
+
+
+
+NOTE: I cloni di un backup di un mirror con versione flessibile su un volume di tipo mirror-vault vengono visualizzati nella vista topologia, ma il conteggio dei backup mirror nella vista topologia non include il backup con versione flessibile.
+
+Nella pagina Topologia è possibile visualizzare tutti i backup e i cloni disponibili per la risorsa o il gruppo di risorse selezionato.  È possibile visualizzare i dettagli di tali backup e cloni e quindi selezionarli per eseguire operazioni di protezione dei dati.
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in appropriato dall'elenco.
+. Nella pagina Risorse, seleziona la risorsa o il gruppo di risorse dall'elenco a discesa *Visualizza*.
+. Selezionare la risorsa dalla vista dei dettagli della risorsa o dalla vista dei dettagli del gruppo di risorse.
++
+Se la risorsa è protetta, viene visualizzata la pagina della topologia della risorsa selezionata.
+
+. Consultare la *scheda Riepilogo* per visualizzare un riepilogo del numero di backup e cloni disponibili sullo storage primario e secondario.
++
+La sezione *Scheda riepilogativa* mostra il numero totale di backup basati su copie snapshot e cloni.
+
++
+Facendo clic sul pulsante *Aggiorna* viene avviata una query dello spazio di archiviazione per visualizzare un conteggio accurato.
+
++
+Se viene eseguito un backup abilitato per SnapLock , facendo clic sul pulsante *Aggiorna* vengono aggiornati i tempi di scadenza SnapLock primario e secondario recuperati da ONTAP.  Una pianificazione settimanale aggiorna anche il tempo di scadenza primario e secondario SnapLock recuperato da ONTAP.
+
++
+Quando la risorsa dell'applicazione è distribuita su più volumi, il tempo di scadenza SnapLock per il backup sarà il tempo di scadenza SnapLock più lungo impostato per uno Snapshot in un volume.  Il tempo di scadenza SnapLock più lungo viene recuperato da ONTAP.
+
++
+Dopo il backup su richiesta, facendo clic sul pulsante *Aggiorna* si aggiornano i dettagli del backup o del clone.
+
+. Nella vista Gestisci copie, fare clic su *Backup* o *Cloni* dall'archivio primario o secondario per visualizzare i dettagli di un backup o di un clone.
++
+I dettagli dei backup e dei cloni vengono visualizzati in formato tabella.
+
+. Selezionare il backup dalla tabella, quindi fare clic sulle icone di protezione dei dati per eseguire operazioni di ripristino, clonazione ed eliminazione.
++
+
+NOTE: Non è possibile rinominare o eliminare i backup presenti nell'archivio secondario.
+
+. Se si desidera eliminare un clone, selezionare il clone dalla tabella, quindi fare clic suimage:../media/delete_icon.gif["Elimina icona"] .
+. Se vuoi dividere un clone, seleziona il clone dalla tabella, quindi fai clic suimage:../media/split_clone.gif["Icona di divisione del clone"] .
+

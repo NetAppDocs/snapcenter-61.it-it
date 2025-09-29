@@ -1,0 +1,34 @@
+---
+permalink: protect-sco/task_restore_and_recover_oracle_databases_using_unix_commands.html 
+sidebar: sidebar 
+keywords: restore, recover, CLI 
+summary: 'Il flusso di lavoro di ripristino e recupero include la pianificazione, l"esecuzione delle operazioni di ripristino e recupero e il monitoraggio delle operazioni.' 
+---
+= Ripristinare e recuperare i database Oracle utilizzando i comandi UNIX
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Il flusso di lavoro di ripristino e recupero include la pianificazione, l'esecuzione delle operazioni di ripristino e recupero e il monitoraggio delle operazioni.
+
+*Informazioni su questo compito*
+
+* È necessario eseguire i seguenti comandi per stabilire la connessione con SnapCenter Server, elencare i backup e recuperarne le informazioni, quindi ripristinare il backup.
++
+Le informazioni riguardanti i parametri che possono essere utilizzati con il comando e le relative descrizioni possono essere ottenute eseguendo Get-Help _command_name_. In alternativa, puoi anche fare riferimento a https://library.netapp.com/ecm/ecm_download_file/ECMLP3337666["Guida di riferimento ai comandi del software SnapCenter"^] .
+
+* Per l'operazione di ripristino di SnapMirror ActiveSync, è necessario selezionare il backup dalla posizione principale.
+
+
+*Passi*
+
+. Avvia una sessione di connessione con il server SnapCenter per un utente specificato: _Open-SmConnection_
+. Recupera le informazioni sui backup che desideri ripristinare: _Get-SmBackup_
+. Recupera le informazioni dettagliate sul backup specificato: _Get-SmBackupDetails_
++
+Questo comando recupera le informazioni dettagliate sul backup di una risorsa specificata con un dato ID di backup.  Le informazioni includono il nome del database, la versione, l'home, l'SCN iniziale e finale, gli spazi tabella, i database collegabili e i relativi spazi tabella.
+
+. Ripristina i dati dal backup: _Restore-SmBackup_
+

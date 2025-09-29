@@ -1,0 +1,41 @@
+---
+permalink: protect-azure/create-backup-policies-oracle.html 
+sidebar: sidebar 
+keywords: create policies, Oracle, backup policies 
+summary: Creare un criterio di backup per la risorsa o il gruppo di risorse di cui si desidera eseguire il backup. 
+---
+= Creare policy di backup per i database Oracle
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Prima di utilizzare SnapCenter per eseguire il backup delle risorse del database Oracle, è necessario creare un criterio di backup per la risorsa o il gruppo di risorse di cui si desidera eseguire il backup.
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Impostazioni*.
+. Nella pagina Impostazioni, fare clic su *Criteri*.
+. Selezionare Oracle Database dall'elenco a discesa.
+. Fare clic su *Nuovo*.
+. Nella pagina Nome, immettere il nome e la descrizione della policy.
+. Nella pagina Tipo di policy, procedere come segue:
++
+.. Selezionare * Azure NetApp Files* come tipo di archiviazione.
+.. Selezionare il tipo di backup, ovvero backup online o offline.
+.. Se si desidera catalogare il backup utilizzando Oracle Recovery Manager (RMAN), selezionare *Catalog backup with Oracle Recovery Manager (RMAN)*.
+.. Se si desidera eliminare i log di archivio dopo il backup, selezionare *Elimina log di archivio dopo il backup*.
+.. Specificare le impostazioni del registro di eliminazione dell'archivio.
+
+
+. Nella pagina Snapshot e backup, procedere come segue:
++
+.. Selezionare la frequenza del backup pianificato.
+.. Specificare le impostazioni di conservazione.
+.. Se si desidera abilitare il backup Azure NetApp Files , selezionare *Abilita backup* e specificare le impostazioni di conservazione.
+
+
+. Nella pagina Script, immettere il percorso e gli argomenti del prescript o del postscript che si desidera eseguire rispettivamente prima o dopo l'operazione di backup.
+. Nella pagina Verifica, seleziona la pianificazione del backup per cui desideri eseguire l'operazione di verifica e immetti il percorso e gli argomenti del prescript o del postscript che desideri eseguire rispettivamente prima o dopo l'operazione di verifica.
+. Rivedi il riepilogo e clicca su *Fine*.
+

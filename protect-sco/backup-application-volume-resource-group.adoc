@@ -1,0 +1,44 @@
+---
+permalink: protect-sco/backup-application-volume-resource-group.html 
+sidebar: sidebar 
+keywords: application volume, resource group, back up, database 
+summary: È possibile eseguire il backup del gruppo di risorse contenente solo volumi di applicazioni o una combinazione di volumi di applicazioni e database. 
+---
+= Eseguire il backup del gruppo di risorse dei volumi dell'applicazione
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile eseguire il backup del gruppo di risorse contenente solo volumi di applicazioni o una combinazione di volumi di applicazioni e database.  Un'operazione di backup sul gruppo di risorse viene eseguita su tutte le risorse definite nel gruppo di risorse.
+
+Se il gruppo di risorse ha più volumi applicativi, tutti i volumi applicativi devono avere un criterio di replica SnapMirror o SnapVault .
+
+*Informazioni su questo compito*
+
+Per impostazione predefinita, vengono creati backup di gruppi di coerenza (CG).  Se si desidera creare backup basati su volumi, è necessario impostare il valore di *EnableOracleNdvVolumeBasedBackup* su true nel file _web.config_.
+
+*Passi*
+
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in Oracle Database dall'elenco.
+. Nella pagina Risorse, seleziona *Gruppo di risorse* dall'elenco *Visualizza*.
++
+È possibile cercare il gruppo di risorse inserendo il nome del gruppo di risorse nella casella di ricerca oppure facendo clic su *image:../media/filter_icon.gif["icona del filtro"] *, quindi selezionando il tag.  Puoi quindi cliccare su *image:../media/filter_icon.gif["icona del filtro"] * per chiudere il riquadro del filtro.
+
+. Nella pagina Gruppi di risorse, seleziona il gruppo di risorse di cui vuoi eseguire il backup, quindi fai clic su *Esegui backup ora*.
+. Nella pagina Backup, procedere come segue:
++
+.. Se hai associato più policy al gruppo di risorse, dall'elenco a discesa *Policy* seleziona la policy che desideri utilizzare per il backup.
++
+Se il criterio selezionato per il backup su richiesta è associato a una pianificazione di backup, i backup su richiesta verranno conservati in base alle impostazioni di conservazione specificate per il tipo di pianificazione.
+
+.. Fare clic su *Backup*.
+
+
+. Monitorare l'avanzamento dell'operazione cliccando su *Monitoraggio* > *Lavori*.
++
+
+NOTE: L'operazione di verifica verrà eseguita solo per i database e non per i volumi dell'applicazione.
+
+

@@ -1,0 +1,52 @@
+---
+permalink: upgrade/upgrade_snapcenter_server_linux.html 
+sidebar: sidebar 
+keywords: upgrade, upgrade snapcenter server, linux 
+summary: È possibile utilizzare il file di installazione di SnapCenter Server per aggiornare SnapCenter Server. 
+---
+= Aggiornare il server SnapCenter sull'host Linux
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile utilizzare il file di installazione di SnapCenter Server per aggiornare SnapCenter Server.
+
+*Passi*
+
+. Eseguire una delle azioni per aggiornare SnapCenter Server.
++
+|===
+| Se vuoi esibirti... | Fai questo... 
+
+
+ a| 
+Aggiornamento non interattivo
+ a| 
+`sudo ./snapcenter-linux-server-(el8/el9/sles15).bin -i silent -DUPGRADE=<value> -DINSTALL_LOG_NAME=<filename>`
+
+Esempio: sudo ./snapcenter_linux_server.bin -i silent -DUPGRADE=1 -DINSTALL_LOG_NAME=InstallerLog.log
+
+I registri verranno archiviati in _/var/opt/snapcenter/logs_.
+
+Parametri da passare per l'aggiornamento:
+
+** DINSTALL_LOG_NAME: Nome del file di registro in cui verranno archiviati i registri di installazione.
+** DUPGRADE: Il valore predefinito è 0.  Specificare questo parametro e il suo valore come un numero intero diverso da 0 per aggiornare SnapCenter Server.
+
+
+
+
+ a| 
+Installazione interattiva
+ a| 
+`./snapcenter-linux-server-(el8/el9/sles15).bin`
+
+Ti verrà chiesto di confermare l'aggiornamento.  Immettere un valore diverso da 0 per confermare l'aggiornamento di SnapCenter Server.
+
+|===
+
+
+
+NOTE: Dovresti disconnetterti e poi accedere a SnapCenter oppure chiudere e poi aprire un nuovo browser per accedere all'interfaccia utente grafica SnapCenter .

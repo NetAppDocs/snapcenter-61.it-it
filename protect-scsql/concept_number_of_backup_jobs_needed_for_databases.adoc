@@ -1,0 +1,16 @@
+---
+permalink: protect-scsql/concept_number_of_backup_jobs_needed_for_databases.html 
+sidebar: sidebar 
+keywords: Number of backup jobs 
+summary: 'I fattori che determinano il numero di processi di backup necessari includono le dimensioni del database, il numero di volumi utilizzati, la frequenza di modifica del database e il contratto di servizio (SLA).' 
+---
+= Numero di processi di backup necessari per i database
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+I fattori che determinano il numero di processi di backup necessari includono le dimensioni del database, il numero di volumi utilizzati, la frequenza di modifica del database e il contratto di servizio (SLA).
+
+Per i backup del database, il numero di processi di backup scelti dipende in genere dal numero di volumi su cui sono posizionati i database.  Ad esempio, se si posiziona un gruppo di database di piccole dimensioni su un volume e un database di grandi dimensioni su un altro volume, è possibile creare un processo di backup per i database di piccole dimensioni e un processo di backup per il database di grandi dimensioni.

@@ -1,0 +1,16 @@
+---
+permalink: protect-hana/concept_housekeeping_of_log_backups.html 
+sidebar: sidebar 
+keywords: SnapCenter Plug-in for SAP HANA Database 
+summary: 'SnapCenter gestisce la manutenzione dei backup dei registri e dei dati a livello di sistema di archiviazione e file system e all"interno del catalogo di backup SAP HANA.' 
+---
+= Come SnapCenter gestisce la manutenzione dei backup dei registri e dei dati
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+SnapCenter gestisce la manutenzione dei backup dei registri e dei dati a livello di sistema di archiviazione e file system e all'interno del catalogo di backup SAP HANA.
+
+Gli snapshot sullo storage primario o secondario e le voci corrispondenti nel catalogo SAP HANA vengono eliminati in base alle impostazioni di conservazione.  Anche le voci del catalogo SAP HANA vengono eliminate durante il backup e l'eliminazione del gruppo di risorse.

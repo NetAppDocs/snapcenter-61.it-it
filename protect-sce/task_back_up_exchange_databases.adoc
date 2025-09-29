@@ -1,0 +1,223 @@
+---
+permalink: protect-sce/task_back_up_exchange_databases.html 
+sidebar: sidebar 
+keywords: SnapCenter plug-in for Exchange Server 
+summary: Se un database non fa parte di alcun gruppo di risorse, è possibile eseguire il backup del database o del gruppo di disponibilità del database dalla pagina Risorse. 
+---
+= Eseguire il backup dei database di Exchange
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Se un database non fa parte di alcun gruppo di risorse, è possibile eseguire il backup del database o del gruppo di disponibilità del database dalla pagina Risorse.
+
+.Prima di iniziare
+* Devi aver creato una policy di backup.
+* È necessario aver assegnato l'aggregato utilizzato dall'operazione di backup all'SVM utilizzato dal database.
+* Se si desidera eseguire il backup di una risorsa che ha una relazione SnapMirror con un archivio secondario, il ruolo assegnato all'utente dell'archivio deve includere il privilegio "`snapmirror all`".  Tuttavia, se si utilizza il ruolo "`vsadmin`", il privilegio "`snapmirror all`" non è richiesto.
+* Se si desidera eseguire il backup di un database o di un gruppo di disponibilità del database che dispone di una copia del database attiva/passiva su uno storage NetApp e non NetApp e si è selezionata l'opzione *Esegui backup copie attive* o *Esegui backup copie sui server da selezionare durante la creazione del processo di backup* nella policy, i processi di backup entreranno in stato di avviso.  Il backup avrà esito positivo per la copia del database attivo/passivo su storage NetApp , mentre non avrà esito positivo per la copia del database attivo/passivo su storage non NetApp .
++
+|===
+
+
+| *Migliore pratica:* non eseguire backup di database attivi e passivi contemporaneamente.  Potrebbe verificarsi una condizione di competizione e uno dei backup potrebbe non riuscire. 
+|===
+
+
+[role="tabbed-block"]
+====
+.Interfaccia utente SnapCenter
+--
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il *plug-in di Microsoft Exchange Server* dall'elenco.
+. Nella pagina Risorse, seleziona *Database* o *Gruppo di disponibilità del database* dall'elenco *Visualizza*.
++
+Nella pagina Risorse, ilimage:../media/not_supported_icon.gif["icona non supportata"] L'icona indica che il database si trova su un archivio non NetApp .
+
++
+
+NOTE: In un DAG, se una copia attiva del database si trova su uno storage non NetApp e almeno una copia passiva del database risiede su uno storage NetApp , è possibile proteggere il database.
+
++
+Clicca *image:../media/filter_icon.gif["icona del filtro"] *, quindi selezionare il nome host e il tipo di database per filtrare le risorse.  Puoi quindi cliccare su *image:../media/filter_icon.gif["icona del filtro"] * per chiudere il riquadro del filtro.
+
++
+** Se si desidera eseguire il backup di un database, fare clic sul nome del database.
++
+... Se è visualizzata la vista Topologia, fare clic su *Proteggi*.
+... Se viene visualizzata la procedura guidata Database - Proteggi risorsa, procedere al passaggio 3.
+
+
+** Se si desidera eseguire il backup di un gruppo di disponibilità del database, fare clic sul nome del gruppo di disponibilità del database.
+
+
+. Se si desidera specificare un nome Snapshot personalizzato, nella pagina Risorse selezionare la casella di controllo *Usa formato nome personalizzato per copia Snapshot*, quindi immettere un formato nome personalizzato che si desidera utilizzare per il nome Snapshot.
++
+Ad esempio, _customtext_policy_hostname_ o _resource_hostname_.  Per impostazione predefinita, al nome dello snapshot viene aggiunto un timestamp.
+
+. Nella pagina Criteri, procedere come segue:
++
+.. Selezionare una o più policy dall'elenco a discesa.
++
+
+NOTE: Puoi anche creare una policy cliccando *image:../media/add_policy_from_resourcegroup.gif["aggiungi gruppo di risorse del modulo di policy"] *.
+
++
+
+NOTE: Se un criterio contiene l'opzione *Esegui copie di backup sui server da selezionare al momento della creazione del processo di backup*, viene visualizzata un'opzione di selezione del server per selezionare uno o più server.  L'opzione di selezione del server elencherà solo il server in cui si trova il database selezionato su uno storage NetApp .
+
+
+
++
+Nella sezione Configura pianificazioni per policy selezionate vengono elencate le policy selezionate.
+
++
+.. Clicca *image:../media/add_policy_from_resourcegroup.gif["aggiungi gruppo di risorse del modulo di policy"] * nella colonna Configura pianificazioni per il criterio per il quale si desidera configurare una pianificazione.
+.. Nella finestra Aggiungi pianificazioni per il criterio _nome_criterio_, configura la pianificazione, quindi fai clic su *OK*.
++
+Dove _policy_name_ è il nome della policy selezionata.
+
++
+Le pianificazioni configurate sono elencate nella colonna Pianificazioni applicate.
+
+
+
+. Nella pagina Notifica, dall'elenco a discesa *Preferenza e-mail*, seleziona gli scenari in cui desideri inviare le e-mail.
++
+È necessario specificare anche gli indirizzi email del mittente e del destinatario, nonché l'oggetto dell'email.  Se si desidera allegare il report dell'operazione di backup eseguita sulla risorsa, selezionare *Allega report attività*.
+
++
+
+NOTE: Per la notifica tramite e-mail, è necessario aver specificato i dettagli del server SMTP tramite l'interfaccia grafica utente (GUI) o il comando PowerShell Set-SmSmtpServer.
+
+. Rivedi il riepilogo e poi clicca su *Fine*.
++
+Viene visualizzata la pagina della topologia del database.
+
+. Fare clic su *Esegui backup ora*.
+. Nella pagina Backup, procedere come segue:
++
+.. Se hai applicato più criteri alla risorsa, dall'elenco a discesa *Criterio* seleziona il criterio che desideri utilizzare per il backup.
++
+Se il criterio selezionato per il backup su richiesta è associato a una pianificazione di backup, i backup su richiesta verranno conservati in base alle impostazioni di conservazione specificate per il tipo di pianificazione.
+
+.. Fare clic su *Backup*.
+
+
+. Monitorare l'avanzamento del backup facendo doppio clic sul processo nel riquadro Attività nella parte inferiore della pagina per visualizzare la pagina Dettagli processo.
++
+** Nelle configurazioni MetroCluster , SnapCenter potrebbe non essere in grado di rilevare una relazione di protezione dopo un failover.
++
+Per informazioni, vedere: https://kb.netapp.com/Advice_and_Troubleshooting/Data_Protection_and_Security/SnapCenter/Unable_to_detect_SnapMirror_or_SnapVault_relationship_after_MetroCluster_failover["Impossibile rilevare la relazione SnapMirror o SnapVault dopo il failover MetroCluster"^]
+
+** Se si esegue il backup dei dati dell'applicazione su VMDK e la dimensione dell'heap Java per il SnapCenter Plug-in for VMware vSphere non è sufficientemente grande, il backup potrebbe non riuscire.
++
+Per aumentare la dimensione dell'heap Java, individuare il file di script _/opt/netapp/init_scripts/scvservice_.  In quello script, il comando _do_start method_ avvia il servizio plug-in SnapCenter VMware.  Aggiornare il comando come segue: _Java -jar -Xmx8192M -Xms4096M_
+
+
+
+
+
+--
+.Cmdlet di PowerShell
+--
+.Passi
+. Avvia una sessione di connessione con SnapCenter Server per un utente specificato utilizzando il cmdlet Open-SmConnection.
++
+[listing]
+----
+Open-smconnection  -SMSbaseurl  https://snapctr.demo.netapp.com:8146/
+----
++
+Viene visualizzata la richiesta di nome utente e password.
+
+. Creare un criterio di backup utilizzando il cmdlet Add-SmPolicy.
++
+Questo esempio crea un nuovo criterio di backup con un backup completo e un backup del registro di tipo Exchange:
+
++
+[listing]
+----
+C:\PS> Add-SmPolicy -PolicyName SCE_w2k12_Full_Log_bkp_Policy -PolicyType Backup -PluginPolicytype SCE -SceBackupType FullBackupAndLogBackup -BackupActiveCopies
+----
++
+Questo esempio crea un nuovo criterio di backup con un backup completo orario e un backup del registro di tipo Exchange:
+
++
+[listing]
+----
+C:\PS> Add-SmPolicy -PolicyName SCE_w2k12_Hourly_Full_Log_bkp_Policy -PolicyType Backup -PluginPolicytype SCE -SceBackupType FullBackupAndLogBackup -BackupActiveCopies -ScheduleType Hourly -RetentionSettings @{'BackupType'='DATA';'ScheduleType'='Hourly';'RetentionCount'='10'}
+----
++
+Questo esempio crea un nuovo criterio di backup per eseguire il backup solo dei registri di Exchange:
+
++
+[listing]
+----
+Add-SmPolicy -PolicyName SCE_w2k12_Log_bkp_Policy -PolicyType Backup -PluginPolicytype SCE -SceBackupType LogBackup -BackupActiveCopies
+----
+. Scopri le risorse host utilizzando il cmdlet Get-SmResources.
++
+Questo esempio rileva le risorse per il plug-in di Microsoft Exchange Server sull'host specificato:
+
++
+[listing]
+----
+C:\PS> Get-SmResources -HostName vise-f6.sddev.mycompany.com -PluginCode SCE
+----
+. Aggiungere un nuovo gruppo di risorse a SnapCenter utilizzando il cmdlet Add-SmResourceGroup.
++
+Questo esempio crea un nuovo gruppo di risorse di backup del database di Exchange Server con i criteri e le risorse specificati:
+
++
+[listing]
+----
+C:\PS> Add-SmResourceGroup -ResourceGroupName SCE_w2k12_bkp_RG -Description 'Backup ResourceGroup with Full and Log backup policy' -PluginCode SCE -Policies SCE_w2k12_Full_bkp_Policy,SCE_w2k12_Full_Log_bkp_Policy,SCE_w2k12_Log_bkp_Policy -Resources @{'Host'='sce-w2k12-exch';'Type'='Exchange Database';'Names'='sce-w2k12-exch.sceqa.com\sce-w2k12-exch_DB_1,sce-w2k12-exch.sceqa.com\sce-w2k12-exch_DB_2'}
+----
++
+Questo esempio crea un nuovo gruppo di risorse di backup del gruppo di disponibilità del database di Exchange (DAG) con i criteri e le risorse specificati:
+
++
+[listing]
+----
+Add-SmResourceGroup -ResourceGroupName SCE_w2k12_bkp_RG -Description 'Backup ResourceGroup with Full and Log backup policy' -PluginCode SCE -Policies SCE_w2k12_Full_bkp_Policy,SCE_w2k12_Full_Log_bkp_Policy,SCE_w2k12_Log_bkp_Policy -Resources @{"Host"="DAGSCE0102";"Type"="Database Availability Group";"Names"="DAGSCE0102"}
+----
+. Avviare un nuovo processo di backup utilizzando il cmdlet New-SmBackup.
++
+[listing]
+----
+C:\PS> New-SmBackup -ResourceGroupName SCE_w2k12_bkp_RG -Policy SCE_w2k12_Full_Log_bkp_Policy
+----
++
+Questo esempio crea un nuovo backup su un archivio secondario:
+
++
+[listing]
+----
+New-SMBackup -DatasetName ResourceGroup1 -Policy Secondary_Backup_Policy4
+----
+. Visualizzare lo stato del processo di backup utilizzando il cmdlet Get-SmBackupReport.
++
+Questo esempio visualizza un report riepilogativo di tutti i lavori eseguiti nella data specificata:
+
++
+[listing]
+----
+C:\PS> Get-SmJobSummaryReport -Date ?1/27/2018?
+----
++
+Questo esempio visualizza un report riepilogativo del lavoro per un ID lavoro specifico:
+
++
+[listing]
+----
+C:\PS> Get-SmJobSummaryReport -JobId 168
+----
+
+
+Le informazioni relative ai parametri che possono essere utilizzati con il cmdlet e le relative descrizioni possono essere ottenute eseguendo _Get-Help command_name_.  In alternativa, vedere https://docs.netapp.com/us-en/snapcenter-cmdlets/index.html["Guida di riferimento ai cmdlet del software SnapCenter"^] .
+
+--
+====

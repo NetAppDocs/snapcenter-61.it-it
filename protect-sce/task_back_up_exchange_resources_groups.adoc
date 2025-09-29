@@ -1,0 +1,47 @@
+---
+permalink: protect-sce/task_back_up_exchange_resources_groups.html 
+sidebar: sidebar 
+keywords: SnapCenter plug-in for Exchange Server 
+summary: Un gruppo di risorse è una raccolta di risorse su un host o un Exchange DAG e può includere un intero DAG o singoli database.  È possibile eseguire il backup dei gruppi di risorse dalla pagina Risorse. 
+---
+= Eseguire il backup dei gruppi di risorse di Exchange
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Un gruppo di risorse è una raccolta di risorse su un host o un Exchange DAG e può includere un intero DAG o singoli database.  È possibile eseguire il backup dei gruppi di risorse dalla pagina Risorse.
+
+.Prima di iniziare
+* È necessario aver creato un gruppo di risorse con un criterio associato.
+* È necessario aver assegnato l'aggregato utilizzato dall'operazione di backup alla macchina virtuale di archiviazione (SVM) utilizzata dal database.
+* Se si desidera eseguire il backup di una risorsa che ha una relazione SnapMirror con un archivio secondario, il ruolo assegnato all'utente dell'archivio deve includere il privilegio "`snapmirror all`".  Tuttavia, se si utilizza il ruolo "`vsadmin`", il privilegio "`snapmirror all`" non è richiesto.
+* Se un gruppo di risorse ha più database da host diversi, l'operazione di backup su alcuni host potrebbe iniziare in ritardo a causa di problemi di rete.  Dovresti configurare il valore di `MaxRetryForUninitializedHosts` In `web.config` utilizzando il `Set-SmConfigSettings` Cmdlet di PowerShell.
+* In un gruppo di risorse, se si include un database o un gruppo di disponibilità del database che ha una copia del database attiva/passiva su uno storage NetApp e non NetApp e si è selezionata l'opzione *Esegui backup copie attive* o *Esegui backup copie sui server da selezionare durante la creazione del processo di backup* nella policy, i processi di backup entreranno in stato di avviso.
++
+Il backup avrà esito positivo per la copia del database attivo/passivo su storage NetApp , mentre non avrà esito positivo per la copia del database attivo/passivo su storage non NetApp .
+
+
+
+.Informazioni su questo compito
+È possibile eseguire il backup di un gruppo di risorse su richiesta dalla pagina Risorse.  Se a un gruppo di risorse è associato un criterio e configurata una pianificazione, i backup vengono eseguiti automaticamente in base alla pianificazione.
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il *plug-in di Microsoft Exchange Server* dall'elenco.
+. Nella pagina Risorse, seleziona *Gruppo di risorse* dall'elenco *Visualizza*.
++
+È possibile cercare il gruppo di risorse inserendo il nome del gruppo di risorse nella casella di ricerca oppure facendo clic su *image:../media/filter_icon.gif["icona del filtro"] *, quindi selezionando il tag.  Puoi quindi cliccare su *image:../media/filter_icon.gif["icona del filtro"] * per chiudere il riquadro del filtro.
+
+. Nella pagina Gruppi di risorse, seleziona il gruppo di risorse di cui vuoi eseguire il backup, quindi fai clic su *Esegui backup ora*.
+. Nella pagina Backup, procedere come segue:
++
+.. Se hai associato più policy al gruppo di risorse, dall'elenco a discesa *Policy* seleziona la policy che desideri utilizzare per il backup.
++
+Se il criterio selezionato per il backup su richiesta è associato a una pianificazione di backup, i backup su richiesta verranno conservati in base alle impostazioni di conservazione specificate per il tipo di pianificazione.
+
+.. Fare clic su *Backup*.
+
+
+. Monitorare l'avanzamento del backup facendo doppio clic sul processo nel riquadro Attività nella parte inferiore della pagina per visualizzare la pagina Dettagli processo.
+

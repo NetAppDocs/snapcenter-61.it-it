@@ -1,0 +1,82 @@
+---
+permalink: protect-scu/view_protected_unix_file_systems_in_the_topology_page.html 
+sidebar: sidebar 
+keywords: topology, unix file systems, 
+summary: 'Quando ci si prepara a eseguire il backup, il ripristino o la clonazione di una risorsa, potrebbe essere utile visualizzare una rappresentazione grafica di tutti i backup, dei file system ripristinati e dei cloni nell"archiviazione primaria e secondaria.' 
+---
+= Visualizza i file system Unix protetti nella pagina Topologia
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Quando ci si prepara a eseguire il backup, il ripristino o la clonazione di una risorsa, potrebbe essere utile visualizzare una rappresentazione grafica di tutti i backup, dei file system ripristinati e dei cloni nell'archiviazione primaria e secondaria.
+
+*Informazioni su questo compito*
+
+Nella pagina Topologia è possibile visualizzare tutti i backup, i file system ripristinati e i cloni disponibili per la risorsa o il gruppo di risorse selezionato.  È possibile visualizzare i dettagli di tali backup, file system ripristinati e cloni, quindi selezionarli per eseguire operazioni di protezione dei dati.
+
+È possibile esaminare le seguenti icone nella vista Gestisci copie per determinare se i backup e i cloni sono disponibili nell'archivio primario o secondario (copie mirror o copie Vault).
+
+* image:../media/topology_primary_storage.gif["icona di archiviazione primaria"]visualizza il numero di backup e cloni disponibili sullo storage primario.
+* image:../media/topology_mirror_secondary_storage.gif["Icona Mirror di archiviazione secondaria"]visualizza il numero di backup e cloni di cui è stato eseguito il mirroring sullo storage secondario mediante la tecnologia SnapMirror .
+* image:../media/topology_vault_secondary_storage.gif["icona del caveau secondario"]visualizza il numero di backup e cloni replicati sullo storage secondario mediante la tecnologia SnapVault .
++
+Il numero di backup visualizzato include i backup eliminati dall'archivio secondario.  Ad esempio, se hai creato 6 backup utilizzando un criterio per conservarne solo 4, il numero di backup visualizzato è 6.
+
+
+
+
+NOTE: I cloni di un backup di un mirror con versione flessibile su un volume di tipo mirror-vault vengono visualizzati nella vista topologia, ma il conteggio dei backup mirror nella vista topologia non include il backup con versione flessibile.
+
+Se si dispone di una relazione secondaria come SnapMirror ActiveSync (inizialmente rilasciata come SnapMirror Business Continuity [SM-BC]), è possibile visualizzare le seguenti icone aggiuntive:
+
+* image:../media/topology_replica_site_up.png["sito replica attivo"]Il sito replica è attivo.
+* image:../media/topology_replica_site_down.png["sito replica inattivo"]Il sito replica è inattivo.
+* image:../media/topology_reestablished.png["la relazione è ristabilita"]La relazione tra specchio secondario e volta non è stata ristabilita.
+
+
+*Passi*
+
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in appropriato dall'elenco.
+. Nella pagina Risorse, seleziona la risorsa o il gruppo di risorse dall'elenco a discesa *Visualizza*.
+. Selezionare la risorsa dalla vista dei dettagli della risorsa o dalla vista dei dettagli del gruppo di risorse.
++
+Se la risorsa è protetta, viene visualizzata la pagina Topologia della risorsa selezionata.
+
+. Esaminare la scheda Riepilogo per visualizzare un riepilogo del numero di backup e cloni disponibili sullo storage primario e secondario.
++
+Nella sezione Scheda riepilogativa viene visualizzato il numero totale di backup e cloni.
+
++
+Facendo clic sul pulsante *Aggiorna* viene avviata una query dello spazio di archiviazione per visualizzare un conteggio accurato.
+
++
+Se viene eseguito un backup abilitato per SnapLock , facendo clic sul pulsante *Aggiorna* vengono aggiornati i tempi di scadenza SnapLock primario e secondario recuperati da ONTAP.  Una pianificazione settimanale aggiorna anche il tempo di scadenza primario e secondario SnapLock recuperato da ONTAP.
+
++
+Quando il file system è distribuito su più volumi, il tempo di scadenza SnapLock per il backup sarà il tempo di scadenza SnapLock più lungo impostato per uno Snapshot in un volume.  Il tempo di scadenza SnapLock più lungo viene recuperato da ONTAP.
+
++
+Per la sincronizzazione attiva SnapMirror , facendo clic sul pulsante *Aggiorna* si aggiorna l'inventario di backup SnapCenter interrogando ONTAP sia per i siti primari che per quelli di replica.  Una pianificazione settimanale esegue questa attività anche per tutti i database contenenti la relazione di sincronizzazione attiva SnapMirror .
+
++
+** Per SnapMirror ActiveSync e solo per ONTAP 9.14.1, le relazioni Async Mirror o Async MirrorVault con la nuova destinazione primaria devono essere configurate manualmente dopo il failover.  Da ONTAP 9.15.1 in poi, Async Mirror o Async MirrorVault vengono configurati automaticamente sulla nuova destinazione primaria.
+** Dopo il failover, è necessario creare un backup affinché SnapCenter sia a conoscenza del failover.  È possibile fare clic su *Aggiorna* solo dopo aver creato un backup.
+
+
+. Nella vista Gestisci copie, fare clic su *Backup* o *Cloni* dall'archivio primario o secondario per visualizzare i dettagli di un backup o di un clone.
++
+I dettagli dei backup e dei cloni vengono visualizzati in formato tabella.
+
+. Selezionare il backup dalla tabella, quindi fare clic sulle icone di protezione dei dati per eseguire operazioni di ripristino, clonazione ed eliminazione.
++
+
+NOTE: Non è possibile rinominare o eliminare i backup presenti nell'archivio secondario.
+
+. Se si desidera eliminare un clone, selezionare il clone dalla tabella, quindi fare clic suimage:../media/delete_icon.gif["icona di eliminazione"] .
+
+
+.Esempio che mostra backup e cloni sullo storage primario
+image:../media/topology_view_scu.png["visualizzazione topologica del backup e dei cloni nell'archiviazione primaria."]

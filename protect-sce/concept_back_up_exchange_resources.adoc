@@ -1,0 +1,20 @@
+---
+permalink: protect-sce/concept_back_up_exchange_resources.html 
+sidebar: sidebar 
+keywords: Backup workflow 
+summary: Quando installi il plug-in SnapCenter per Microsoft Exchange Server nel tuo ambiente, puoi utilizzare SnapCenter per eseguire il backup delle risorse di Exchange. 
+---
+= Flusso di lavoro di backup
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Quando installi il plug-in SnapCenter per Microsoft Exchange Server nel tuo ambiente, puoi utilizzare SnapCenter per eseguire il backup delle risorse di Exchange.
+
+È possibile pianificare più backup da eseguire contemporaneamente su più server.  Le operazioni di backup e ripristino non possono essere eseguite contemporaneamente sulla stessa risorsa.  Non sono supportate copie di backup attive e passive sullo stesso volume.
+
+Il seguente flusso di lavoro mostra la sequenza in cui è necessario eseguire l'operazione di backup:
+
+image:../media/sce_backup_workflow.gif["database del server di scambio del flusso di lavoro di backup"]

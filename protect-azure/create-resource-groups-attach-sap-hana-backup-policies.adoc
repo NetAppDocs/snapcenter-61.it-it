@@ -1,0 +1,58 @@
+---
+permalink: protect-azure/create-resource-groups-attach-sap-hana-backup-policies.html 
+sidebar: sidebar 
+keywords: resource groups, attach policies, snapcenter, SAP HANA, backup polices, schedule 
+summary: Un gruppo di risorse è il contenitore a cui è necessario aggiungere le risorse di cui si desidera eseguire il backup e la protezione. 
+---
+= Crea gruppi di risorse e collega policy di backup SAP HANA
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Un gruppo di risorse è il contenitore a cui è necessario aggiungere le risorse di cui si desidera eseguire il backup e la protezione.
+
+Un gruppo di risorse consente di eseguire il backup simultaneo di tutti i dati associati a una determinata applicazione.  Per qualsiasi attività di protezione dei dati è necessario un gruppo di risorse.  È inoltre necessario allegare una o più policy al gruppo di risorse per definire il tipo di processo di protezione dei dati che si desidera eseguire.
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in appropriato dall'elenco.
+. Nella pagina Risorse, fare clic su *Nuovo gruppo di risorse*.
+. Nella pagina Nome, eseguire le seguenti azioni:
++
+|===
+| Per questo campo... | Fai questo... 
+
+
+ a| 
+Nome
+ a| 
+Immettere un nome per il gruppo di risorse.
+
+
+
+ a| 
+Etichette
+ a| 
+Inserisci una o più etichette che ti aiuteranno a cercare in seguito il gruppo di risorse.
+
+
+
+ a| 
+Utilizza il formato nome personalizzato per la copia Snapshot
+ a| 
+Selezionare questa casella di controllo e immettere un formato di nome personalizzato che si desidera utilizzare per il nome dello snapshot.
+
+|===
+. Nella pagina Risorse, seleziona un nome host dall'elenco a discesa *Host* e il tipo di risorsa dall'elenco a discesa *Tipo di risorsa*.
+. Seleziona le risorse dalla sezione *Risorse disponibili*, quindi fai clic sulla freccia destra per spostarle nella sezione *Risorse selezionate*.
+. Nella pagina Criteri, procedere come segue:
++
+.. Selezionare una o più policy dall'elenco a discesa.
+.. Nella colonna Configura pianificazioni, fare clic su *image:../media/add_policy_from_resourcegroup.gif["aggiungi gruppo di risorse del modulo di policy"] * per la policy che vuoi configurare.
+.. Nella finestra di dialogo Aggiungi pianificazioni per il criterio _nome_criterio_, configurare la pianificazione, quindi fare clic su *OK*.
+
+
+. Nella pagina Notifica, dall'elenco a discesa *Preferenza e-mail*, seleziona gli scenari in cui desideri inviare le e-mail.
+. Rivedi il riepilogo e poi clicca su *Fine*.
+

@@ -1,0 +1,26 @@
+---
+permalink: protect-sco/reference_requirements_for_backing_up_an_oracle_database.html 
+sidebar: sidebar 
+keywords: requirements, prerequisites 
+summary: Prima di eseguire il backup di un database Oracle, è necessario assicurarsi che i prerequisiti siano stati completati. 
+---
+= Requisiti per il backup di un database Oracle
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Prima di eseguire il backup di un database Oracle, è necessario assicurarsi che i prerequisiti siano stati completati.
+
+* È necessario aver creato un gruppo di risorse con un criterio associato.
+* Se si desidera eseguire il backup di una risorsa che ha una relazione SnapMirror con un archivio secondario, il ruolo ONTAP assegnato all'utente dell'archivio deve includere il privilegio "`snapmirror all`".  Tuttavia, se si utilizza il ruolo "`vsadmin`", il privilegio "`snapmirror all`" non è richiesto.
+* È necessario aver assegnato l'aggregato utilizzato dall'operazione di backup alla macchina virtuale di archiviazione (SVM) utilizzata dal database.
+* Se per quel database è abilitata la protezione secondaria, dovresti aver verificato che tutti i volumi di dati e i volumi di registro di archivio appartenenti al database siano protetti.
+* Avresti dovuto verificare che il database che contiene file sui gruppi di dischi ASM fosse nello stato "`MOUNT`" o "`OPEN`" per verificare i suoi backup utilizzando l'utilità Oracle DBVERIFY.
+* Dovresti aver verificato che la lunghezza del punto di montaggio del volume non superi i 240 caratteri.
+* Se il database sottoposto a backup è di grandi dimensioni (dimensioni in TB), è necessario aumentare il valore di RESTTimeout a 86400000 ms nel file _C:\Program Files\ NetApp \SMCore\SMCoreServiceHost.exe.config_ nell'host del server SnapCenter .
++
+Durante la modifica dei valori, assicurarsi che non vi siano processi in esecuzione e riavviare il servizio SnapCenter SMCore dopo aver aumentato il valore.
+
+

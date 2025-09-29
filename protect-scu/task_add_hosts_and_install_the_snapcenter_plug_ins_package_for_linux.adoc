@@ -1,0 +1,156 @@
+---
+permalink: protect-scu/task_add_hosts_and_install_the_snapcenter_plug_ins_package_for_linux.html 
+sidebar: sidebar 
+keywords: credentials, install plug-in, Linux, GUI, add host, monitor 
+summary: È possibile utilizzare la pagina Aggiungi host SnapCenter per aggiungere host e quindi installare il pacchetto plug-in di SnapCenter per Linux.  I plug-in vengono installati automaticamente sugli host remoti. 
+---
+= Aggiungi host e installa il pacchetto Plug-in per Linux utilizzando l'interfaccia grafica
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile utilizzare la pagina Aggiungi host per aggiungere host e quindi installare il pacchetto plug-in SnapCenter per Linux.  I plug-in vengono installati automaticamente sugli host remoti.
+
+*Passi*
+
+. Nel riquadro di navigazione a sinistra, fare clic su *Host*.
+. Verificare che la scheda *Host gestiti* sia selezionata in alto.
+. Fare clic su *Aggiungi*.
+. Nella pagina Host, eseguire le seguenti azioni:
++
+|===
+| Per questo campo... | Fai questo... 
+
+
+ a| 
+Tipo di host
+ a| 
+Selezionare *Linux* come tipo di host.
+
+
+
+ a| 
+Nome host
+ a| 
+Immettere il nome di dominio completo (FQDN) o l'indirizzo IP dell'host.
+
+SnapCenter dipende dalla corretta configurazione del DNS.  Pertanto, la prassi migliore è quella di immettere il nome di dominio completo (FQDN).
+
+Se si aggiunge un host tramite SnapCenter e l'host fa parte di un sottodominio, è necessario fornire l'FQDN.
+
+
+
+ a| 
+Credenziali
+ a| 
+Seleziona il nome delle credenziali che hai creato oppure creane di nuove.
+
+La credenziale deve disporre di diritti amministrativi sull'host remoto.  Per maggiori dettagli, consultare le informazioni sulla creazione delle credenziali.
+
+È possibile visualizzare i dettagli sulle credenziali posizionando il cursore sul nome della credenziale specificato.
+
+
+NOTE: La modalità di autenticazione delle credenziali è determinata dal tipo di host specificato nella procedura guidata Aggiungi host.
+
+|===
+. Nella sezione Seleziona plug-in da installare, seleziona *File System Unix*.
+. (Facoltativo) Fare clic su *Altre opzioni*.
++
+|===
+| Per questo campo... | Fai questo... 
+
+
+ a| 
+Porta
+ a| 
+Mantenere il numero di porta predefinito oppure specificare il numero di porta.
+
+Il numero di porta predefinito è 8145.  Se SnapCenter Server è stato installato su una porta personalizzata, tale numero di porta verrà visualizzato come porta predefinita.
+
+
+NOTE: Se hai installato manualmente i plug-in e hai specificato una porta personalizzata, devi specificare la stessa porta.  In caso contrario, l'operazione fallisce.
+
+
+
+ a| 
+Percorso di installazione
+ a| 
+Il percorso predefinito è _/opt/ NetApp/snapcenter_.
+
+Facoltativamente, è possibile personalizzare il percorso.  Se si utilizza il percorso personalizzato, assicurarsi che il contenuto predefinito dei sudoer venga aggiornato con il percorso personalizzato.
+
+
+
+ a| 
+Salta i controlli di preinstallazione facoltativi
+ a| 
+Selezionare questa casella di controllo se i plug-in sono già stati installati manualmente e non si desidera verificare se l'host soddisfa i requisiti per l'installazione del plug-in.
+
+|===
+. Fare clic su *Invia*.
++
+Se non hai selezionato la casella di controllo Salta controlli preliminari, l'host viene convalidato per verificare se soddisfa i requisiti per l'installazione del plug-in.
+
++
+
+NOTE: Lo script di pre-controllo non convalida lo stato del firewall della porta del plug-in se è specificato nelle regole di rifiuto del firewall.
+
++
+Se i requisiti minimi non vengono soddisfatti, vengono visualizzati messaggi di errore o di avviso appropriati.  Se l'errore è correlato allo spazio su disco o alla RAM, è possibile aggiornare il file web.config situato in _C:\Programmi\ NetApp\ SnapCenter WebApp_ per modificare i valori predefiniti.  Se l'errore è correlato ad altri parametri, dovresti risolvere il problema.
+
++
+
+NOTE: In una configurazione HA, se si aggiorna il file web.config, è necessario aggiornare il file su entrambi i nodi.
+
+. Verificare l'impronta digitale, quindi fare clic su *Conferma e invia*.
++
+
+NOTE: SnapCenter non supporta l'algoritmo ECDSA.
+
++
+
+NOTE: La verifica dell'impronta digitale è obbligatoria anche se lo stesso host è stato aggiunto in precedenza a SnapCenter e l'impronta digitale è stata confermata.
+
+. Monitorare l'avanzamento dell'installazione.
++
+I file di registro specifici dell'installazione si trovano in _/custom_location/snapcenter/logs_.
+
+
+
+*Risultato*
+
+Tutti i file system montati sull'host vengono automaticamente rilevati e visualizzati nella pagina Risorse.  Se non viene visualizzato nulla, fare clic su *Aggiorna risorse*.
+
+
+
+== Monitorare lo stato dell'installazione
+
+È possibile monitorare l'avanzamento dell'installazione del pacchetto plug-in SnapCenter tramite la pagina Lavori.  Potrebbe essere opportuno controllare l'avanzamento dell'installazione per stabilire quando è completa o se si è verificato un problema.
+
+.Informazioni su questo compito
+Le seguenti icone compaiono nella pagina Lavori e indicano lo stato dell'operazione:
+
+* image:../media/progress_icon.gif["Icona in corso"]In corso
+* image:../media/success_icon.gif["Icona completata"]Completato con successo
+* image:../media/failed_icon.gif["Icona fallita"]Fallito
+* image:../media/warning_icon.gif["Completato con icona di avviso"]Completato con avvisi o non è stato possibile avviarlo a causa di avvisi
+* image:../media/verification_job_in_queue.gif["Il lavoro di verifica è in coda"]In coda
+
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Monitor*.
+. Nella pagina *Monitor*, fare clic su *Lavori*.
+. Nella pagina *Lavori*, per filtrare l'elenco in modo che vengano elencate solo le operazioni di installazione dei plug-in, procedere come segue:
++
+.. Fare clic su *Filtro*.
+.. Facoltativo: specificare la data di inizio e di fine.
+.. Dal menu a discesa Tipo, seleziona *Installazione plug-in*.
+.. Dal menu a discesa Stato, selezionare lo stato dell'installazione.
+.. Fare clic su *Applica*.
+
+
+. Selezionare il lavoro di installazione e fare clic su *Dettagli* per visualizzare i dettagli del lavoro.
+. Nella pagina *Dettagli lavoro*, fare clic su *Visualizza registri*.
+

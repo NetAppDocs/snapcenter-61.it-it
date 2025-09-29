@@ -1,0 +1,41 @@
+---
+permalink: install/task_enable_ca_certificates_for_snapcenter.html 
+sidebar: sidebar 
+keywords: SnapCenter, enable CA, certificate 
+summary: È necessario configurare i certificati CA e abilitare la convalida dei certificati CA per SnapCenter Server. 
+---
+= Abilita i certificati CA per SnapCenter
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È necessario configurare i certificati CA e abilitare la convalida dei certificati CA per SnapCenter Server.
+
+.Prima di iniziare
+* È possibile abilitare o disabilitare i certificati CA utilizzando il cmdlet Set-SmCertificateSettings.
+* È possibile visualizzare lo stato del certificato per SnapCenter Server utilizzando il cmdlet Get-SmCertificateSettings.
+
+
+Le informazioni relative ai parametri che possono essere utilizzati con il cmdlet e le relative descrizioni possono essere ottenute eseguendo _Get-Help command_name_. In alternativa, è possibile fare riferimento a https://docs.netapp.com/us-en/snapcenter-cmdlets/index.html["Guida di riferimento ai cmdlet del software SnapCenter"^] .
+
+*Passi*
+
+. Nella pagina Impostazioni, vai su *Impostazioni* > *Impostazioni globali* > *Impostazioni certificato CA*.
+. Selezionare *Abilita convalida certificato*.
+. Fare clic su *Applica*.
+
+
+*Dopo aver finito*
+
+Nella scheda Host gestiti viene visualizzato un lucchetto e il colore del lucchetto indica lo stato della connessione tra SnapCenter Server e l'host del plug-in.
+
+* *image:../media/enable_ca_issues_icon.png["icona dei problemi"] * indica che non è abilitato o assegnato alcun certificato CA all'host del plug-in.
+* *image:../media/enable_ca_good_icon.png["buona icona"] * indica che il certificato CA è stato convalidato correttamente.
+* *image:../media/enable_ca_failed_icon.png["icona fallita"] * indica che il certificato CA non è stato convalidato.
+* *image:../media/enable_ca_undefined_icon.png["icona indefinita"] * indica che non è stato possibile recuperare le informazioni di connessione.
+
+
+
+NOTE: Quando lo stato è giallo o verde, le operazioni di protezione dei dati sono state completate correttamente.

@@ -1,0 +1,185 @@
+---
+permalink: admin/concept_what_operations_can_be_performed_from_the_resource_page.html 
+sidebar: sidebar 
+keywords: Resources page 
+summary: È possibile scoprire risorse ed eseguire operazioni di protezione dei dati dalla pagina Risorse.  Le operazioni che puoi eseguire variano in base al plug-in che stai utilizzando per gestire le tue risorse. 
+---
+= Operazioni supportate dalla pagina Risorse
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile scoprire risorse ed eseguire operazioni di protezione dei dati dalla pagina Risorse.  Le operazioni che puoi eseguire variano in base al plug-in che stai utilizzando per gestire le tue risorse.
+
+Dalla pagina Risorse è possibile eseguire le seguenti attività:
+
+|===
+| Puoi eseguire queste attività... | Per Microsoft Exchange Server | Per Microsoft SQL Server | Per Microsoft Windows | Per il database Oracle | Per il database SAP HANA 
+
+
+ a| 
+Determinare se le risorse sono disponibili per il backup
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+
+
+
+ a| 
+Eseguire il backup su richiesta di una risorsa
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+
+
+
+ a| 
+Ripristina dai backup
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+
+
+
+ a| 
+Backup clonati
+ a| 
+NO
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+
+
+
+ a| 
+Gestire i backup
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+
+
+
+ a| 
+Gestisci i cloni
+ a| 
+NO
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+
+
+
+ a| 
+Gestire le politiche
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+
+
+
+ a| 
+Gestisci le connessioni di archiviazione
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+
+
+
+ a| 
+Montare i backup
+ a| 
+NO
+ a| 
+NO
+ a| 
+NO
+ a| 
+SÌ
+ a| 
+NO
+
+
+
+ a| 
+Smonta i backup
+ a| 
+NO
+ a| 
+NO
+ a| 
+NO
+ a| 
+SÌ
+ a| 
+NO
+
+
+
+ a| 
+Visualizza i dettagli
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+ a| 
+SÌ
+
+|===

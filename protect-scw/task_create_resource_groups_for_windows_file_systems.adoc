@@ -1,0 +1,136 @@
+---
+permalink: protect-scw/task_create_resource_groups_for_windows_file_systems.html 
+sidebar: sidebar 
+keywords: resource groups 
+summary: Un gruppo di risorse è il contenitore a cui è possibile aggiungere più file system che si desidera proteggere.  È inoltre necessario allegare una o più policy al gruppo di risorse per definire il tipo di processo di protezione dei dati che si desidera eseguire e quindi specificare la pianificazione del backup. 
+---
+= Creare gruppi di risorse per i file system di Windows
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Un gruppo di risorse è il contenitore a cui è possibile aggiungere più file system che si desidera proteggere.  È inoltre necessario allegare una o più policy al gruppo di risorse per definire il tipo di processo di protezione dei dati che si desidera eseguire e quindi specificare la pianificazione del backup.
+
+.Informazioni su questo compito
+* Per ONTAP 9.12.1 e versioni precedenti, i cloni creati dagli SnapLock Vault Snapshot come parte del ripristino erediteranno il tempo di scadenza SnapLock Vault. L'amministratore dell'archiviazione deve pulire manualmente i cloni dopo la scadenza SnapLock .
+* L'aggiunta di nuovi file system senza SnapMirror ActiveSync a un gruppo di risorse esistente che contiene risorse con SnapMirror ActiveSync non è supportata.
+* L'aggiunta di nuovi file system a un gruppo di risorse esistente in modalità failover di SnapMirror ActiveSync non è supportata.  È possibile aggiungere risorse al gruppo di risorse solo nello stato normale o di failback.
+
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare il plug-in appropriato dall'elenco.
+. Nella pagina Risorse, seleziona *File System* dall'elenco.
++
+
+NOTE: Se hai aggiunto di recente un file system a SnapCenter, fai clic su *Aggiorna risorse* per visualizzare la risorsa appena aggiunta.
+
+. Fare clic su *Nuovo gruppo di risorse*.
+. Nella pagina Nome della procedura guidata, procedere come segue:
++
+|===
+| Per questo campo... | Fai questo... 
+
+
+ a| 
+Nome
+ a| 
+Immettere il nome del gruppo di risorse.
+
+
+NOTE: Il nome del gruppo di risorse non deve superare i 250 caratteri.
+
+
+
+ a| 
+Utilizza il formato nome personalizzato per la copia Snapshot
+ a| 
+Facoltativo: inserisci un nome e un formato personalizzati per lo snapshot.
+
+Ad esempio, customtext_resourcegroup_policy_hostname o resourcegroup_hostname.  Per impostazione predefinita, al nome dello snapshot viene aggiunto un timestamp.
+
+
+
+ a| 
+Etichetta
+ a| 
+Inserisci un tag descrittivo per aiutarti a trovare un gruppo di risorse.
+
+|===
+. Nella pagina Risorse, esegui le seguenti attività:
++
+.. Selezionare l'host per filtrare l'elenco delle risorse.
++
+Se hai aggiunto risorse di recente, queste appariranno nell'elenco delle risorse disponibili solo dopo aver aggiornato l'elenco delle risorse.
+
+.. Nella sezione Risorse disponibili, fare clic sui file system di cui si desidera eseguire il backup, quindi fare clic sulla freccia destra per spostarli nella sezione Aggiunti.
++
+Se si seleziona l'opzione *Seleziona automaticamente tutte le risorse sullo stesso volume di archiviazione*, vengono selezionate tutte le risorse sullo stesso volume.  Quando le sposti nella sezione Aggiunti, tutte le risorse presenti su quel volume vengono spostate insieme.
+
++
+Per aggiungere un singolo file system, deselezionare l'opzione *Seleziona automaticamente tutte le risorse sullo stesso volume di archiviazione*, quindi selezionare i file system che si desidera spostare nella sezione Aggiunti.
+
+
+
+. Nella pagina Criteri, eseguire le seguenti attività:
++
+.. Selezionare una o più policy dall'elenco a discesa.
++
+È possibile selezionare qualsiasi policy esistente e fare clic su *Dettagli* per determinare se è possibile utilizzarla.
+
++
+Se nessuna policy esistente soddisfa i tuoi requisiti, puoi crearne una nuova cliccando su *image:../media/add_policy_from_resourcegroup.gif["icona più"] * per avviare la procedura guidata dei criteri.
+
++
+I criteri selezionati sono elencati nella colonna Criterio nella sezione Configura pianificazioni per i criteri selezionati.
+
+.. Nella sezione Configura pianificazioni per policy selezionate, fai clic su *image:../media/add_policy_from_resourcegroup.gif["icona più"] * nella colonna Configura pianificazioni per il criterio per il quale si desidera configurare la pianificazione.
+.. Se il criterio è associato a più tipi di pianificazione (frequenze), selezionare la frequenza che si desidera configurare.
+.. Nella finestra di dialogo Aggiungi pianificazioni per la policy _nome_policy_, configura la pianificazione specificando la data di inizio, la data di scadenza e la frequenza, quindi fai clic su *Fine*.
++
+Le pianificazioni configurate sono elencate nella colonna Pianificazioni applicate nella sezione Configura pianificazioni per policy selezionate.
+
+
+
++
+Le pianificazioni di backup di terze parti non sono supportate quando si sovrappongono alle pianificazioni di backup SnapCenter .  Non modificare le pianificazioni dall'Utilità di pianificazione di Windows e da SQL Server Agent.
+
+. Nella pagina Notifiche, fornire le seguenti informazioni di notifica:
++
+|===
+| Per questo campo... | Fai questo... 
+
+
+ a| 
+Preferenza e-mail
+ a| 
+Selezionare *Sempre*, *In caso di errore* o *In caso di errore o avviso* per inviare e-mail ai destinatari dopo aver creato gruppi di risorse di backup, allegato criteri e configurato pianificazioni.  Inserisci il server SMTP, l'oggetto predefinito dell'e-mail e gli indirizzi e-mail del mittente e del mittente.
+
+
+
+ a| 
+Da
+ a| 
+Indirizzo e-mail
+
+
+
+ a| 
+A
+ a| 
+Inviare un'e-mail all'indirizzo
+
+
+
+ a| 
+Soggetto
+ a| 
+Riga dell'oggetto e-mail predefinita
+
+|===
+. Rivedi il riepilogo e poi clicca su *Fine*.
++
+È possibile eseguire un backup su richiesta oppure attendere che venga eseguito il backup pianificato.
+
+

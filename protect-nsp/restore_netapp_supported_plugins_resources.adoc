@@ -1,0 +1,21 @@
+---
+permalink: protect-nsp/restore_netapp_supported_plugins_resources.html 
+sidebar: sidebar 
+keywords:  
+summary: 'Il flusso di lavoro di ripristino e recupero include la pianificazione, l"esecuzione delle operazioni di ripristino e il monitoraggio delle operazioni.' 
+---
+= Ripristina le risorse dei plug-in supportati da NetApp
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Il flusso di lavoro di ripristino e recupero include la pianificazione, l'esecuzione delle operazioni di ripristino e il monitoraggio delle operazioni.
+
+.Informazioni su questo compito
+Il seguente flusso di lavoro mostra la sequenza in cui è necessario eseguire l'operazione di ripristino:
+
+image::../media/all_plug_ins_restore_workflow.gif[Ripristina flusso di lavoro]
+
+È anche possibile utilizzare i cmdlet di PowerShell manualmente o negli script per eseguire operazioni di backup, ripristino e clonazione.  Per informazioni sui cmdlet di PowerShell, utilizzare la guida del cmdlet SnapCenter o vedere https://docs.netapp.com/us-en/snapcenter-cmdlets/index.html["Guida di riferimento ai cmdlet del software SnapCenter"] .

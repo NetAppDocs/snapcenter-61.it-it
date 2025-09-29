@@ -1,0 +1,173 @@
+---
+permalink: protect-hana/reference_prerequisites_to_adding_hosts_and_installing_snapcenter_plug_in_for_sap_hana_database.html 
+sidebar: sidebar 
+keywords: credentials 
+summary: Prima di aggiungere un host e installare i pacchetti plug-in, è necessario soddisfare tutti i requisiti.  Il plug-in SnapCenter per il database SAP HANA è disponibile sia negli ambienti Windows che Linux. 
+---
+= Prerequisiti per l'aggiunta di host e l'installazione del plug-in SnapCenter per il database SAP HANA
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Prima di aggiungere un host e installare i pacchetti plug-in, è necessario soddisfare tutti i requisiti.  Il plug-in SnapCenter per il database SAP HANA è disponibile sia negli ambienti Windows che Linux.
+
+* Devi aver installato Java 11 sul tuo host.
++
+
+NOTE: IBM Java non è supportato su host Windows e Linux.
+
+* È necessario aver installato il terminale interattivo del database SAP HANA (client HDBSQL) sull'host.
+* Per Windows, il plug-in Creator Service dovrebbe essere eseguito utilizzando l'utente Windows "`LocalSystem`", che è il comportamento predefinito quando il plug-in per il database SAP HANA è installato come amministratore di dominio.
+* Per Windows, le chiavi dell'archivio utente devono essere create come utente SYSTEM.
+* Quando si installa un plug-in su un host Windows, se si specifica una credenziale non integrata o se l'utente appartiene a un utente di un gruppo di lavoro locale, è necessario disabilitare UAC sull'host.  Il plug-in SnapCenter per Microsoft Windows verrà distribuito per impostazione predefinita con il plug-in SAP HANA sugli host Windows.
+* Per gli host Linux, l'accesso alle chiavi HDB Secure User Store avviene come utente del sistema operativo HDBSQL.
+* SnapCenter Server deve avere accesso alla porta 8145 o personalizzata del plug-in per l'host del database SAP HANA.
+
+
+
+
+== Host Windows
+
+* È necessario disporre di un utente di dominio con privilegi di amministratore locale e autorizzazioni di accesso locale sull'host remoto.
+* Durante l'installazione del plug-in per il database SAP HANA su un host Windows, il plug-in SnapCenter per Microsoft Windows viene installato automaticamente.
+* È necessario aver abilitato la connessione SSH basata su password per l'utente root o non root.
+* Devi aver installato Java 11 sul tuo host Windows.
++
+http://www.java.com/en/download/manual.jsp["Scarica JAVA per tutti i sistemi operativi"]
+
++
+https://imt.netapp.com/matrix/imt.jsp?components=121074;&solution=1257&isHWU&src=IMT["Strumento matrice di interoperabilità NetApp"]
+
+
+
+
+
+== Host Linux
+
+* È necessario aver abilitato la connessione SSH basata su password per l'utente root o non root.
+* Devi aver installato Java 11 sul tuo host Linux.
++
+http://www.java.com/en/download/manual.jsp["Scarica JAVA per tutti i sistemi operativi"]
+
++
+https://imt.netapp.com/matrix/imt.jsp?components=121073;&solution=1257&isHWU&src=IMT["Strumento matrice di interoperabilità NetApp"]
+
+* Per i database SAP HANA in esecuzione su un host Linux, durante l'installazione del plug-in per il database SAP HANA, viene installato automaticamente il plug-in SnapCenter per UNIX.
+* Dovresti avere *bash* come shell predefinita per l'installazione del plug-in.
+
+
+
+
+== Comandi supplementari
+
+Per eseguire un comando supplementare sul plug-in SnapCenter per SAP HANA, è necessario includerlo nel file _allowed_commands.config_.
+
+* Posizione predefinita sull'host Windows: _C:\Programmi\ NetApp\ SnapCenter\Snapcenter Plug-in Creator\etc\allowed_commands.config_
+* Posizione predefinita sull'host Linux: _/opt/ NetApp/snapcenter/scc/etc/allowed_commands.config_
+
+
+Per consentire comandi supplementari sull'host del plug-in, aprire il file _allowed_commands.config_ in un editor.  Immettere ogni comando su una riga separata e i comandi non fanno distinzione tra maiuscole e minuscole.  Assicurarsi di specificare il percorso completo e di racchiuderlo tra virgolette (") se contiene spazi.
+
+Per esempio:
+
+comando: monta
+
+comando: smonta
+
+comando: "C:\Programmi\ NetApp\SnapCreator commands\sdcli.exe"
+
+comando: myscript.bat
+
+Se il file _allowed_commands.config_ non è presente, l'esecuzione dei comandi o degli script verrà bloccata e il flusso di lavoro non riuscirà con il seguente errore:
+
+"[/mnt/mount -a] esecuzione non consentita.  Autorizza aggiungendo il comando nel file %s sull'host del plugin."
+
+Se il comando o lo script non è presente in _allowed_commands.config_, l'esecuzione del comando o dello script verrà bloccata e il flusso di lavoro non riuscirà con il seguente errore:
+
+"[/mnt/mount -a] esecuzione non consentita.  Autorizza aggiungendo il comando nel file %s sull'host del plugin."
+
+
+NOTE: Non dovresti usare un carattere jolly (*) per consentire tutti i comandi.
+
+
+
+== Configurare i privilegi sudo per gli utenti non root per l'host Linux
+
+SnapCenter 2.0 e le versioni successive consentono a un utente non root di installare il pacchetto di plug-in SnapCenter per Linux e di avviare il processo di plug-in.  I processi del plug-in verranno eseguiti come utente non root effettivo.  È necessario configurare i privilegi sudo per l'utente non root per consentire l'accesso a diversi percorsi.
+
+*Cosa ti servirà*
+
+* Sudo versione 1.8.7 o successiva.
+* Se l'umask è 0027, assicurarsi che la cartella java e tutti i file al suo interno abbiano l'autorizzazione 555.  In caso contrario l'installazione del plug-in potrebbe non riuscire.
+* Per l'utente non root, assicurarsi che il nome dell'utente non root e il nome del gruppo dell'utente siano gli stessi.
+* Modificare il file _/etc/ssh/sshd_config_ per configurare gli algoritmi del codice di autenticazione dei messaggi: MAC hmac-sha2-256 e MAC hmac-sha2-512.
++
+Riavviare il servizio sshd dopo aver aggiornato il file di configurazione.
+
++
+Esempio:
+
++
+[listing]
+----
+#Port 22
+#AddressFamily any
+#ListenAddress 0.0.0.0
+#ListenAddress ::
+#Legacy changes
+#KexAlgorithms diffie-hellman-group1-sha1
+#Ciphers aes128-cbc
+#The default requires explicit activation of protocol
+Protocol 2
+HostKey/etc/ssh/ssh_host_rsa_key
+MACs hmac-sha2-256
+----
+
+
+*Informazioni su questo compito*
+
+È necessario configurare i privilegi sudo per l'utente non root per consentire l'accesso ai seguenti percorsi:
+
+* /home/_LINUX_USER_/.sc_netapp/snapcenter_linux_host_plugin.bin
+* /custom_location/ NetApp/snapcenter/spl/installation/plugins/uninstall
+* /posizione_personalizzata/ NetApp/snapcenter/spl/bin/spl
+
+
+*Passi*
+
+. Accedi all'host Linux su cui desideri installare il pacchetto plug-in SnapCenter per Linux.
+. Aggiungere le seguenti righe al file /etc/sudoers utilizzando l'utilità Linux visudo.
++
+[listing, subs="+quotes"]
+----
+Cmnd_Alias HPPLCMD = sha224:checksum_value== /home/_LINUX_USER_/.sc_netapp/snapcenter_linux_host_plugin.bin, /opt/NetApp/snapcenter/spl/installation/plugins/uninstall, /opt/NetApp/snapcenter/spl/bin/spl, /opt/NetApp/snapcenter/scc/bin/scc
+Cmnd_Alias PRECHECKCMD = sha224:checksum_value== /home/_LINUX_USER_/.sc_netapp/Linux_Prechecks.sh
+Cmnd_Alias CONFIGCHECKCMD = sha224:checksum_value== /opt/NetApp/snapcenter/spl/plugins/scu/scucore/configurationcheck/Config_Check.sh
+Cmnd_Alias SCCMD = sha224:checksum_value== /opt/NetApp/snapcenter/spl/bin/sc_command_executor
+Cmnd_Alias SCCCMDEXECUTOR =checksum_value== /opt/NetApp/snapcenter/scc/bin/sccCommandExecutor
+_LINUX_USER_ ALL=(ALL) NOPASSWD:SETENV: HPPLCMD, PRECHECKCMD, CONFIGCHECKCMD, SCCCMDEXECUTOR, SCCMD
+Defaults: _LINUX_USER_ env_keep += "IATEMPDIR"
+Defaults: _LINUX_USER_ env_keep += "JAVA_HOME"
+Defaults: _LINUX_USER_ !visiblepw
+Defaults: _LINUX_USER_ !requiretty
+----
++
+
+NOTE: Se si dispone di una configurazione RAC, insieme agli altri comandi consentiti, è necessario aggiungere quanto segue al file /etc/sudoers: '/<crs_home>/bin/olsnodes'
+
+
+
+È possibile ottenere il valore di _crs_home_ dal file _/etc/oracle/olr.loc_.
+
+_LINUX_USER_ è il nome dell'utente non root che hai creato.
+
+È possibile ottenere il valore _checksum_value_ dal file *sc_unix_plugins_checksum.txt*, che si trova in:
+
+* _C:\ProgramData\ NetApp\ SnapCenter\Package Repository\sc_unix_plugins_checksum.txt_ se SnapCenter Server è installato sull'host Windows.
+* _/opt/ NetApp/snapcenter/SnapManagerWeb/Repository/sc_unix_plugins_checksum.txt_ se SnapCenter Server è installato sull'host Linux. .
+
+
+
+IMPORTANT: L'esempio deve essere utilizzato solo come riferimento per la creazione dei propri dati.

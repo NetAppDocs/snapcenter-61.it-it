@@ -1,0 +1,33 @@
+---
+permalink: protect-scsql/task_reseed_availability_group_databases.html 
+sidebar: sidebar 
+keywords: reseed 
+summary: 'Il reseeding è un"opzione per ripristinare i database del gruppo di disponibilità \(AG\).  Se un database secondario perde la sincronizzazione con il database primario in un AG, è possibile effettuare il seeding del database secondario.' 
+---
+= Reseed dei database del gruppo di disponibilità
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Il reseeding è un'opzione per ripristinare i database dei gruppi di disponibilità (AG).  Se un database secondario perde la sincronizzazione con il database primario in un AG, è possibile effettuare il seeding del database secondario.
+
+.Prima di iniziare
+* È necessario aver creato un backup del database AG secondario che si desidera ripristinare.
+* Il server SnapCenter e l'host del plug-in devono avere installata la stessa versione SnapCenter .
+
+
+.Informazioni su questo compito
+* Non è possibile eseguire operazioni di reseeding sui database primari.
+* Non è possibile eseguire un'operazione di reseeding se il database replica è stato rimosso dal gruppo di disponibilità.  Quando la replica viene rimossa, l'operazione di reseeding fallisce.
+* Durante l'esecuzione dell'operazione di reseeding sul database del gruppo di disponibilità SQL, non è necessario attivare backup del log sui database replica di tale database del gruppo di disponibilità.  Se si attivano i backup del log durante l'operazione di reseeding, l'operazione di reseeding fallisce e viene visualizzato il messaggio di errore Il database mirror "database_name" non dispone di dati di log delle transazioni sufficienti per preservare la catena di backup del log del database principale.
+
+
+.Passi
+. Nel riquadro di navigazione a sinistra, fare clic su *Risorse*, quindi selezionare *Plug-in SnapCenter per SQL Server* dall'elenco.
+. Nella pagina Risorse, seleziona *Database* dall'elenco *Visualizza*.
+. Selezionare il database AG secondario dall'elenco.
+. Fare clic su *Reseed*.
+. Monitorare l'avanzamento dell'operazione cliccando su *Monitoraggio* > *Lavori*.
+

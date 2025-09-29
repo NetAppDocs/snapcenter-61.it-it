@@ -1,0 +1,261 @@
+---
+permalink: protect-scsql/task_back_up_sql_resources.html 
+sidebar: sidebar 
+keywords: backup 
+summary: Se una risorsa non fa ancora parte di alcun gruppo di risorse, è possibile eseguirne il backup dalla pagina Risorse. 
+---
+= Eseguire il backup delle risorse SQL
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Se una risorsa non fa ancora parte di alcun gruppo di risorse, è possibile eseguirne il backup dalla pagina Risorse.
+
+.Informazioni su questo compito
+* Per ottimizzare l'operazione di backup, è necessario creare un record di ricerca inversa dei nomi dei cluster Windows e degli indirizzi IP nel server DNS.
+* Per l'autenticazione delle credenziali di Windows, è necessario impostare le proprie credenziali prima di installare i plug-in.
+* Per l'autenticazione dell'istanza di SQL Server, è necessario aggiungere le credenziali dopo aver installato i plug-in.
+* Per l'autenticazione gMSA, è necessario configurare gMSA durante la registrazione dell'host con SnapCenter nella pagina *Aggiungi host* o *Modifica host* per abilitare e utilizzare gMSA.
+* Se l'host viene aggiunto con gMSA e se gMSA dispone di privilegi di accesso e di amministratore di sistema, allora gMSA può connettersi all'istanza SQL.
++
+** SnapCenter verificherà se l'autenticazione per le istanze SQL è configurata.  Se l'autenticazione è configurata, l'accesso all'istanza SQL avverrà tramite questa credenziale.
+** Se l'autenticazione non è configurata, utilizzare gMSA per verificare se il plug-in SQL è attualmente in funzione.  Se il plug-in è in funzione, verrà utilizzato per stabilire una connessione all'istanza SQL.
+** L'accesso all'istanza SQL avverrà tramite autenticazione delle credenziali di Windows quando l'autenticazione per le istanze SQL non è configurata e il plug-in non è operativo.
+
+
+
+
+[role="tabbed-block"]
+====
+.Interfaccia utente SnapCenter
+--
+.Passi
+. Nel riquadro di navigazione a sinistra, seleziona *Risorse*, quindi seleziona il plug-in appropriato dall'elenco.
+. Nella pagina Risorse, seleziona *Database*, *Istanza* o *Gruppo di disponibilità* dall'elenco a discesa *Visualizza*.
++
+.. Selezionare il database, l'istanza o il gruppo di disponibilità di cui si desidera eseguire il backup.
++
+Quando si esegue un backup di un'istanza, le informazioni sullo stato dell'ultimo backup o il timestamp di tale istanza non saranno disponibili nella pagina delle risorse.
+
++
+Nella vista topologia non è possibile distinguere se lo stato del backup, il timestamp o il backup riguardano un'istanza o un database.
+
+
+
+. Nella pagina Risorse, seleziona la casella di controllo *formato nome personalizzato per copia Snapshot*, quindi immetti un formato nome personalizzato che desideri utilizzare per il nome Snapshot.
++
+Ad esempio, customtext_policy_hostname o resource_hostname.  Per impostazione predefinita, al nome dello snapshot viene aggiunto un timestamp.
+
+. Nella pagina Criteri, eseguire le seguenti attività:
++
+.. Nella sezione Criteri, seleziona uno o più criteri dall'elenco a discesa.
++
+Puoi creare una policy selezionando *image:../media/add_policy_from_resourcegroup.gif["aggiungi gruppo di risorse del modulo di policy"] * per avviare la procedura guidata dei criteri.
+
++
+Nella sezione *Configura pianificazioni per policy selezionate* vengono elencate le policy selezionate.
+
+.. Seleziona *image:../media/add_policy_from_resourcegroup.gif["aggiungi gruppo di risorse del modulo di policy"] * nella colonna Configura pianificazioni per il criterio per il quale si desidera configurare una pianificazione.
+.. In *Aggiungi pianificazioni per la policy* `policy_name` finestra di dialogo, configurare la pianificazione e quindi selezionare *OK*.
++
+Qui `policy_name` è il nome della policy che hai selezionato.
+
++
+Le pianificazioni configurate sono elencate nella colonna *Pianificazioni applicate*.
+
+.. Selezionare *Usa scheduler Microsoft SQL Server*, quindi selezionare l'istanza dello scheduler dall'elenco a discesa *Istanza scheduler* associata al criterio di pianificazione.
+
+
+. Nella pagina Verifica, procedere come segue:
++
+.. Selezionare il server di verifica dall'elenco a discesa *Server di verifica*.
++
+È possibile selezionare più server di verifica (host locale o host remoto).
+
++
+
+NOTE: La versione del server di verifica deve essere uguale o superiore alla versione dell'edizione del server SQL che ospita il database primario.
+
+.. Selezionare *Carica localizzatori secondari per verificare i backup sul sistema di archiviazione secondario* per verificare i backup sul sistema di archiviazione secondario.
+.. Seleziona la policy per la quale desideri configurare la pianificazione della verifica, quindi seleziona *image:../media/add_policy_from_resourcegroup.gif["aggiungi gruppo di risorse del modulo di policy"] *.
+.. Nella finestra di dialogo Aggiungi pianificazioni di verifica _nome_policy_, eseguire le seguenti azioni:
++
+|===
+| Se lo desidera... | Fai questo... 
+
+
+ a| 
+Esegui la verifica dopo il backup
+ a| 
+Selezionare *Esegui verifica dopo backup*.
+
+
+
+ a| 
+Pianifica una verifica
+ a| 
+Selezionare *Esegui verifica pianificata*.
+
+|===
++
+
+NOTE: Se il server di verifica non dispone di una connessione di archiviazione, l'operazione di verifica fallisce con l'errore: Impossibile montare il disco.
+
+.. Selezionare *OK*.
++
+Le pianificazioni configurate sono elencate nella colonna Pianificazioni applicate.
+
+
+
+. Nella pagina Notifica, dall'elenco a discesa *Preferenza e-mail*, seleziona gli scenari in cui desideri inviare le e-mail.
++
+È necessario specificare anche gli indirizzi email del mittente e del destinatario, nonché l'oggetto dell'email.  Se si desidera allegare il report dell'operazione eseguita sul gruppo di risorse, selezionare *Allega report lavoro*.
+
++
+
+NOTE: Per la notifica via e-mail, è necessario aver specificato i dettagli del server SMTP tramite l'interfaccia grafica utente (GUI) o il comando PowerShell Set-SmSmtpServer.
+
+. Rivedi il riepilogo e seleziona *Fine*.
++
+Viene visualizzata la pagina della topologia del database.
+
+. Seleziona *Esegui backup adesso*.
+. Nella pagina Backup, procedere come segue:
++
+.. Se hai applicato più criteri alla risorsa, dall'elenco a discesa *Criterio* seleziona il criterio che desideri utilizzare per il backup.
++
+Se il criterio selezionato per il backup su richiesta è associato a una pianificazione di backup, i backup su richiesta verranno conservati in base alle impostazioni di conservazione specificate per il tipo di pianificazione.
+
+.. Seleziona *Verifica dopo il backup* per verificare il backup.
+.. Selezionare *Backup*.
++
+
+NOTE: Non rinominare il processo di backup creato nello scheduler di Windows o nell'agente di SQL Server.
+
++
+Se il criterio selezionato per il backup su richiesta è associato a una pianificazione di backup, i backup su richiesta verranno conservati in base alle impostazioni di conservazione specificate per il tipo di pianificazione.
+
++
+Viene creato un gruppo di risorse implicito.  È possibile visualizzarlo selezionando l'utente o il gruppo corrispondente dalla pagina Accesso utente.  Il tipo di gruppo di risorse implicito è "`Resource`".
+
+
+
+. Monitorare l'avanzamento dell'operazione selezionando *Monitoraggio* > *Lavori*.
+
+
+.Dopo aver finito
+* Nelle configurazioni MetroCluster , SnapCenter potrebbe non essere in grado di rilevare una relazione di protezione dopo un failover.
++
+https://kb.netapp.com/Advice_and_Troubleshooting/Data_Protection_and_Security/SnapCenter/Unable_to_detect_SnapMirror_or_SnapVault_relationship_after_MetroCluster_failover["Impossibile rilevare la relazione SnapMirror o SnapVault dopo il failover MetroCluster"]
+
+* Se si esegue il backup dei dati dell'applicazione su VMDK e la dimensione dell'heap Java per il SnapCenter Plug-in for VMware vSphere non è sufficientemente grande, il backup potrebbe non riuscire.  Per aumentare la dimensione dell'heap Java, individuare il file di script /opt/netapp/init_scripts/scvservice.  In quella sceneggiatura, il `do_start method` Il comando avvia il servizio plug-in SnapCenter VMware.  Aggiorna quel comando come segue: `Java -jar -Xmx8192M -Xms4096M` .
+
+
+.Informazioni correlate
+link:task_create_backup_policies_for_sql_server_databases.html["Creare criteri di backup per i database di SQL Server"]
+
+https://kb.netapp.com/Advice_and_Troubleshooting/Data_Protection_and_Security/SnapCenter/Clone_operation_might_fail_or_take_longer_time_to_complete_with_default_TCP_TIMEOUT_value["Le operazioni di backup falliscono con un errore di connessione MySQL a causa del ritardo nel TCP_TIMEOUT"]
+
+https://kb.netapp.com/Advice_and_Troubleshooting/Data_Protection_and_Security/SnapCenter/Backup_fails_with_Windows_scheduler_error["Il backup non riesce con un errore di pianificazione di Windows"]
+
+https://kb.netapp.com/Advice_and_Troubleshooting/Data_Protection_and_Security/SnapCenter/Quiesce_or_grouping_resources_operations_fail["Le operazioni di quiesce o di raggruppamento delle risorse falliscono"]
+
+--
+.Cmdlet di PowerShell
+--
+.Passi
+. Avvia una sessione di connessione con SnapCenter Server per un utente specificato utilizzando il cmdlet Open-SmConnection.
++
+[listing]
+----
+Open-smconnection  -SMSbaseurl  https://snapctr.demo.netapp.com:8146
+----
++
+Viene visualizzata la richiesta di nome utente e password.
+
+. Creare un criterio di backup utilizzando il cmdlet Add-SmPolicy.
++
+Questo esempio crea un nuovo criterio di backup con un tipo di backup SQL di FullBackup:
+
++
+[listing]
+----
+PS C:\> Add-SmPolicy -PolicyName TESTPolicy
+-PluginPolicyType SCSQL -PolicyType Backup
+-SqlBackupType FullBackup -Verbose
+----
++
+Questo esempio crea un nuovo criterio di backup con un tipo di backup del file system Windows CrashConsistent:
+
++
+[listing]
+----
+PS C:\> Add-SmPolicy -PolicyName FileSystemBackupPolicy
+-PluginPolicyType SCW -PolicyType Backup
+-ScwBackupType CrashConsistent -Verbose
+----
+. Scopri le risorse host utilizzando il cmdlet Get-SmResources.
++
+Questo esempio rileva le risorse per il plug-in Microsoft SQL sull'host specificato:
+
++
+[listing]
+----
+C:\PS>PS C:\> Get-SmResources -HostName vise-f6.sddev.mycompany.com
+-PluginCode SCSQL
+----
++
+Questo esempio rileva le risorse per i file system Windows sull'host specificato:
+
++
+[listing]
+----
+C:\PS>PS C:\> Get-SmResources -HostName vise2-f6.sddev.mycompany.com
+-PluginCode SCW
+----
+. Aggiungere un nuovo gruppo di risorse a SnapCenter utilizzando il cmdlet Add-SmResourceGroup.
++
+Questo esempio crea un nuovo gruppo di risorse di backup del database SQL con i criteri e le risorse specificati:
+
++
+[listing]
+----
+PS C:\> Add-SmResourceGroup -ResourceGroupName AccountingResource
+-Resources @{"Host"="visef6.org.com";
+"Type"="SQL Database";"Names"="vise-f6\PayrollDatabase"}
+-Policies "BackupPolicy"
+----
++
+Questo esempio crea un nuovo gruppo di risorse di backup del file system di Windows con i criteri e le risorse specificati:
+
++
+[listing]
+----
+PS C:\> Add-SmResourceGroup -ResourceGroupName EngineeringResource
+-PluginCode SCW -Resources @{"Host"="WIN-VOK20IKID5I";
+"Type"="Windows Filesystem";"Names"="E:\"}
+-Policies "EngineeringBackupPolicy"
+----
+. Avviare un nuovo processo di backup utilizzando il cmdlet New-SmBackup.
++
+[listing]
+----
+PS C:> New-SmBackup -ResourceGroupName PayrollDataset -Policy FinancePolicy
+----
+. Visualizzare lo stato del processo di backup utilizzando il cmdlet Get-SmBackupReport.
++
+Questo esempio visualizza un report riepilogativo di tutti i lavori eseguiti nella data specificata:
+
++
+[listing]
+----
+PS C:\> Get-SmJobSummaryReport -Date '1/27/2016'
+----
+
+
+Le informazioni relative ai parametri che possono essere utilizzati con il cmdlet e le relative descrizioni possono essere ottenute eseguendo _Get-Help command_name_. In alternativa, puoi anche fare riferimento a https://docs.netapp.com/us-en/snapcenter-cmdlets/index.html["Guida di riferimento ai cmdlet del software SnapCenter"^] .
+
+--
+====
