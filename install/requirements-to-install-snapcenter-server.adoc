@@ -168,7 +168,7 @@ Nella tabella seguente sono elencate le diverse porte e i relativi valori predef
 
 
  a| 
-Porta SnapCenter
+Porta web SnapCenter
  a| 
 8146
  a| 

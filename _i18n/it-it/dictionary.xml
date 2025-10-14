@@ -3310,7 +3310,6 @@
   <block id="f78fb51edae6a69d5e1e911a2b6fc268" category="cell">Numeri di porta</block>
   <block id="888a77f5ac0748b6c8001822417df8b6" category="cell">Protocollo</block>
   <block id="02674a4ef33e11c879283629996c8ff8" category="cell">Direzione</block>
-  <block id="ed00b70cc595a411eff2cc42510a291f" category="paragraph">Porta SnapCenter</block>
   <block id="202ed3792e2cfa7318b12ead83763c37" category="paragraph">8146</block>
   <block id="0e8433f9a404f1f3ba601c14b026d321" category="paragraph">HTTPS</block>
   <block id="abd4328c725637aabedbd02d3b7ffd40" category="paragraph">Bidirezionale</block>
@@ -9558,4 +9557,5 @@
   <block id="bdd6d606b70db547418beb7cef6dd4c3" category="list-text">recuperare una risorsa di Microsoft SQL Server utilizzando una chiave</block>
   <block id="88d9e24753477cfb09f25b21c0a59b9e" category="paragraph">SnapCenter esegue gli aggiornamenti a SnapMirror e SnapVault dopo aver completato l'operazione Snapshot. Gli aggiornamenti SnapMirror e SnapVault vengono eseguiti come parte del processo SnapCenter . Se si utilizza SnapMirror ActiveSync, utilizzare le pianificazioni predefinite SnapMirror o SnapVault sia per SnapMirror ActiveSync che per le relazioni asincrone.</block>
   <block id="ea1c96f839915f73d25b910bbc92b734" category="list-text">Dati presenti sui sistemi primari e secondari ONTAP FAS, AFF o ASA e protetti su storage di oggetti e archivi nel cloud tramite l'integrazione di backup e ripristino NetApp</block>
+  <block id="e6f36a956625505e0a3733e3e0073fa0" category="paragraph">Porta web SnapCenter</block>
 </blocks>
