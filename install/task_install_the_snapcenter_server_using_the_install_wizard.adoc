@@ -160,24 +160,9 @@ Per informazioni specifiche sulla risoluzione dei problemi di .NET, vedere https
 
 
  a| 
-Accodamento dei messaggi
- a| 
-* Servizi di accodamento dei messaggi
-+
-
-NOTE: Assicurarsi che nessun'altra applicazione utilizzi il servizio MSMQ creato e gestito da SnapCenter .
-
-* RabbitMQ
-* Erlang
-
-
-
-
- a| 
 Servizio di attivazione dei processi di Windows
  a| 
-* Modello di processo
-
+Modello di processo
 
 
 
