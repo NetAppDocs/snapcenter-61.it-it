@@ -21,11 +21,11 @@ Per abilitare l'autenticazione basata su certificato per SnapCenter Server e gli
 
 * Per abilitare l'autenticazione basata sul certificato client:
 +
-`Set-SmConfigSettings -Agent –configSettings @{"EnableClientCertificateAuthentication"="true"}` `-HostName`<<hostname>>
+`Set-SmConfigSettings -Agent –configSettings @{"EnableClientCertificateAuthentication"="true"}` `-HostName` `hostname`
 
 * Per disabilitare l'autenticazione basata sul certificato client:
 +
-`Set-SmConfigSettings -Agent –configSettings @{"EnableClientCertificateAuthentication"="false"}` `-HostName` `<<hostname>>``
+`Set-SmConfigSettings -Agent –configSettings @{"EnableClientCertificateAuthentication"="false"}` `-HostName` `hostname`
 
 
 
